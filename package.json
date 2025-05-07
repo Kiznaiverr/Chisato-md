@@ -1,0 +1,15 @@
+{
+  "name": "chisato-md",
+  "version": "1.0.0",
+  "description": "a simple whatsapp bot made by kiznavierr",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot"
+  ],
+  "author": "kiznavierr",
+  "license": "ISC"
+}
