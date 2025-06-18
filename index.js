@@ -5,6 +5,7 @@ import pino from 'pino'
 import { Handler } from './lib/handler.js'
 import { Database } from './lib/database.js'
 import { loadPlugins } from './lib/loader.js'
+import config from './lib/config.js'
 
 // Initialize logger
 const logger = pino({ 
@@ -25,13 +26,15 @@ const plugins = await loadPlugins()
 
 // Enhanced startup banner
 console.log(chalk.cyan('\n╔══════════════════════════════════════╗'))
-console.log(chalk.cyan('║') + chalk.bold.blue('        🤖 Chisato MD Bot         ') + chalk.cyan('║'))
+console.log(chalk.cyan('║') + chalk.bold.blue(`        🤖 ${config.getBotName()}         `) + chalk.cyan('║'))
 console.log(chalk.cyan('║') + chalk.white('     WhatsApp Multi-Device Bot    ') + chalk.cyan('║'))
-console.log(chalk.cyan('║') + chalk.gray('        Created by Kiznavierr      ') + chalk.cyan('║'))
+console.log(chalk.cyan('║') + chalk.gray(`        Created by ${config.get('botSettings', 'author')}      `) + chalk.cyan('║'))
 console.log(chalk.cyan('╚══════════════════════════════════════╝'))
 
-console.log(chalk.green('\n� Initializing bot systems...'))
-console.log(chalk.yellow(`� Loaded ${plugins.length} plugins successfully`))
+console.log(chalk.green('\n🚀 Initializing bot systems...'))
+console.log(chalk.yellow(`📦 Loaded ${plugins.length} plugins successfully`))
+console.log(chalk.cyan(`⚙️  Prefix: ${config.getPrefix()}`))
+console.log(chalk.cyan(`👑 Owners: ${config.getOwners().length} configured`))
 console.log(chalk.blue('🔧 Setting up WhatsApp connection...\n'))
 
 async function startBot() {
@@ -45,9 +48,10 @@ async function startBot() {
         logger,
         printQRInTerminal: false,
         auth: state,
-        browser: ['Chisato MD', 'Chrome', '3.0'],
+        browser: [config.getBotName(), 'Chrome', '3.0'],
         markOnlineOnConnect: true,
-        generateHighQualityLinkPreview: true,        getMessage: async (key) => {
+        generateHighQualityLinkPreview: true,
+        getMessage: async (key) => {
             // Messages not stored for performance
             return undefined
         }
