@@ -6,16 +6,20 @@ export default {
     usage: '.owner',
     cooldown: 5,
     async execute(context) {
-        const { reply, sock } = context
+        const { reply, sock, config } = context
+        
+        const ownerInfo = config.get('ownerSettings')
+        const botInfo = config.get('botSettings')
         
         const ownerText = `
-👨‍💻 *BOT DEVELOPER*
+👨‍💻 *BOT OWNER*
 
-📱 *Name:* Kiznavierr
-🌐 *GitHub:* @kiznavierr
-📧 *Contact:* Available on GitHub
+📱 *Name:* ${ownerInfo.ownerName || 'Bot Owner'}
+📞 *Number:* +${ownerInfo.ownerNumber || 'Not Set'}
+🤖 *Bot:* ${botInfo.botName || 'Chisato-MD'}
+🌐 *Version:* ${botInfo.version || '1.0.0'}
 
-💻 *About Developer:*
+💻 *About Owner:*
 Passionate developer specializing in WhatsApp bot development using modern technologies like Baileys, Node.js, and JavaScript.
 
 🛠️ *Services:*
@@ -32,12 +36,11 @@ Passionate developer specializing in WhatsApp bot development using modern techn
 • Auto Response System
 
 📝 *Want a custom bot?*
-Contact the developer through GitHub for custom bot development services!
+Contact the owner through the number above for bot services!
 
 🙏 *Support the project:*
-Give a ⭐ on GitHub if you like this bot!
+Give a ⭐ if you like this bot!
         `.trim()
-        
-        await reply(ownerText)
+          await reply(ownerText)
     }
 }

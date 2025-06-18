@@ -1,0 +1,78 @@
+{
+  "botSettings": {
+    "botName": "Chisato-MD",
+    "version": "1.0.0",
+    "author": "Kiznavierr",
+    "prefix": ".",
+    "timezone": "Asia/Jakarta",
+    "language": "id",
+    "autoRead": false,
+    "autoTyping": true,
+    "autoRecording": false,
+    "selfReply": false,
+    "publicMode": true
+  },
+  "ownerSettings": {
+    "owners": [
+      "YOUR_NUMBER@s.whatsapp.net"
+    ],
+    "ownerName": "Bot Owner",
+    "ownerNumber": "YOUR_NUMBER"
+  },
+  "adminSettings": {
+    "admins": [],
+    "autoPromoteOwner": true
+  },
+  "limitSettings": {
+    "dailyLimit": 50,
+    "premiumLimit": 999,
+    "limitResetHour": 0,
+    "limitResetMinute": 0
+  },
+  "cooldownSettings": {
+    "globalCooldown": 1,
+    "userCooldown": 3,
+    "groupCooldown": 5
+  },
+  "databaseSettings": {
+    "saveInterval": 30000,
+    "backupInterval": 3600000,
+    "maxBackups": 5,
+    "autoCleanup": true
+  },
+  "securitySettings": {
+    "antiSpam": true,
+    "maxMessagePerMinute": 10,
+    "blacklistedNumbers": [],
+    "whitelistedNumbers": [],
+    "blockInvalidCommands": false
+  },
+  "featureSettings": {
+    "welcomeMessage": true,
+    "goodbyeMessage": true,
+    "antiLink": false,
+    "autoKickBadWords": false,
+    "levelSystem": true,
+    "economySystem": false
+  },
+  "apiKeys": {
+    "googleApi": "",
+    "weatherApi": "",
+    "translateApi": "",
+    "newsApi": ""
+  },
+  "webhookSettings": {
+    "enabled": false,
+    "url": "",
+    "secret": ""
+  },
+  "logSettings": {
+    "logLevel": "info",
+    "logToFile": true,
+    "logFilePath": "./logs/bot.log",
+    "coloredLogs": true,
+    "logCommands": true,
+    "logErrors": true,
+    "logConnections": true
+  }
+}

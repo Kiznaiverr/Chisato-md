@@ -1,56 +1,48 @@
-# 🤖 Chisato MD - WhatsApp Bot
+# 🤖 Chisato MD - Advanced WhatsApp Bot
 
 ![Bot Status](https://img.shields.io/badge/Status-Active-brightgreen)
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)
-![Baileys](https://img.shields.io/badge/Baileys-6.7.18-blue)
+![Bailey| `.profile` | User profile & premium status | `profile [@user]` |
+| `.limit` | Check daily usage limit | `limit` |
+| `.register` | Register as bot user | `register <name> <age>` |
+| `.rank` | View user rank & level | `rank [@user]` |https://img.shields.io/badge/Baileys-6.7.18-blue)
+![License](https://img.shields.io/badge/License-ISC-yellow)
 
-A modern WhatsApp bot built with Baileys library, featuring a modular plugin system and local JSON database.
+A modern, feature-rich WhatsApp bot with dynamic menu system, premium user management, and comprehensive admin tools. Built with Baileys library for reliable WhatsApp Web API integration.
 
 ## 📑 Table of Contents
 
-- [Features](#-features)
-- [Requirements](#-requirements)
-- [Quick Start](#-quick-start)
-- [Configuration](#️-configuration)
-- [Commands](#-commands)
-- [Plugin System](#-plugin-system)
-- [Database Structure](#-database-structure)
-- [Plugin Development](#-plugin-development)
-- [Security](#️-security)
-- [Troubleshooting](#-troubleshooting)
-- [Contributing](#-contributing)
+- [✨ Features](#-features)
+- [🚀 Quick Start](#-quick-start)
+- [⚙️ Configuration](#️-configuration)
+- [💎 Premium System](#-premium-system)
+- [📱 Commands](#-commands)
+- [🔌 Plugin Development](#-plugin-development)
+- [🔧 Troubleshooting](#-troubleshooting)
+- [⚡ Quick Reference](#-quick-reference)
 
-## 🌟 Features
+## ✨ Features
 
-- ✅ **Multi-device support** - Works with WhatsApp Web API
-- 🔌 **Modular plugin system** - Easy to extend and customize
-- 📁 **Organized plugin structure** - Plugins grouped by category
-- 💾 **Local JSON database** - No external database required
-- 👥 **Group management** - Admin commands and settings
-- 👤 **User profiles & levels** - Experience and progression system
-- 🎯 **Limit system** - Daily usage limits with premium support
-- 🎫 **Premium user support** - Unlimited access for premium users
-- 🔒 **Owner-only commands** - Secure administrative functions
-- ⏰ **Command cooldowns** - Prevent spam and abuse
-- 🎨 **Beautiful responses** - Well-formatted command outputs
-- 🚀 **Auto-response system** - Automatic greetings and reactions
-- 🛡️ **Security features** - Ban system, input validation, error handling
+### 🎯 **Core Capabilities**
+- 🔌 **Modular Plugin System** - Organized by permission levels
+- 🎯 **Dynamic Menu** - Auto-generated, searchable command interface
+- ⚙️ **Centralized Config** - JSON-based configuration management
+- 💎 **Premium System** - Advanced user tier management
+- 🔐 **3-Tier Permissions** - Owner → Admin → User hierarchy
+- 🎨 **Smart UI** - Color-coded logging and beautiful responses
 
-## 📋 Requirements
-
-Before running the bot, make sure you have:
-
-- ✅ **Node.js 18 or higher** installed
-- ✅ **NPM or Yarn** package manager
-- ✅ **WhatsApp account** for the bot
-- ✅ **Basic terminal knowledge**
+### 🛡️ **Security & Performance**
+- ⚡ **Optimized Performance** - No message storage, smart caching
+- 🛡️ **Anti-Spam Protection** - Rate limiting and cooldowns
+- 🚫 **Anti Self-Reply** - Bot ignores its own messages
+- 📍 **Prefix-Only Response** - Commands require prefix
+- 🔒 **Input Validation** - Secure command processing
 
 ## 🚀 Quick Start
 
 ### 1. Installation
-
 ```bash
-# Clone the repository
+# Clone repository
 git clone <repository-url>
 cd chisato-md
 
@@ -58,510 +50,376 @@ cd chisato-md
 npm install
 ```
 
-### 2. Start the Bot
+### 2. Configuration
+Edit `config.json`:
+```json
+{
+  "ownerSettings": {
+    "owners": ["YOUR_NUMBER@s.whatsapp.net"]
+  },
+  "botSettings": {
+    "prefix": ".",
+    "botName": "Your Bot Name"
+  }
+}
+```
 
+### 3. Start Bot
 ```bash
 npm start
 ```
 
-### 3. Connect WhatsApp
-
-1. **Open WhatsApp** on your phone
-2. Go to **Settings > Linked Devices**
-3. Tap **"Link a Device"**
-4. **Scan the QR code** displayed in terminal
-
-### 4. Configure Bot
-
-After first run, edit `database/settings.json`:
-
-```json
-{
-  "prefix": ".",
-  "botName": "Chisato MD",
-  "owner": "6281234567890",
-  "timezone": "Asia/Jakarta"
-}
-```
-
-**Important:** Replace the owner number with your WhatsApp number (without + or spaces)
+### 4. Connect WhatsApp
+1. Open WhatsApp → Settings → Linked Devices
+2. Scan QR code from terminal
+3. Send `.menu` to test
 
 ## ⚙️ Configuration
 
-### Setting Owner Number
+### 📁 Config Structure
+All bot settings are in `config.json`:
+```json
+{
+  "botSettings": {
+    "botName": "Chisato-MD",
+    "prefix": ".",
+    "timezone": "Asia/Jakarta"
+  },
+  "ownerSettings": {
+    "owners": ["YOUR_NUMBER@s.whatsapp.net"],
+    "ownerName": "Your Name",
+    "ownerNumber": "YOUR_NUMBER"
+  },
+  "adminSettings": {
+    "admins": [],
+    "autoPromoteOwner": true
+  },
+  "limitSettings": {
+    "dailyLimit": 50,
+    "premiumLimit": 999
+  }
+}
+```
 
-1. After first run, check `database/settings.json`
-2. Replace `""` in `owner` field with your WhatsApp number
-3. Format: `"6281234567890"` (country code + number, no + or spaces)
-4. Restart the bot
+### ⚙️ Config Commands
+```bash
+.config get botSettings.prefix      # Get prefix
+.config set botSettings.prefix !    # Change prefix
+.config list                        # View all settings
+.config backup                      # Backup configuration
+```
 
-### Customizing Settings
+📖 **Complete Configuration Guide**: See `CONFIG_GUIDE.md` for detailed explanations of all settings.
 
-- **Prefix**: Change command prefix (default: `.`)
-- **Bot Name**: Customize bot name in responses
-- **Timezone**: Set your local timezone
+## 💎 Premium System
 
-### Environment Variables (Optional)
+### 🎯 **User Tiers**
+| Tier | Icon | Daily Limit | Features |
+|------|------|-------------|----------|
+| Owner | 👑 | ∞ Unlimited | Full bot control, config access |
+| Premium | 💎 | ∞ Unlimited | No daily limits, priority support |
+| Regular | 🆓 | 50 commands | Basic features, daily reset |
 
-Create `.env` file for sensitive data:
+### 🔧 **Premium Management (Owner Only)**
+```bash
+# Add Premium Users
+.addpremium @user 30d    # Add 30 days premium
+.addpremium @user 7h     # Add 7 hours premium
+.addpremium @user 120m   # Add 120 minutes premium
+.addpremium @user        # Add lifetime premium (no expiry)
 
-```env
-OWNER_NUMBER=6281234567890
-API_KEY=your-api-key
+# Manage Premium Status
+.delpremium @user        # Remove premium status
+.listpremium            # View all premium users with expiry info
+
+# User Status Commands
+.limit                  # Check daily usage & premium status
+.profile [@user]        # View user profile with premium info
+```
+
+### ⏰ **Duration Formats**
+- `30d` - 30 days
+- `24h` - 24 hours  
+- `60m` - 60 minutes
+- No duration = Lifetime premium
+
+### 🎁 **Premium Benefits**
+**Owner Benefits:**
+- 👑 Unlimited daily commands
+- 👑 Full configuration access
+- 👑 Admin & premium management
+- 👑 All plugin access
+
+**Premium Benefits:**
+- 💎 Unlimited daily commands
+- 💎 Priority support & features
+- 💎 Premium status display
+- 💎 Bypass cooldown restrictions
+
+**Regular User:**
+- 🆓 50 commands per day (configurable)
+- 🆓 Basic feature access
+- 🆓 Clear upgrade path information
+
+### ⚙️ **Auto-Expiry System**
+- ✅ Automatic expiry checking on every command
+- ✅ Graceful downgrade to regular user
+- ✅ Premium duration tracking
+- ✅ Expiry notifications in profile/limit commands
+
+### 🔧 **Configuration Options**
+```json
+{
+  "limitSettings": {
+    "dailyLimit": 50,        
+    "premiumLimit": 999,     
+    "limitResetHour": 0,     
+    "limitResetMinute": 0    
+  }
+}
 ```
 
 ## 📱 Commands
 
-### 🏠 General Commands
-
+### 🌟 **General Commands**
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `.menu` | Show all commands | `.menu` |
-| `.ping` | Check bot response time | `.ping` |
-| `.info` | Show bot information | `.info` |
-| `.owner` | Show owner contact | `.owner` |
+| `.menu` | Dynamic interactive menu with categories | `menu [category\|search keyword]` |
+| `.ping` | Response time & system info | `ping` |
+| `.listcmd` | Quick command list by category | `listcmd [category]` |
+| `.cmdinfo` | Detailed command information | `cmdinfo <command>` |
+| `.sysinfo` | Complete system information | `sysinfo` |
+| `.info` | Bot information & features | `info` |
 
-### 👤 User Commands
-
+### 👤 **User Commands**
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `.profile` | Show your profile | `.profile` |
-| `.register` | Register to bot | `.register name.age` |
-| `.limit` | Check your daily limit | `.limit` |
+| `.profile` | User profile & stats | `profile [@user]` |
+| `.limit` | Check daily limit | `limit` |
+| `.register` | Register as user | `register <name> <age>` |
 
-### 👥 Group Commands (Admin Only)
-
+### 👨‍💼 **Admin Commands**
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `.group` | Group settings menu | `.group` |
-| `.kick` | Remove member | `.kick @user` |
-| `.promote` | Make user admin | `.promote @user` |
-| `.demote` | Remove admin | `.demote @user` |
+| `.kick` | Remove group member | `kick @user [reason]` |
+| `.ban` | Ban user from bot usage | `ban @user [reason]` |
+| `.unban` | Unban user from bot | `unban @user` |
+| `.promote` | Make user group admin | `promote @user` |
+| `.demote` | Remove user admin status | `demote @user` |
+| `.mute` | Mute bot in group | `mute [duration]` |
+| `.unmute` | Unmute bot in group | `unmute` |
 
-### 🎲 Fun Commands
-
+### 👑 **Owner Commands**
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `.quote` | Random inspirational quote | `.quote` |
-| `.truth` | Random truth question | `.truth` |
-| `.dare` | Random dare challenge | `.dare` |
+| `.addadmin` | Add bot administrator | `addadmin @user` |
+| `.deladmin` | Remove bot administrator | `deladmin @user` |
+| `.addpremium` | Add premium user | `addpremium @user [duration]` |
+| `.delpremium` | Remove premium status | `delpremium @user` |
+| `.listpremium` | List all premium users | `listpremium` |
+| `.config` | Manage bot configuration | `config [get\|set\|list] [key] [value]` |
+| `.eval` | Execute JavaScript code | `eval <code>` ⚠️ Use carefully |
 
-### 🔍 Search Commands
-
+### 📁 **Media Commands**
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `.google` | Search on Google | `.google query` |
+| `.sticker` / `.s` | Convert media to sticker | Reply to image/video or send with caption `.s` |
 
-### 🛠️ Owner Commands
+## 🔌 Plugin Development
 
-| Command | Description | Usage |
-|---------|-------------|-------|
-| `.eval` | Execute JavaScript code | `.eval code` |
-| `.ban` | Ban user from bot | `.ban @user` |
-| `.unban` | Unban user | `.unban @user` |
-
-## 🔌 Plugin System
-
-### Plugin Structure
-
-Plugins are organized in categorized folders:
-
+### 📁 **Plugin Structure**
 ```
 plugins/
-├── general/        # Basic commands (menu, ping, info)
-├── user/          # User-related commands (profile, register)
-├── group/         # Group management commands
-├── fun/           # Entertainment commands
-├── search/        # Search and utility commands
-├── owner/         # Owner-only commands
-└── custom/        # Your custom plugins
+├── admin/     # Admin-only commands
+├── user/      # User commands  
+├── owner/     # Owner-only commands
+├── general/   # Public commands
+├── media/     # Media processing
+└── fun/       # Entertainment
 ```
 
-### Creating a Plugin
-
-Create a new `.js` file in the appropriate category folder:
-
+### 🔧 **Plugin Template**
 ```javascript
 export default {
-    command: 'hello',
-    aliases: ['hi'],
-    description: 'Greet the user',
+    command: 'example',
+    aliases: ['ex'],
     category: 'general',
-    usage: '.hello',
-    cooldown: 3,
-    async execute(context) {
-        const { reply, pushName } = context
-        await reply(`Hello ${pushName}! 👋`)
+    description: 'Example command',
+    usage: 'example <arg>',
+    cooldown: 5,
+    limit: 1,
+    ownerOnly: false,
+    
+    async execute({ reply, args, react, db, sender }) {
+        await react('⏳')
+        
+        // Command logic here
+        await reply('Success!')
+        
+        await react('✅')
     }
 }
 ```
 
-### Plugin Properties
-
-#### Required Properties
-- **command** (string): Main command name
-- **execute** (function): Function to run when command is called
-
-#### Optional Properties
-- **aliases** (array): Alternative command names
-- **description** (string): Command description for help
-- **category** (string): Command category (auto-detected from folder)
-- **usage** (string): Usage example
-- **cooldown** (number): Cooldown in seconds
-- **limit** (number): Limit cost for non-premium users
-- **premium** (boolean): Premium only command
-- **ownerOnly** (boolean): Owner only command
-- **groupOnly** (boolean): Group only command
-- **privateOnly** (boolean): Private chat only command
-
-### Context Object
-
-The `context` object provides access to:
-
-```javascript
-{
-    sock,           // Baileys socket instance
-    msg,            // Original message object
-    body,           // Message text
-    messageType,    // Type of message
-    isGroup,        // Boolean: is group chat
-    sender,         // Sender JID
-    groupMetadata,  // Group info (if group)
-    pushName,       // Sender display name
-    db,             // Database instance
-    command,        // Used command
-    args,           // Command arguments array
-    text,           // Arguments as string
-    prefix,         // Bot prefix
-    reply,          // Function to reply
-    react           // Function to react
-}
-```
-
-## 💾 Database Structure
-
-The bot uses JSON files for data storage:
-
-### Files Created Automatically
-
-- **`database/users.json`** - User profiles, levels, limits, registration data
-- **`database/groups.json`** - Group settings, welcome messages, admin features
-- **`database/settings.json`** - Bot configuration, prefix, owner info
-- **`database/messages.json`** - Message cache for bot functionality
-
-### User Data Structure
-
-```json
-{
-  "6281234567890": {
-    "jid": "6281234567890@s.whatsapp.net",
-    "name": "John Doe",
-    "level": 5,
-    "exp": 250,
-    "limit": 20,
-    "premium": false,
-    "banned": false,
-    "warning": 0,
-    "registered": true,
-    "regTime": 1640995200000,
-    "age": 25,
-    "lastSeen": 1640995200000
-  }
-}
-```
-
-### Group Data Structure
-
-```json
-{
-  "group-id@g.us": {
-    "jid": "group-id@g.us",
-    "name": "My Group",
-    "welcome": true,
-    "bye": true,
-    "antilink": false,
-    "antispam": false,
-    "mute": false,
-    "banned": false,
-    "created": 1640995200000
-  }
-}
-```
-
-## 🔧 Plugin Development
-
-### Advanced Examples
-
-#### Command with Arguments
-
-```javascript
-export default {
-    command: 'say',
-    description: 'Make bot say something',
-    category: 'fun',
-    usage: '.say <text>',
-    async execute(context) {
-        const { reply, text } = context
-        
-        if (!text) {
-            return await reply('❌ Please provide text to say!')
-        }
-        
-        await reply(text)
-    }
-}
-```
-
-#### Database Integration
-
-```javascript
-export default {
-    command: 'balance',
-    description: 'Check your balance',
-    category: 'economy',
-    usage: '.balance',
-    async execute(context) {
-        const { reply, sender, db } = context
-        const user = db.getUser(sender)
-        
-        // Add balance if doesn't exist
-        if (!user.balance) {
-            user.balance = 1000
-            db.saveUsers()
-        }
-        
-        await reply(`💰 Your balance: $${user.balance}`)
-    }
-}
-```
-
-#### API Integration
-
-```javascript
-import axios from 'axios'
-
-export default {
-    command: 'weather',
-    description: 'Get weather information',
-    category: 'utility',
-    usage: '.weather <city>',
-    limit: 2,
-    cooldown: 30,
-    async execute(context) {
-        const { reply, text } = context
-        
-        if (!text) {
-            return await reply('❌ Please provide city name!')
-        }
-        
-        try {
-            await reply('🌤️ Getting weather data...')
-            
-            const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${text}&appid=YOUR_API_KEY`)
-            const weather = response.data
-            
-            const result = `
-🌤️ *WEATHER INFO*
-📍 Location: ${weather.name}
-🌡️ Temperature: ${Math.round(weather.main.temp - 273.15)}°C
-💧 Humidity: ${weather.main.humidity}%
-☁️ Condition: ${weather.weather[0].description}
-            `.trim()
-            
-            await reply(result)
-        } catch (error) {
-            await reply('❌ Failed to get weather data!')
-        }
-    }
-}
-```
-
-### Best Practices
-
-#### ✅ Do's
-- Always validate user input
-- Handle errors gracefully
-- Use descriptive command names
-- Add helpful usage examples
-- Set appropriate cooldowns
-- Use database efficiently
-- Follow consistent formatting
-
-#### ❌ Don'ts
-- Don't block the event loop
-- Don't ignore errors
-- Don't spam users
-- Don't use inappropriate limits
-- Don't hardcode sensitive values
-- Don't ignore security
-
-## 🛡️ Security
-
-### Built-in Security Features
-
-- **Owner Verification** - Commands restricted to bot owner
-- **User Ban System** - Ability to ban problematic users
-- **Command Cooldowns** - Prevent command spam
-- **Input Validation** - Sanitize user inputs
-- **Error Handling** - Graceful error management
-- **Rate Limiting** - Limit system for fair usage
-
-### Security Best Practices
-
-1. **Never share session files** - Keep your WhatsApp session private
-2. **Set strong owner verification** - Use correct phone number format
-3. **Regular monitoring** - Check logs for suspicious activity
-4. **Update dependencies** - Keep packages up to date
-5. **Validate inputs** - Always check user inputs in plugins
+### 🎯 **Permission Flags**
+- `ownerOnly: true` - Owner only
+- `adminOnly: true` - Admin and owner only
+- `groupOnly: true` - Group chats only
+- `limit: 2` - Uses 2 daily limit
+- `premium: true` - Premium users only
 
 ## 🔧 Troubleshooting
 
-### Common Issues
+### 🚨 **Common Issues**
 
-#### Bot Won't Start
-
-**Problem:** Bot crashes on startup
-
-**Solutions:**
-1. Check Node.js version: `node --version` (need 18+)
-2. Reinstall dependencies: `rm -rf node_modules && npm install`
-3. Check for syntax errors in plugins
-
-#### QR Code Issues
-
-**Problem:** QR code not scanning or connection fails
-
-**Solutions:**
-1. Clear session: delete `session/` folder
-2. Restart bot completely
-3. Make sure WhatsApp Web is logged out on browser
-4. Try scanning with better lighting
-
-#### Commands Not Working
-
-**Problem:** Bot doesn't respond to commands
-
-**Solutions:**
-1. Check prefix in `database/settings.json`
-2. Verify owner number format (no + or spaces)
-3. Check if user is banned
-4. Verify plugin syntax
-
-#### Database Issues
-
-**Problem:** Data not saving or corrupted
-
-**Solutions:**
-1. Check file permissions
-2. Backup and delete `database/` folder
-3. Restart bot to regenerate files
-4. Check disk space
-
-#### Memory Issues
-
-**Problem:** Bot using too much memory
-
-**Solutions:**
-1. Restart bot daily
-2. Clear old messages from database
-3. Optimize plugins
-4. Monitor plugin performance
-
-### Getting Help
-
-1. **Check Documentation** - Read this guide thoroughly
-2. **Check Console Logs** - Look for error messages
-3. **Test in Private Chat** - Isolate group-related issues
-4. **Update Dependencies** - Ensure latest versions
-5. **GitHub Issues** - Report bugs or ask questions
-
-## 📊 Performance Optimization
-
-### Tips for Better Performance
-
-- ✅ **Restart regularly** - Restart bot daily for optimal performance
-- ✅ **Clean database** - Remove old messages periodically
-- ✅ **Optimize plugins** - Write efficient code
-- ✅ **Monitor memory** - Check memory usage regularly
-- ✅ **Use cooldowns** - Prevent rapid command execution
-
-### Monitoring
-
+**Bot not responding:**
 ```bash
-# Check memory usage
-node --expose-gc index.js
-
-# Monitor with PM2 (recommended for production)
-npm install -g pm2
-pm2 start index.js --name "chisato-bot"
-pm2 monitor
+# Check connection and prefix
+.ping                    # Test bot response
+.config get botSettings  # Check settings
 ```
 
-## 🤝 Contributing
+**Permission errors:**
+```bash
+.config list adminSettings   # Check admin list
+.config list ownerSettings   # Check owner list
+```
 
-We welcome contributions! Here's how you can help:
+**Plugin errors:**
+```bash
+# Check console for error messages
+# Verify plugin syntax and structure
+# Ensure proper file permissions
+```
 
-### Ways to Contribute
+### 📊 **Debug Commands**
+```bash
+.sysinfo                # System information
+.ping                   # Response time test
+.listcmd               # Loaded plugins
+```
 
-1. **Report Bugs** - Create detailed issue reports
-2. **Suggest Features** - Propose new functionality
-3. **Submit Plugins** - Share your custom plugins
-4. **Improve Documentation** - Help make docs better
-5. **Code Contributions** - Submit pull requests
+### 📝 **Log Analysis**
+**Console Colors:**
+- 🟡 **Yellow** - Valid command execution
+- 🔴 **Red** - Errors and permission denied
+- ⚪ **White** - Non-command messages
+- 🟢 **Green** - System events
 
-### Development Setup
+---
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+## 🎉 **Ready to Deploy!**
 
-### Plugin Contribution Guidelines
+### ⭐ **Key Highlights**
+- 🎯 **Dynamic Menu System** - Auto-generated from loaded plugins
+- 💎 **Premium Management** - Complete user tier system
+- ⚙️ **Easy Configuration** - JSON-based settings with live reload
+- 🔐 **Secure Architecture** - Permission-based access control
+- 🎨 **Beautiful Interface** - Colorful logging and formatted responses
+- 🚀 **High Performance** - Optimized for speed and reliability
 
-- Follow existing code style
-- Add proper documentation
-- Include error handling
-- Test with different scenarios
-- Use appropriate categories
-
-## 📄 License
-
-This project is licensed under the **ISC License**.
-
-## ⚠️ Disclaimer
-
-**Important:** This project is not affiliated with WhatsApp. Use responsibly and respect WhatsApp's Terms of Service.
-
-- 🚫 Don't spam users
-- 🚫 Don't use for harassment
-- 🚫 Don't violate WhatsApp ToS
-- 🚫 Don't share session files
-- ✅ Use for legitimate purposes only
-
-## 🙏 Credits
-
-- **[Baileys](https://github.com/WhiskeySockets/Baileys)** - WhatsApp Web API library
-- **[Kiznavierr](https://github.com/kiznavierr)** - Main developer
-- **Contributors** - Everyone who helped improve this project
-
-## 📞 Support
-
-Need help? Here are your options:
-
-- 📖 **Documentation** - Check this README first
-- 🐛 **Bug Reports** - Open a GitHub issue
-- 💡 **Feature Requests** - Suggest improvements
+### 📞 **Support**
+- 📖 **Documentation** - This README covers all features
+- 🐛 **Issues** - Report bugs via GitHub issues
+- 💡 **Features** - Suggest improvements
 - 💬 **Community** - Join discussions
 
 ---
 
-<div align="center">
+**Made with ❤️ by [Kiznavierr](https://github.com/kiznavierr)**
 
-**⭐ Star this repository if you find it helpful!**
+⭐ **Star this repository if you find it helpful!**
 
-Made with ❤️ by [Kiznavierr](https://github.com/kiznavierr)
+---
 
-**Happy Botting! 🎉**
+## ⚡ Quick Reference
 
-</div>
+### 🔧 **Instant Setup**
+1. Clone repo → `npm install` → Edit `config.json` (set owner number)
+2. Run `npm start` → Scan QR → Test with `.menu`
+
+### 🎯 **Essential Commands**
+```bash
+# Navigation & Info
+.menu                   # Interactive menu system
+.menu admin            # View admin commands
+.menu search keyword   # Search commands
+.listcmd               # Quick command list
+.ping                  # Response time & system info
+
+# Configuration Management
+.config get botSettings.prefix    # View current prefix
+.config set botSettings.prefix !  # Change prefix to !
+.config list                      # View all settings
+.config backup                    # Backup configuration
+
+# Premium Management (Owner Only)
+.addpremium @user 30d   # Add 30 days premium
+.addpremium @user       # Add lifetime premium  
+.delpremium @user       # Remove premium status
+.listpremium           # View all premium users
+
+# Admin Management (Owner Only)
+.addadmin @user        # Add bot administrator
+.deladmin @user        # Remove bot administrator
+
+# Group Management (Admin+)
+.kick @user            # Remove group member
+.ban @user             # Ban user from bot
+.promote @user         # Make group admin
+.mute                  # Stop bot responses
+
+# Media Processing
+.sticker              # Convert image/video to sticker (reply)
+.s                    # Send media with caption .s
+```
+
+### 🎯 **User Tiers & Limits**
+| Tier | Icon | Daily Limit | Access Level |
+|------|------|-------------|--------------|
+| 👑 **Owner** | 👑 | ∞ Unlimited | Full bot control, config access |
+| 💎 **Premium** | 💎 | ∞ Unlimited | No limits, priority features |
+| 🆓 **Regular** | 🆓 | 50 commands | Basic features, daily reset |
+
+### ⏰ **Duration Formats**
+- `30d` = 30 days, `24h` = 24 hours, `60m` = 60 minutes
+- No duration = Lifetime premium
+
+### 📁 **Project Structure**
+```
+config.json         # Main configuration file
+lib/
+├── config.js       # Configuration manager
+├── handler.js      # Message handler & command processor
+├── database.js     # User & group data management
+└── loader.js       # Plugin loader system
+plugins/
+├── admin/          # Admin-only commands
+├── user/           # User commands  
+├── owner/          # Owner-only commands
+├── general/        # Public commands
+└── media/          # Media processing commands
+database/
+├── users.json      # User data & premium status
+└── groups.json     # Group settings & data
+```
+
+### 🚨 **Quick Troubleshooting**
+**Bot not responding?** → Check `.ping` and verify prefix in config
+**Permission errors?** → Verify owner/admin status with `.config list`
+**Plugin issues?** → Check console for errors, verify file structure
+
+### 🎨 **Console Status Colors**
+- 🟡 **Yellow** - Valid command execution
+- 🔴 **Red** - Errors/permission denied  
+- ⚪ **White** - Non-command messages
+- 🟢 **Green** - System events & connection
+
+### 💡 **Pro Tips**
+- All commands require the configured prefix (default: `.`)
+- Premium users bypass daily limits automatically
+- Use `.cmdinfo <command>` for detailed command help
+- Backup config regularly with `.config backup`
+- Check `.sysinfo` for detailed system performance
+
+---

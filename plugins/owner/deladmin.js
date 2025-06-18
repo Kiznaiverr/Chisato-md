@@ -1,3 +1,5 @@
+import config from '../../lib/config.js'
+
 export default {
     command: 'deladmin',
     aliases: ['removeadmin'],
@@ -23,9 +25,7 @@ export default {
         // Check if target is valid
         if (!target) {
             return reply('❌ Invalid user.')
-        }
-
-        // Check if target is owner
+        }        // Check if target is owner
         if (db.isOwner(target)) {
             return reply('❌ Cannot remove owner from admin!')
         }
@@ -37,12 +37,19 @@ export default {
 
         try {
             await react('⏳')
+              // Remove admin using config manager
+            const success = db.removeAdmin(target)
             
-            // Remove admin
-            db.removeAdmin(target)
-            
-            await react('✅')
-            await reply(`✅ Successfully removed @${target.split('@')[0]} from bot admin!`)
+            if (success) {
+                await react('✅')
+                await reply(`✅ Successfully removed @${target.split('@')[0]} from bot admin!
+                
+📋 Remaining admins: ${config.getAdmins().length}
+⚙️ Use .config list adminSettings to see all admins`)
+            } else {
+                await react('❌')
+                await reply('❌ Cannot remove owner or user is not an admin!')
+            }
             
         } catch (error) {
             console.error('Error removing admin:', error)

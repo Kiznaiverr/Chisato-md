@@ -1,3 +1,5 @@
+import config from '../../lib/config.js'
+
 export default {
     command: 'addadmin',
     aliases: ['setadmin'],
@@ -23,21 +25,23 @@ export default {
         // Check if target is valid
         if (!target) {
             return reply('❌ Invalid user.')
-        }
-
-        // Check if target is already admin
+        }        // Check if target is already admin
         if (db.isAdmin(target)) {
             return reply('❌ User is already an admin!')
-        }
-
-        try {
+        }try {
             await react('⏳')
-            
-            // Add admin
-            db.addAdmin(target)
-            
-            await react('✅')
-            await reply(`✅ Successfully added @${target.split('@')[0]} as bot admin!`)
+              // Add admin using config manager
+            const success = db.addAdmin(target)
+              if (success) {
+                await react('✅')
+                await reply(`✅ Successfully added @${target.split('@')[0]} as bot admin!
+                
+📋 Current admins: ${db.getAdmins().length}
+⚙️ Use .config list adminSettings to see all admins`)
+            } else {
+                await react('❌')
+                await reply('❌ User is already an admin or an owner!')
+            }
             
         } catch (error) {
             console.error('Error adding admin:', error)

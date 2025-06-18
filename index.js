@@ -23,12 +23,16 @@ const db = new Database()
 // Load plugins
 const plugins = await loadPlugins()
 
-console.log(chalk.cyan('╔══════════════════════════════════════╗'))
+// Enhanced startup banner
+console.log(chalk.cyan('\n╔══════════════════════════════════════╗'))
 console.log(chalk.cyan('║') + chalk.bold.blue('        🤖 Chisato MD Bot         ') + chalk.cyan('║'))
 console.log(chalk.cyan('║') + chalk.white('     WhatsApp Multi-Device Bot    ') + chalk.cyan('║'))
+console.log(chalk.cyan('║') + chalk.gray('        Created by Kiznavierr      ') + chalk.cyan('║'))
 console.log(chalk.cyan('╚══════════════════════════════════════╝'))
-console.log(chalk.green('📋 Starting bot...'))
-console.log(chalk.yellow(`🔌 Loaded ${plugins.length} plugins`))
+
+console.log(chalk.green('\n� Initializing bot systems...'))
+console.log(chalk.yellow(`� Loaded ${plugins.length} plugins successfully`))
+console.log(chalk.blue('🔧 Setting up WhatsApp connection...\n'))
 
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState('./session')
@@ -68,13 +72,16 @@ async function startBot() {
                 setTimeout(startBot, 3000)
             } else {
                 console.log(chalk.red('🚪 Logged out. Please restart bot.'))
-            }
-        } else if (connection === 'open') {
+            }        } else if (connection === 'open') {
+            const botNumber = sock.user.id.split(':')[0]
+            const currentTime = new Date().toLocaleTimeString('id-ID')
+            
             console.log(chalk.green('┌─────────────────────────────────────┐'))
             console.log(chalk.green('│') + chalk.bold.white('   ✅ Bot Connected Successfully!   ') + chalk.green('│'))
-            console.log(chalk.green('│') + chalk.cyan(`   📱 Number: ${sock.user.id.split(':')[0]}`) + ' '.repeat(8 - sock.user.id.split(':')[0].length) + chalk.green('│'))
-            console.log(chalk.green('│') + chalk.magenta(`   🕒 Time: ${new Date().toLocaleTimeString('id-ID')}`) + ' '.repeat(12 - new Date().toLocaleTimeString('id-ID').length) + chalk.green('│'))
+            console.log(chalk.green('│') + chalk.cyan(`   📱 Number: ${botNumber}`) + ' '.repeat(Math.max(0, 37 - 15 - botNumber.length)) + chalk.green('│'))
+            console.log(chalk.green('│') + chalk.magenta(`   🕒 Time: ${currentTime}`) + ' '.repeat(Math.max(0, 37 - 12 - currentTime.length)) + chalk.green('│'))
             console.log(chalk.green('└─────────────────────────────────────┘'))
+            console.log(chalk.yellow('📬 Bot is now ready to receive messages!\n'))
         }
     })
 
