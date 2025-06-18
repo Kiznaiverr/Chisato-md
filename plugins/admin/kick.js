@@ -41,7 +41,7 @@ export default {
         }
 
         try {
-            await react('⏳')
+            await react('🕔')
             
             // Kick the user
             await sock.groupParticipantsUpdate(msg.key.remoteJid, [target], 'remove')

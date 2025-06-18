@@ -88,7 +88,7 @@ export default {
                 const daysLeft = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24))
                 
                 profileText += `├ ⏰ Expires: ${expiry.toLocaleDateString('id-ID')}\n`
-                profileText += `├ ⏳ Days Left: ${daysLeft > 0 ? daysLeft : 'Expired'}\n`
+                profileText += `├ 🕔 Days Left: ${daysLeft > 0 ? daysLeft : 'Expired'}\n`
             } else {
                 profileText += `├ ⏰ Expires: Lifetime\n`
             }

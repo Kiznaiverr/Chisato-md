@@ -34,7 +34,7 @@ export default {
                 const daysLeft = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24))
                 
                 limitText += `├ ⏰ Expires: ${expiryDate.toLocaleDateString('id-ID')}\n`
-                limitText += `├ ⏳ Days Left: ${daysLeft > 0 ? daysLeft : 'Expired'}\n`
+                limitText += `├ 🕔 Days Left: ${daysLeft > 0 ? daysLeft : 'Expired'}\n`
             } else {
                 limitText += `├ ⏰ Expires: Never (Lifetime)\n`
             }

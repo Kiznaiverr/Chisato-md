@@ -15,7 +15,7 @@ export default {
         const { reply, msg, sock, react, args } = context
         
         try {
-            await react('⏳')
+            await react('🕔')
             
             // Check arguments
             if (args.length < 2) {

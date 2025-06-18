@@ -13,7 +13,7 @@ export default {
         if (!isGroup) return reply('❌ This command can only be used in groups.')
 
         try {
-            await react('⏳')
+            await react('🕔')
             
             // Mute the group
             await sock.groupSettingUpdate(msg.key.remoteJid, 'announcement')

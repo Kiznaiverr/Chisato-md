@@ -11,7 +11,7 @@ export default {
     
     async execute({ reply, react }) {
         try {
-            await react('⏳')
+            await react('🕔')
             
             // Get basic info
             const platform = os.platform()

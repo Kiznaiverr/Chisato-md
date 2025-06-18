@@ -36,7 +36,7 @@ export default {
         }
 
         try {
-            await react('⏳')
+            await react('🕔')
               // Remove admin using config manager
             const success = db.removeAdmin(target)
             

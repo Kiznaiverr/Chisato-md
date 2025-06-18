@@ -29,7 +29,7 @@ export default {
         if (db.isAdmin(target)) {
             return reply('❌ User is already an admin!')
         }try {
-            await react('⏳')
+            await react('🕔')
               // Add admin using config manager
             const success = db.addAdmin(target)
               if (success) {

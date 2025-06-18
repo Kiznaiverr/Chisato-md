@@ -31,7 +31,7 @@ export default {
         }
 
         try {
-            await react('⏳')
+            await react('🕔')
             
             // Get user data
             const user = db.getUser(target)

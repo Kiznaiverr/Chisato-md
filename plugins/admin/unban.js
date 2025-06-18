@@ -31,7 +31,7 @@ export default {
         }
 
         try {
-            await react('⏳')
+            await react('🕔')
             
             // Unban the user
             db.unbanUser(target)

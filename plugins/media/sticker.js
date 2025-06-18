@@ -1,6 +1,7 @@
-import { getContentType } from '@whiskeysockets/baileys'
+import { getContentType, downloadMediaMessage } from '@whiskeysockets/baileys'
 import { sticker, video2webp } from '../../lib/sticker.js'
 import { fileTypeFromBuffer } from 'file-type'
+import { Buffer } from 'buffer'
 
 export default {
     command: 'sticker',
@@ -15,7 +16,7 @@ export default {
         const { reply, msg, sock, react, args, config } = context
         
         try {
-            await react('⏳')
+            await react('🕔')
             
             let mediaMessage = null
             let downloadMessage = null
@@ -66,10 +67,11 @@ export default {
                 return await reply('❌ File too large! Maximum size is 15MB for stickers.')
             }
             
-            await reply('🔄 Converting to sticker...')
-            
             // Download media
-            const buffer = await sock.downloadMediaMessage(downloadMessage)
+            let buffer = await downloadMediaMessage(downloadMessage, sock)
+            if (buffer && typeof buffer.read === 'function') {
+                buffer = await streamToBuffer(buffer)
+            }
             
             if (!buffer || buffer.length === 0) {
                 await react('❌')
@@ -138,4 +140,13 @@ export default {
             await reply(errorMessage)
         }
     }
+}
+
+// Helper function to convert Readable stream to Buffer
+async function streamToBuffer(stream) {
+    const chunks = []
+    for await (const chunk of stream) {
+        chunks.push(chunk)
+    }
+    return Buffer.concat(chunks)
 }

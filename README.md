@@ -251,7 +251,7 @@ export default {
     ownerOnly: false,
     
     async execute({ reply, args, react, db, sender }) {
-        await react('⏳')
+        await react('🕔')
         
         // Command logic here
         await reply('Success!')
