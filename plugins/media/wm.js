@@ -5,7 +5,7 @@ import { fileTypeFromBuffer } from 'file-type'
 export default {
     command: 'wm',
     aliases: ['watermark', 'setwm'],
-    description: 'Add watermark to sticker',
+    description: 'Add watermark',
     category: 'media',
     usage: '.wm <packname> | <author> (reply to image/video)',
     limit: 2,

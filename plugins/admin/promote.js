@@ -2,7 +2,7 @@ export default {
     command: 'promote',
     aliases: ['admin'],
     category: 'admin',
-    description: 'Promote a member to admin',
+    description: 'Promote a member',
     usage: 'promote @user',
     groupOnly: true,
     adminOnly: true,

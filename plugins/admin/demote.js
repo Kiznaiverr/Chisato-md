@@ -2,7 +2,7 @@ export default {
     command: 'demote',
     aliases: ['unadmin'],
     category: 'admin',
-    description: 'Demote an admin to member',
+    description: 'Demote an admin',
     usage: 'demote @user',
     groupOnly: true,
     adminOnly: true,

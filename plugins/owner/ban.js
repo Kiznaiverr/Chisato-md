@@ -1,6 +1,6 @@
 export default {
     command: 'ban',
-    description: 'Ban user from using the bot',
+    description: 'Ban user',
     category: 'owner',
     usage: '.ban @user',
     ownerOnly: true,

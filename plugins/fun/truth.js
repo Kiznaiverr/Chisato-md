@@ -1,6 +1,6 @@
 export default {
     command: 'truth',
-    description: 'Get a random truth question',
+    description: 'Get a random truth',
     category: 'fun',
     usage: '.truth',
     cooldown: 3,

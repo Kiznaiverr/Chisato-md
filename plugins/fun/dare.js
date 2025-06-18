@@ -1,6 +1,6 @@
 export default {
     command: 'dare',
-    description: 'Get a random dare challenge',
+    description: 'Get a random dare',
     category: 'fun',
     usage: '.dare',
     cooldown: 3,

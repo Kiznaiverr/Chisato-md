@@ -1,7 +1,7 @@
 export default {
     command: 'eval',
     aliases: ['exec', 'run'],
-    description: 'Execute JavaScript code (Owner only)',
+    description: 'Execute JavaScript code',
     category: 'owner',
     usage: '.eval <code>',
     ownerOnly: true,

@@ -1,7 +1,7 @@
 export default {
     command: 'owner',
     aliases: ['creator', 'dev'],
-    description: 'Show owner contact information',
+    description: 'Show owner details',
     category: 'general',
     usage: '.owner',
     cooldown: 5,

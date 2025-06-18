@@ -4,7 +4,7 @@ export default {
     command: 'deladmin',
     aliases: ['removeadmin'],
     category: 'owner',
-    description: 'Remove user as bot admin',
+    description: 'Remove bot admin',
     usage: 'deladmin @user',
     ownerOnly: true,
     cooldown: 5,

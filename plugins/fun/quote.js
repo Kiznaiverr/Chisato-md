@@ -1,7 +1,7 @@
 export default {
     command: 'quote',
     aliases: ['wisdom'],
-    description: 'Get a random inspirational quote',
+    description: '',
     category: 'fun',
     usage: '.quote',
     cooldown: 5,

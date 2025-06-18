@@ -2,7 +2,7 @@ export default {
     command: 'kick',
     aliases: ['remove'],
     category: 'admin',
-    description: 'Kick a member from the group',
+    description: 'Kick a member',
     usage: 'kick @user',
     groupOnly: true,
     adminOnly: true,

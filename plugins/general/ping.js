@@ -4,7 +4,7 @@ export default {
     command: 'ping',
     aliases: ['p'],
     category: 'general',
-    description: 'Check bot response time and basic system info',
+    description: 'Check bot response',
     usage: 'ping',
     cooldown: 3,
     

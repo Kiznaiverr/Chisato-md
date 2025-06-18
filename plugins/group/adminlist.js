@@ -1,7 +1,7 @@
 export default {
     command: 'adminlist',
     aliases: ['listadmin', 'admins'],
-    description: 'Show list of group admins',
+    description: 'Show list admins',
     category: 'group',
     usage: '.adminlist',
     groupOnly: true,

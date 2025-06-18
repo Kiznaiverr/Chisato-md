@@ -2,7 +2,7 @@ export default {
     command: 'limit',
     aliases: ['mylimit', 'checklimit'],
     category: 'user',
-    description: 'Check your daily command usage limit',
+    description: 'Check limit',
     usage: 'limit',
     cooldown: 3,
     

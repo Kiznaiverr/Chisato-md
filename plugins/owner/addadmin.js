@@ -4,7 +4,7 @@ export default {
     command: 'addadmin',
     aliases: ['setadmin'],
     category: 'owner',
-    description: 'Add user as bot admin',
+    description: 'Add bot admin',
     usage: 'addadmin @user',
     ownerOnly: true,
     cooldown: 5,

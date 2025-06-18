@@ -2,7 +2,7 @@ export default {
     command: 'profile',
     aliases: ['prof', 'me'],
     category: 'user',
-    description: 'View user profile and statistics',
+    description: 'View user profile',
     usage: 'profile [@user]',
     cooldown: 5,
     

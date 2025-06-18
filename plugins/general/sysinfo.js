@@ -5,7 +5,7 @@ export default {
     command: 'sysinfo',
     aliases: ['systeminfo', 'system'],
     category: 'general',
-    description: 'Show detailed system information',
+    description: '',
     usage: 'sysinfo',
     cooldown: 10,
     

@@ -2,7 +2,7 @@ export default {
     command: 'status',
     aliases: ['stats'],
     category: 'general',
-    description: 'Show bot status and statistics',
+    description: 'Show bot status',
     usage: 'status',
     cooldown: 5,
     

@@ -6,10 +6,10 @@ import { Buffer } from 'buffer'
 export default {
     command: 'sticker',
     aliases: ['s', 'stiker'],
-    description: 'Convert image/video to sticker with optional watermark',
+    description: 'Convert to sticker',
     category: 'media',
     usage: '.sticker [packname] [author] (reply to image/video) or send image/video with caption .s',
-    limit: 2,
+    limit: 1,
     cooldown: 5,
     
     async execute(context) {

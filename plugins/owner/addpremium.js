@@ -2,7 +2,7 @@ export default {
     command: 'addpremium',
     aliases: ['setpremium', 'addprem'],
     category: 'owner',
-    description: 'Add user as premium member',
+    description: 'Add premium member',
     usage: 'addpremium @user [duration]',
     ownerOnly: true,
     cooldown: 5,

@@ -2,7 +2,7 @@ export default {
     command: 'delpremium',
     aliases: ['removepremium', 'delprem'],
     category: 'owner',
-    description: 'Remove user from premium members',
+    description: 'Remove premium member',
     usage: 'delpremium @user',
     ownerOnly: true,
     cooldown: 5,

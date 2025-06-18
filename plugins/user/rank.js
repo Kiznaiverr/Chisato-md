@@ -1,7 +1,7 @@
 export default {
     command: 'rank',
     aliases: ['level', 'lvl'],
-    description: 'Show your level and ranking',
+    description: 'Show rank',
     category: 'user',
     usage: '.rank',
     cooldown: 5,

@@ -2,7 +2,7 @@ export default {
     command: 'listpremium',
     aliases: ['premiumlist', 'listprem'],
     category: 'owner',
-    description: 'Show list of premium users',
+    description: 'Show list premumium',
     usage: 'listpremium',
     ownerOnly: true,
     cooldown: 5,

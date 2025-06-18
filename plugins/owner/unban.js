@@ -1,6 +1,6 @@
 export default {
     command: 'unban',
-    description: 'Unban user from using the bot',
+    description: 'Unban user',
     category: 'owner',
     usage: '.unban @user',
     ownerOnly: true,

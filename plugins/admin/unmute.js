@@ -2,7 +2,7 @@ export default {
     command: 'unmute',
     aliases: ['unsilent'],
     category: 'admin',
-    description: 'Unmute the group (all members can send messages)',
+    description: 'Unmute the group',
     usage: 'unmute',
     groupOnly: true,
     adminOnly: true,

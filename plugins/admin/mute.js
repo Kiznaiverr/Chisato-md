@@ -2,7 +2,7 @@ export default {
     command: 'mute',
     aliases: ['silent'],
     category: 'admin',
-    description: 'Mute the group (only admins can send messages)',
+    description: 'Mute the group',
     usage: 'mute',
     groupOnly: true,
     adminOnly: true,

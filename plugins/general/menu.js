@@ -5,7 +5,7 @@ export default {
     command: 'menu',
     aliases: ['help', 'commands', 'm'],
     category: 'general',
-    description: 'Show dynamic bot command menu',
+    description: '',
     usage: 'menu [category] or menu [search]',
     cooldown: 3,
 

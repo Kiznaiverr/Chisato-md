@@ -1,7 +1,7 @@
 export default {
     command: 'broadcast',
     aliases: ['bc'],
-    description: 'Send message to all users',
+    description: 'Send message to all',
     category: 'owner',
     usage: '.broadcast <message>',
     ownerOnly: true,

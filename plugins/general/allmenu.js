@@ -5,7 +5,7 @@ export default {
     command: 'allmenu',
     aliases: ['allmenu', 'allcommands', 'allcmd'],
     category: 'general',
-    description: 'Show all commands grouped by category',
+    description: 'Show all commands',
     usage: 'allmenu',
     cooldown: 3,
 
