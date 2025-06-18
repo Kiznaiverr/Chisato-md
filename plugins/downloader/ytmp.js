@@ -1,27 +1,37 @@
 import fetch from 'node-fetch';
 
+// Helper to fetch with timeout
+async function fetchWithTimeout(resource, options = {}) {
+    const { timeout = 30000 } = options;
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    try {
+        const response = await fetch(resource, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(id);
+        return response;
+    } catch (err) {
+        clearTimeout(id);
+        throw err;
+    }
+}
+
 const downloadYoutube = async (url, format = '720p') => {
     const api = `https://api.nekoyama.my.id/api/youtube/download?url=${encodeURIComponent(url)}&format=${format}`;
-    const res = await fetch(api);
+    const res = await fetchWithTimeout(api, { timeout: 30000 });
     if (!res.ok) throw new Error('Gagal menghubungi API YouTube!');
     const json = await res.json();
     if (json.status !== 'success' || !json.data) {
         throw new Error('Gagal mendapatkan data. Pastikan link YouTube valid dan publik.');
     }
-    const { title, download_links, url: yturl, thumbnail, author, duration } = json.data;
-    return {
-        title,
-        download_links,
-        yturl,
-        thumbnail,
-        author,
-        duration
-    };
+    return json;
 };
 
 export default {
-    command: ['ytmp', 'ytv', 'ytmp4', 'ytvideo', 'ytmp3', 'yta', 'ytaudio', 'ytvmp3'],
-    aliases: [],
+    command: 'ytmp',
+    aliases: ['ytv', 'ytmp4', 'ytvideo', 'ytmp3', 'yta', 'ytaudio', 'ytvmp3'],
     category: 'downloader',
     description: 'Download video/audio YouTube (720p/mp3)',
     usage: 'ytmp <url> | ytmp3 <url>',
@@ -33,14 +43,27 @@ export default {
         const isAudio = ['yta', 'ytmp3', 'ytaudio', 'ytvmp3'].includes(command);
         const format = isAudio ? 'mp3' : '720p';
         try {
-            const result = await downloadYoutube(url, format);
-            const { title, download_links, yturl, thumbnail, author, duration } = result;
-            let fileUrl = isAudio ? download_links.audio : download_links.video;
-            if (!fileUrl) return reply('Tidak ada media yang bisa diunduh dari link tersebut.');
-            const fileRes = await fetch(fileUrl);
+            // React with clock emoji to indicate processing
+            await sock.sendMessage(msg.key.remoteJid, { react: { text: '🕔', key: msg.key } });
+            // Fetch API and log response for debugging
+            const apiResponse = await downloadYoutube(url, format);
+            if (!apiResponse || !apiResponse.data) throw new Error('API response kosong atau tidak valid.');
+            const data = apiResponse.data;
+            // Compose info
+            const info = `🎵 *Title*: ${data.title || '-'}\n👤 *Uploader*: ${data.uploader || '-'}\n⏱️ *Duration*: ${data.duration || '-'}\n🔗 *Link*: https://youtu.be/${data.video_id || '-'}\n`;
+            // Determine media URL
+            let fileUrl = data.download_url;
+            if (!fileUrl) throw new Error('Tidak ada URL media yang bisa diunduh dari API.');
+            // Download media with timeout
+            let fileRes;
+            try {
+                fileRes = await fetchWithTimeout(fileUrl, { timeout: 30000 });
+            } catch (err) {
+                throw new Error('Gagal mengunduh file media (timeout atau error jaringan).');
+            }
             if (!fileRes.ok) throw new Error('Gagal download file YouTube!');
             const buffer = Buffer.from(await fileRes.arrayBuffer());
-            const info = `🎵 *Title*: ${title || '-'}\n🖼️ *Thumbnail*: ${thumbnail || '-'}\n👤 *Uploader*: ${author || '-'}\n⏱️ *Duration*: ${duration || '-'}\n🔗 *Link*: ${yturl || '-'}\n`;
+            // Send media
             if (isAudio) {
                 await sock.sendMessage(msg.key.remoteJid, {
                     audio: buffer,
@@ -56,8 +79,10 @@ export default {
                 }, { quoted: msg });
             }
         } catch (error) {
+            // Log error for debugging
+            console.error('YT Plugin Error:', error);
             await sock.sendMessage(msg.key.remoteJid, { react: { text: '❌', key: msg.key } });
-            reply('⚠️ *Oops! Something went wrong.*\n\n🚨 Please try lagi nanti atau cek link yang kamu berikan.');
+            reply('⚠️ *Terjadi kesalahan saat memproses permintaan YouTube.*\n\n' + (error.message || error));
         }
     }
 };
