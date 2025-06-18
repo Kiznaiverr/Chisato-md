@@ -41,7 +41,7 @@ export default {
         }
 
         try {
-            await react('🕔')
+            await react('⏳')
             
             // Ban the user
             db.banUser(target)
