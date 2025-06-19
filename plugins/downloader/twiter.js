@@ -6,6 +6,7 @@ export default {
     category: 'downloader',
     description: 'Download media (video/gambar) dari Twitter/X',
     usage: 'twitter <url>',
+    limit: 1,
     cooldown: 5,
 
     async execute({ args, reply, sock, msg }) {

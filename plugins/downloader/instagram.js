@@ -6,6 +6,7 @@ export default {
     category: 'downloader',
     description: 'Download video atau gambar dari Instagram (Reel/Post)',
     usage: 'instagram <url>',
+    limit: 1,
     cooldown: 5,
 
     async execute({ args, reply, sock, msg }) {

@@ -8,7 +8,7 @@ export default {
     description: 'Add watermark',
     category: 'media',
     usage: '.wm <packname> | <author> (reply to image/video)',
-    limit: 2,
+    limit: 1,
     cooldown: 5,
     
     async execute(context) {

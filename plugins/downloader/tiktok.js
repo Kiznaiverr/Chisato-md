@@ -6,6 +6,7 @@ export default {
     category: 'downloader',
     description: 'Download video dan audio dari TikTok',
     usage: 'tiktok <url>',
+    limit: 1,
     cooldown: 5,
 
     async execute({ args, reply, sock, msg }) {

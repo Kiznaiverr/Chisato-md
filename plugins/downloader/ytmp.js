@@ -35,6 +35,7 @@ export default {
     category: 'downloader',
     description: 'Download video/audio YouTube (720p/mp3)',
     usage: 'ytmp <url> | ytmp3 <url>',
+    limit: 1,
     cooldown: 5,
 
     async execute({ args, reply, sock, msg, command }) {

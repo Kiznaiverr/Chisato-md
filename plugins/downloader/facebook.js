@@ -6,6 +6,7 @@ export default {
     category: 'downloader',
     description: 'Download video Facebook via link',
     usage: 'facebook <url>',
+    limit:1,
     cooldown: 5,
 
     async execute({ args, reply, sock, msg }) {

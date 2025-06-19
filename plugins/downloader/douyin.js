@@ -8,6 +8,7 @@ export default {
     category: 'downloader',
     description: 'Download video Douyin (TikTok China) via link/text',
     usage: 'douyin <url/text>',
+    limit: 1,
     cooldown: 5,
 
     async execute({ args, reply, sock, msg }) {
