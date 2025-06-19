@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import pino from 'pino'
 import { Handler } from './lib/handler.js'
 import { Database } from './lib/database.js'
-import { loadPlugins } from './lib/loader.js'
+import { loadPlugins, startAutoReload, stopAutoReload } from './lib/loader.js'
 import config from './lib/config.js'
 
 // Initialize logger
@@ -23,6 +23,9 @@ const db = new Database()
 
 // Load plugins
 const plugins = await loadPlugins()
+
+// Initialize handler (will be set after connection)
+let handler = null
 
 // Enhanced startup banner
 console.log(chalk.cyan('\n╔══════════════════════════════════════╗'))
@@ -54,11 +57,17 @@ async function startBot() {
         getMessage: async (key) => {
             // Messages not stored for performance
             return undefined
-        }
-    })
+        }    })
 
     // Initialize handler
-    const handler = new Handler(sock, db, plugins)
+    handler = new Handler(sock, db, plugins)
+    
+    // Start auto-reload watcher
+    startAutoReload((updatedPlugins) => {
+        if (handler) {
+            handler.updatePlugins(updatedPlugins)
+        }
+    })
 
     sock.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect, qr } = update
@@ -85,7 +94,8 @@ async function startBot() {
             console.log(chalk.green('│') + chalk.cyan(`   📱 Number: ${botNumber}`) + ' '.repeat(Math.max(0, 37 - 15 - botNumber.length)) + chalk.green('│'))
             console.log(chalk.green('│') + chalk.magenta(`   🕒 Time: ${currentTime}`) + ' '.repeat(Math.max(0, 37 - 12 - currentTime.length)) + chalk.green('│'))
             console.log(chalk.green('└─────────────────────────────────────┘'))
-            console.log(chalk.yellow('📬 Bot is now ready to receive messages!\n'))
+            console.log(chalk.yellow('📬 Bot is now ready to receive messages!'))
+            console.log(chalk.cyan('🔄 Auto-reload is active - plugins will reload on file changes\n'))
         }
     })
 
@@ -106,13 +116,16 @@ startBot().catch(err => {
 // Handle process termination
 process.on('SIGINT', () => {
     console.log(chalk.yellow('\n🛑 Bot stopped by user'))
+    stopAutoReload()
     process.exit(0)
 })
 
 process.on('uncaughtException', (err) => {
     console.error(chalk.red('❌ Uncaught Exception:'), err)
+    stopAutoReload()
 })
 
 process.on('unhandledRejection', (err) => {
     console.error(chalk.red('❌ Unhandled Rejection:'), err)
+    stopAutoReload()
 })
