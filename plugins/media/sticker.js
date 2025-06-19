@@ -102,8 +102,8 @@ export default {
             } else {
                 // Convert image to sticker with watermark
                 stickerBuffer = await sticker(buffer, null, packname, author, ['🤖'], {
-                    'android-app-store-link': 'https://github.com/kiznavierr/chisato-md',
-                    'ios-app-store-link': 'https://github.com/kiznavierr/chisato-md'
+                    'android-app-store-link': 'https://github.com/kiznaiverr/chisato-md',
+                    'ios-app-store-link': 'https://github.com/kiznaiverr/chisato-md'
                 })
             }
             

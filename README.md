@@ -207,7 +207,7 @@ export default {
 
 ---
 
-**Made with ❤️ by [Kiznavierr](https://github.com/kiznavierr)**
+**Made with ❤️ by [Kiznavierr](https://github.com/kiznaiverr)**
 
 ⭐ **Star this repository if you find it helpful!**
 

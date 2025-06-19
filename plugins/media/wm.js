@@ -87,8 +87,8 @@ export default {
             }
             // Buat sticker baru dari buffer (baik dari sticker, image, atau video)
             const stickerBuffer = await sticker(buffer, null, packname, author, ['🎨'], {
-                'android-app-store-link': 'https://github.com/kiznavierr/chisato-md',
-                'ios-app-store-link': 'https://github.com/kiznavierr/chisato-md',
+                'android-app-store-link': 'https://github.com/kiznaiverr/chisato-md',
+                'ios-app-store-link': 'https://github.com/kiznaiverr/chisato-md',
                 'custom-watermark': true
             })
             if (!stickerBuffer || stickerBuffer.length === 0) {
