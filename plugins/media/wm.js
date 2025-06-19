@@ -7,7 +7,7 @@ export default {
     aliases: ['watermark', 'setwm'],
     description: 'Add watermark',
     category: 'media',
-    usage: '.wm <packname> | <author> (reply to image/video)',
+    usage: '<packname> | <author>',
     limit: 1,
     cooldown: 5,
     

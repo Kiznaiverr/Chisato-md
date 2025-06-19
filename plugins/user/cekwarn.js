@@ -3,7 +3,7 @@ export default {
     aliases: ['checkwarn', 'warningku', 'mywarnings'],
     category: 'user',
     description: 'Check your warnings or someone\'s warnings (admin only)',
-    usage: '.cekwarn [@user]',
+    usage: '@user',
     cooldown: 5,
     groupOnly: true,
 

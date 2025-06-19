@@ -34,7 +34,7 @@ export default {
     aliases: ['ytv', 'ytmp4', 'ytvideo', 'ytmp3', 'yta', 'ytaudio', 'ytvmp3'],
     category: 'downloader',
     description: 'Download video/audio YouTube (720p/mp3)',
-    usage: 'ytmp <url> | ytmp3 <url>',
+    usage: '<url>',
     limit: 1,
     cooldown: 5,
 

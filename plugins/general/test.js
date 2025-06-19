@@ -3,7 +3,7 @@ export default {
     aliases: ['tes'],
     category: 'general',
     description: 'Test bot response',
-    usage: 'test',
+    usage: '',
     cooldown: 3,
     
     async execute({ reply, sender, isGroup, groupMetadata }) {

@@ -8,7 +8,7 @@ export default {
     aliases: ['s', 'stiker'],
     description: 'Convert to sticker',
     category: 'media',
-    usage: '.sticker [packname] [author] (reply to image/video) or send image/video with caption .s',
+    usage: '',
     limit: 1,
     cooldown: 5,
     

@@ -6,7 +6,7 @@ export default {
     aliases: ['systeminfo', 'system'],
     category: 'general',
     description: '',
-    usage: 'sysinfo',
+    usage: '',
     cooldown: 10,
     
     async execute({ reply, react }) {

@@ -3,7 +3,7 @@ export default {
     aliases: ['level', 'lvl'],
     description: 'Show rank',
     category: 'user',
-    usage: '.rank',
+    usage: '',
     cooldown: 5,
     async execute(context) {
         const { reply, sender, db, pushName } = context

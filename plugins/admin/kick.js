@@ -3,7 +3,7 @@ export default {
     aliases: ['remove'],
     category: 'admin',
     description: 'Kick a member',
-    usage: 'kick @user',
+    usage: '@user',
     groupOnly: true,
     adminOnly: true,
     botAdmin: true,

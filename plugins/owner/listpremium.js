@@ -3,7 +3,7 @@ export default {
     aliases: ['premiumlist', 'listprem'],
     category: 'owner',
     description: 'Show list premumium',
-    usage: 'listpremium',
+    usage: '',
     ownerOnly: true,
     cooldown: 5,
     

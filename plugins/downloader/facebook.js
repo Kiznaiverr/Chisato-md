@@ -5,7 +5,7 @@ export default {
     aliases: ['fb', 'fbvid', 'fbdown'],
     category: 'downloader',
     description: 'Download video Facebook via link',
-    usage: 'facebook <url>',
+    usage: '<url>',
     limit:1,
     cooldown: 5,
 

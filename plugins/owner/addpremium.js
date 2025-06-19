@@ -3,7 +3,7 @@ export default {
     aliases: ['setpremium', 'addprem'],
     category: 'owner',
     description: 'Add premium member',
-    usage: 'addpremium @user [duration]',
+    usage: '@user [duration]',
     ownerOnly: true,
     cooldown: 5,
     

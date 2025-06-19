@@ -5,7 +5,7 @@ export default {
     aliases: ['tt', 'ttdl', 'tiktokdl'],
     category: 'downloader',
     description: 'Download video dan audio dari TikTok',
-    usage: 'tiktok <url>',
+    usage: '<url>',
     limit: 1,
     cooldown: 5,
 

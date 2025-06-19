@@ -3,7 +3,7 @@ export default {
     aliases: ['warnlist', 'warninglist'],
     category: 'admin',
     description: 'list',
-    usage: '.listwarn',
+    usage: '',
     cooldown: 5,
     groupOnly: true,
     adminOnly: true,

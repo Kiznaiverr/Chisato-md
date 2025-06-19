@@ -2,7 +2,7 @@ export default {
     command: 'ban',
     description: 'Ban user',
     category: 'owner',
-    usage: '.ban @user',
+    usage: '@user',
     ownerOnly: true,
     cooldown: 0,
     async execute(context) {

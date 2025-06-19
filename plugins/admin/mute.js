@@ -3,7 +3,7 @@ export default {
     aliases: ['silent'],
     category: 'admin',
     description: 'Mute group',
-    usage: 'mute',
+    usage: '',
     groupOnly: true,
     adminOnly: true,
     botAdmin: true,

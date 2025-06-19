@@ -3,7 +3,7 @@ export default {
     aliases: ['creator', 'dev'],
     description: 'Show owner details',
     category: 'general',
-    usage: '.owner',
+    usage: '',
     cooldown: 5,
     async execute(context) {
         const { reply, sock, config } = context

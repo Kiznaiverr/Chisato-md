@@ -5,7 +5,7 @@ export default {
     aliases: ['wisdom'],
     description: 'Kirim gambar motivasi random',
     category: 'fun',
-    usage: '.quote',
+    usage: '',
     cooldown: 5,
     async execute(context) {
         const { sock, msg, reply } = context;

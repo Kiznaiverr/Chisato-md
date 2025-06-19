@@ -4,7 +4,7 @@ export default {
   command: 'ytsearch',
   aliases: ['yt-search', 'yts'],
   tags: ['tools'],
-  help: ['ytsearch <query>'],
+  help: ['<query>'],
   limit: 1,
   premium: false,
   groupOnly: false,

@@ -5,7 +5,7 @@ export default {
     aliases: ['p'],
     category: 'general',
     description: 'Check bot response',
-    usage: 'ping',
+    usage: '',
     cooldown: 3,
     
     async execute({ reply, prefix }) {

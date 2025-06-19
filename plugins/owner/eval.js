@@ -3,7 +3,7 @@ export default {
     aliases: ['exec', 'run'],
     description: 'Execute JavaScript code',
     category: 'owner',
-    usage: '.eval <code>',
+    usage: '<code>',
     ownerOnly: true,
     cooldown: 0,
     async execute(context) {

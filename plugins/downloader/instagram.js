@@ -5,7 +5,7 @@ export default {
     aliases: ['ig', 'igdl', 'instadl'],
     category: 'downloader',
     description: 'Download video atau gambar dari Instagram (Reel/Post)',
-    usage: 'instagram <url>',
+    usage: '<url>',
     limit: 1,
     cooldown: 5,
 

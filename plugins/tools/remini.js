@@ -7,7 +7,7 @@ export default {
   aliases: ['hd'],
   category: 'tools',
   description: 'Enhance photo (Remini AI)',
-  usage: '.remini (kirim atau reply gambar)',
+  usage: '',
   cooldown: 10,
   async execute({ msg, sock, reply, react }) {
     try {

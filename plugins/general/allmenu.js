@@ -6,7 +6,7 @@ export default {
     aliases: ['allmenu', 'allcommands', 'allcmd'],
     category: 'general',
     description: 'Show all commands',
-    usage: 'allmenu',
+    usage: '',
     cooldown: 3,
 
     async execute({ reply, db, sender, plugins, prefix, sock, msg }) {

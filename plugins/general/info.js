@@ -3,7 +3,7 @@ export default {
     aliases: ['botinfo'],
     category: 'general',
     description: 'Show bot info',
-    usage: 'info',
+    usage: '',
     cooldown: 5,
     
     async execute({ reply, db, sock }) {

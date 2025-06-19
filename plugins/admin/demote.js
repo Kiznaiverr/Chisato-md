@@ -3,7 +3,7 @@ export default {
     aliases: ['unadmin'],
     category: 'admin',
     description: 'Demote an admin',
-    usage: 'demote @user',
+    usage: '@user',
     groupOnly: true,
     adminOnly: true,
     botAdmin: true,

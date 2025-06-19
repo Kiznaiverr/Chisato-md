@@ -7,7 +7,7 @@ export default {
     aliases: ['douyin', 'dy', 'douyindl'],
     category: 'downloader',
     description: 'Download video Douyin (TikTok China) via link/text',
-    usage: 'douyin <url/text>',
+    usage: '<url/text>',
     limit: 1,
     cooldown: 5,
 

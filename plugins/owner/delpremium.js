@@ -3,7 +3,7 @@ export default {
     aliases: ['removepremium', 'delprem'],
     category: 'owner',
     description: 'Remove premium member',
-    usage: 'delpremium @user',
+    usage: '@user',
     ownerOnly: true,
     cooldown: 5,
     

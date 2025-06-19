@@ -3,7 +3,7 @@ export default {
     aliases: ['admin'],
     category: 'admin',
     description: 'Promote a member',
-    usage: 'promote @user',
+    usage: '@user',
     groupOnly: true,
     adminOnly: true,
     botAdmin: true,

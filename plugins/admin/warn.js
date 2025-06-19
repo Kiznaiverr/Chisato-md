@@ -3,7 +3,7 @@ export default {
     aliases: ['w'],
     category: 'admin',
     description: 'Warn a user',
-    usage: '.warn @user [reason]',
+    usage: '@user [reason]',
     cooldown: 3,
     groupOnly: true,
     adminOnly: true,

@@ -5,7 +5,7 @@ export default {
     aliases: ['search'],
     description: 'Search on Google',
     category: 'search',
-    usage: '.google <query>',
+    usage: '<query>',
     limit: 1,
     cooldown: 5,
     async execute(context) {

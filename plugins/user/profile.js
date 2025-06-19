@@ -3,7 +3,7 @@ export default {
     aliases: ['prof', 'me'],
     category: 'user',
     description: 'View user profile',
-    usage: 'profile [@user]',
+    usage: '@user',
     cooldown: 5,
     
     async execute({ msg, args, reply, db, sender }) {

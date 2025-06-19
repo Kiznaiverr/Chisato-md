@@ -4,7 +4,7 @@ export default {
     command: 'dare',
     description: 'Get a random dare',
     category: 'fun',
-    usage: '.dare',
+    usage: '',
     cooldown: 3,
     async execute(context) {
         const { reply } = context;

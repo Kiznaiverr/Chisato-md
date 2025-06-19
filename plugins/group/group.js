@@ -3,7 +3,7 @@ export default {
     aliases: ['grup'],
     description: 'Group management settings',
     category: 'group',
-    usage: '.group <setting> <on/off>',
+    usage: '<setting> <on/off>',
     groupOnly: true,
     cooldown: 5,
     async execute(context) {

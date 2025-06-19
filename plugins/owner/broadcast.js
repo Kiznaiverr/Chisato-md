@@ -3,7 +3,7 @@ export default {
     aliases: ['bc'],
     description: 'Send message to all',
     category: 'owner',
-    usage: '.broadcast <message>',
+    usage: '<message>',
     ownerOnly: true,
     cooldown: 0,
     async execute(context) {

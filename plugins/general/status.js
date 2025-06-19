@@ -3,7 +3,7 @@ export default {
     aliases: ['stats'],
     category: 'general',
     description: 'Show bot status',
-    usage: 'status',
+    usage: '',
     cooldown: 5,
     
     async execute({ reply, db, plugins, sock }) {

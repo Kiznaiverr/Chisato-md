@@ -3,7 +3,7 @@ export default {
     aliases: ['listadmin', 'admins'],
     description: 'Show list admins',
     category: 'group',
-    usage: '.adminlist',
+    usage: '',
     groupOnly: true,
     cooldown: 10,
     async execute(context) {

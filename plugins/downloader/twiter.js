@@ -5,7 +5,7 @@ export default {
     aliases: ['tw', 'twitterdl', 'xdl'],
     category: 'downloader',
     description: 'Download media (video/gambar) dari Twitter/X',
-    usage: 'twitter <url>',
+    usage: '<url>',
     limit: 1,
     cooldown: 5,
 

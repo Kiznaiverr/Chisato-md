@@ -4,7 +4,7 @@ export default {
   command: 'play',
   aliases: ['ytplay', 'playmp3'],
   tags: ['downloader', 'music'],
-  help: ['play <query>'],
+  help: ['<query>'],
   limit: false,
   premium: false,
   groupOnly: false,

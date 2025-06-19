@@ -3,7 +3,7 @@ export default {
     aliases: ['resetwarn', 'clearwarnings'],
     category: 'admin',
     description: 'Clear warnings',
-    usage: '.clearwarn @user [reason]',
+    usage: '@user [reason]',
     cooldown: 3,
     groupOnly: true,
     adminOnly: true,

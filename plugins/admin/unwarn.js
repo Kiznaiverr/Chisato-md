@@ -3,7 +3,7 @@ export default {
     aliases: ['uw', 'removewarn'],
     category: 'admin',
     description: 'Remove warning',
-    usage: '.unwarn @user [reason]',
+    usage: '@user [reason]',
     cooldown: 3,
     groupOnly: true,
     adminOnly: true,

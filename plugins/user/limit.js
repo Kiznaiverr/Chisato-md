@@ -3,7 +3,7 @@ export default {
     aliases: ['mylimit', 'checklimit'],
     category: 'user',
     description: 'Check limit',
-    usage: 'limit',
+    usage: '',
     cooldown: 3,
     
     async execute({ reply, db, sender }) {

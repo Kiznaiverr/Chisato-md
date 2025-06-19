@@ -2,7 +2,7 @@ export default {
     command: 'unban',
     description: 'Unban user',
     category: 'owner',
-    usage: '.unban @user',
+    usage: '@user',
     ownerOnly: true,
     cooldown: 0,
     async execute(context) {

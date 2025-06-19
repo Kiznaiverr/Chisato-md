@@ -5,7 +5,7 @@ export default {
     aliases: ['removeadmin'],
     category: 'owner',
     description: 'Remove bot admin',
-    usage: 'deladmin @user',
+    usage: '@user',
     ownerOnly: true,
     cooldown: 5,
     

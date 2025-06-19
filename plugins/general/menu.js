@@ -6,7 +6,7 @@ export default {
     aliases: ['help', 'commands', 'm'],
     category: 'general',
     description: '',
-    usage: 'menu [category] or menu [search]',
+    usage: '',
     cooldown: 3,
 
     async execute({ reply, args, db, sender, plugins, prefix, isGroup, groupMetadata, sock, msg }) {

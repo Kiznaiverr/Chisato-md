@@ -4,7 +4,7 @@ export default {
     command: 'truth',
     description: 'Get a random truth',
     category: 'fun',
-    usage: '.truth',
+    usage: '',
     cooldown: 3,
     async execute(context) {
         const { reply } = context
