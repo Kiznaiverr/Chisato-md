@@ -9,7 +9,7 @@ export default {
     usage: 'allmenu',
     cooldown: 3,
 
-    async execute({ reply, db, sender, plugins, prefix }) {
+    async execute({ reply, db, sender, plugins, prefix, sock, msg }) {
         const isOwner = db.isOwner(sender)
         const isAdmin = db.isAdmin(sender)
         const botName = 'Chisato'
@@ -27,24 +27,71 @@ export default {
             if (!categories[cat]) categories[cat] = []
             categories[cat].push(plugin)
         }
-        const sortedCats = Object.keys(categories).sort()
-
-        // HEADER
+        const sortedCats = Object.keys(categories).sort()        // HEADER
         let menuText = ''
-        menuText += `⌬〡 ɴᴀᴍᴀ ʙᴏᴛ: ${botName}\n`
-        menuText += `⌬〡 ᴜsᴇʀ: ${userName}\n`
-        menuText += `⌬〡 sᴛᴀᴛᴜs: ${premiumText}\n`
-        menuText += `⌬〡 ʟɪᴍɪᴛ: ${userLimit}/${maxLimit}\n`
-        menuText += '  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌\n'
-        menuText += 'Selamat datang di *Chisato All Menu*! Semua fitur bot dikelompokkan berdasarkan kategori di bawah ini.\n'
-        menuText += 'Gunakan perintah sesuai kategori, atau ketik ".menu <kategori>" untuk detail tiap kategori.\n'
-        menuText += '╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌\n'
+        menuText += `╭─────────────────────────╮\n`
+        menuText += `│  🤖 *${botName} - All Commands*  │\n`
+        menuText += `╰─────────────────────────╯\n\n`
+        menuText += `👤 *User:* ${userName}\n`
+        menuText += `🏷️ *Status:* ${premiumText}\n`
+        menuText += `⚡ *Limit:* ${userLimit}/${maxLimit}\n`
+        menuText += `🕒 *Time:* ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
+        menuText += `━━━━━━━━━━━━━━━━━━━━━━━━━\n`
+        menuText += `📚 *SEMUA COMMAND TERSEDIA:*\n\n`
         // MENU KATEGORI
-        menuText += '┏━━━━°⌜ Chisato ⌟°━━━━┓\n'
+        const categoryIcons = {
+            'admin': '👑',
+            'owner': '🔱',
+            'general': '📋',
+            'user': '👤',
+            'group': '👥',
+            'fun': '🎮',
+            'media': '🎨',
+            'tools': '🔧',
+            'search': '🔍',
+            'downloader': '📥'
+        }
+        
         sortedCats.forEach(cat => {
-            menuText += `> • .${cat}menu\n`
+            const icon = categoryIcons[cat] || '📂'
+            const categoryName = cat.charAt(0).toUpperCase() + cat.slice(1)
+            menuText += `${icon} *${categoryName.toUpperCase()} COMMANDS:*\n`
+            
+            // List all commands in this category
+            categories[cat].forEach(plugin => {
+                const aliases = plugin.aliases ? ` (${plugin.aliases.join(', ')})` : ''
+                const description = plugin.description ? ` - ${plugin.description}` : ''
+                menuText += `• \`${prefix}${plugin.command}\`${aliases}${description}\n`
+            })
+            menuText += `\n`
         })
-        menuText += '╰┄┄┄┄┄┄┄┄┄┄┄┄┄〢\nChisato'
-        return reply(menuText)
+        
+        menuText += `━━━━━━━━━━━━━━━━━━━━━━━━━\n`
+        menuText += `📊 *Total Commands:* ${plugins.filter(p => {
+            if (p.ownerOnly && !isOwner) return false
+            if (p.adminOnly && !isAdmin && !isOwner) return false
+            return true
+        }).length}\n\n`
+        menuText += `💡 *Tips:* Gunakan \`.menu\` untuk tampilan kategori yang lebih ringkas\n\n`
+        menuText += `🤖 *Powered by Chisato-MD* | Created by Kiznavierr`
+        
+        // Send allmenu with banner image
+        try {
+            const bannerPath = path.join(process.cwd(), 'images', 'banner', 'Chisato.jpg')
+            
+            if (fs.existsSync(bannerPath)) {
+                await sock.sendMessage(msg.key.remoteJid, {
+                    image: fs.readFileSync(bannerPath),
+                    caption: menuText
+                }, { quoted: msg })
+            } else {
+                // Fallback to text only if image not found
+                return reply(menuText)
+            }
+        } catch (error) {
+            console.error('Error sending allmenu with image:', error)
+            // Fallback to text only on error
+            return reply(menuText)
+        }
     }
 }
