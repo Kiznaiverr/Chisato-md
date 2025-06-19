@@ -18,7 +18,7 @@ export default {
             let listText = `╭─「 💎 ${font.smallCaps('Premium Users List')} 」\n`
             listText += `├ 📊 ${font.smallCaps('Total Premium')}: ${premiumUsers.length}\n`
             listText += `├ 👑 ${font.smallCaps('Total Owners')}: ${owners.length}\n`
-            listText += `├─────────────────────────\n`
+            listText += `├───────────────\n`
             
             if (owners.length > 0) {
                 listText += `├ 👑 ${font.smallCaps('BOT OWNERS')}:\n`
@@ -26,7 +26,7 @@ export default {
                     const isLast = index === owners.length - 1 && premiumUsers.length === 0
                     const symbol = isLast ? '╰' : '├'
                     const number = user.jid.split('@')[0]
-                    const name = user.name || 'Unknown'
+                    const name = font.smallCaps(user.name || 'Unknown')
                     
                     listText += `${symbol} 👑 ${name} (${number})\n`
                     if (!isLast || premiumUsers.length > 0) {
@@ -37,7 +37,7 @@ export default {
             
             if (premiumUsers.length > 0) {
                 if (owners.length > 0) {
-                    listText += `├─────────────────────────\n`
+                    listText += `├───────────────\n`
                 }
                 listText += `├ 💎 ${font.smallCaps('PREMIUM MEMBERS')}:\n`
                 
@@ -45,7 +45,7 @@ export default {
                     const isLast = index === premiumUsers.length - 1
                     const symbol = isLast ? '╰' : '├'
                     const number = user.jid.split('@')[0]
-                    const name = user.name || 'Unknown'
+                    const name = font.smallCaps(user.name || 'Unknown')
                     
                     listText += `${symbol} 💎 ${name} (${number})\n`
                     

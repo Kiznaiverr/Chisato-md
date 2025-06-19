@@ -57,14 +57,14 @@ export default {
             
             // Get GPU info
             const gpuInfo = graphics.controllers && graphics.controllers.length > 0 
-                ? graphics.controllers[0].model || 'Unknown GPU'
-                : 'No GPU detected'
+                ? graphics.controllers[0].model || font.smallCaps('Unknown GPU')
+                : font.smallCaps('No GPU detected')
                 
             // Get network info
             const activeNetworks = networkInterfaces.filter(net => net.operstate === 'up' && !net.internal)
             const networkInfo = activeNetworks.length > 0 
                 ? `${activeNetworks[0].iface} (${activeNetworks[0].type})`
-                : 'No active network'
+                : font.smallCaps('No active network')
             
             // Bot process info
             const processMemory = process.memoryUsage()
@@ -72,29 +72,29 @@ export default {
             const botMemTotal = (processMemory.heapTotal / 1024 / 1024).toFixed(1)
             
             let sysInfo = `┌─「 💻 ${font.smallCaps('System Information')} 」\n`
-            sysInfo += `├─────────────────────────\n`
+            sysInfo += `├───────────────\n`
             sysInfo += `├ 🖥️ ${font.smallCaps('OS')}: ${osInfo.distro || platform} ${osInfo.release || ''}\n`
             sysInfo += `├ 🏠 ${font.smallCaps('Host')}: ${hostname}\n`
             sysInfo += `├ 🏗️ ${font.smallCaps('Arch')}: ${arch}\n`
             sysInfo += `├ ⏰ ${font.smallCaps('Uptime')}: ${uptimeStr}\n`
-            sysInfo += `├─────────────────────────\n`
+            sysInfo += `├───────────────\n`
             sysInfo += `├ 🧠 ${font.smallCaps('CPU')}: ${cpu.manufacturer} ${cpu.brand}\n`
             sysInfo += `├ ⚙️ ${font.smallCaps('Cores')}: ${cpu.cores} ${font.smallCaps('cores')} / ${cpu.physicalCores} ${font.smallCaps('physical')}\n`
-            sysInfo += `├ 🚀 ${font.smallCaps('Speed')}: ${font.smallCaps('Base')} ${cpu.speed} GHz, ${font.smallCaps('Max')} ${cpu.speedMax} GHz\n`
-            sysInfo += `├─────────────────────────\n`
+            sysInfo += `├ 🚀 ${font.smallCaps('Speed')}: ${font.smallCaps('Base')} ${cpu.speed} ${font.smallCaps('GHz')}, ${font.smallCaps('Max')} ${cpu.speedMax} ${font.smallCaps('GHz')}\n`
+            sysInfo += `├───────────────\n`
             sysInfo += `├ 🎯 ${font.smallCaps('RAM')}: ${formatBytes(mem.used)} / ${formatBytes(mem.total)} (${memUsagePercent}%)\n`
             sysInfo += `├ 🆓 ${font.smallCaps('Free')}: ${formatBytes(mem.free)}\n`
-            sysInfo += `├ 🤖 ${font.smallCaps('Bot RAM')}: ${botMemUsed} MB / ${botMemTotal} MB\n`
-            sysInfo += `├─────────────────────────\n`
+            sysInfo += `├ 🤖 ${font.smallCaps('Bot RAM')}: ${botMemUsed} ${font.smallCaps('MB')} / ${botMemTotal} ${font.smallCaps('MB')}\n`
+            sysInfo += `├───────────────\n`
             sysInfo += `├ 💾 ${font.smallCaps('Storage')}: ${formatBytes(storageUsed)} / ${formatBytes(storageTotal)} (${storagePercent}%)\n`
             sysInfo += `├ 📁 ${font.smallCaps('Free')}: ${formatBytes(storageTotal - storageUsed)}\n`
             sysInfo += `├ 🎮 ${font.smallCaps('GPU')}: ${gpuInfo}\n`
             
             if (graphics.controllers && graphics.controllers[0] && graphics.controllers[0].vram) {
-                sysInfo += `├ 🎨 ${font.smallCaps('VRAM')}: ${graphics.controllers[0].vram} MB\n`
+                sysInfo += `├ 🎨 ${font.smallCaps('VRAM')}: ${graphics.controllers[0].vram} ${font.smallCaps('MB')}\n`
             }
             
-            sysInfo += `├─────────────────────────\n`
+            sysInfo += `├───────────────\n`
             sysInfo += `├ 🌐 ${font.smallCaps('Network')}: ${networkInfo}\n`
             
             if (battery.hasBattery) {

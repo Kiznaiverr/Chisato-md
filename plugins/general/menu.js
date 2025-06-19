@@ -28,9 +28,9 @@ export default {
         const isPremium = db.isPremium ? db.isPremium(sender) : false
         const userLimit = user?.limit ?? 0
         const maxLimit = db.getSetting ? (db.getSetting('dailyLimit') || 10) : 10
-        const botName = 'Chisato'
-        const userName = user?.name || 'Kiznavierr'
-        const premiumText = isOwner ? 'Owner' : (isPremium ? 'Premium' : 'Free')
+        const botName = font.smallCaps('Chisato')
+        const userName = font.smallCaps(user?.name || 'User')
+        const premiumText = isOwner ? font.smallCaps('Owner') : (isPremium ? font.smallCaps('Premium') : font.smallCaps('Free'))
 
         // Dynamic category menu detection
         const categoryMenus = {}
@@ -74,17 +74,17 @@ export default {
         // If requesting a specific category menu
         if (requestedCategory) {
             const categoryPlugins = categories[requestedCategory] || []
-            const icon = categoryIcons[requestedCategory] || '📂' // Fallback icon
+            const icon = categoryIcons[requestedCategory] || '📂'
             const categoryName = requestedCategory.charAt(0).toUpperCase() + requestedCategory.slice(1)
 
-            let categoryMenuText = `╭─────────────────────────╮\n`
+            let categoryMenuText = `╭───────────────╮\n`
             categoryMenuText += `│  ${icon} ${font.smallCaps(categoryName + ' Menu')}  │\n`
-            categoryMenuText += `╰─────────────────────────╯\n\n`
+            categoryMenuText += `╰───────────────╯\n\n`
             categoryMenuText += `👤 ${font.smallCaps('user')}: ${userName}\n`
             categoryMenuText += `🏷️ ${font.smallCaps('status')}: ${premiumText}\n`
             categoryMenuText += `⚡ ${font.smallCaps('limit')}: ${userLimit}/${maxLimit}\n`
             categoryMenuText += `🕒 ${font.smallCaps('time')}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
-            categoryMenuText += `━━━━━━━━━━━━━━━━━━━━━━━━━\n`
+            categoryMenuText += `━━━━━━━━━━━━━━━\n`
 
             if (categoryPlugins.length === 0) {
                 categoryMenuText += `📭 ${font.smallCaps('No commands available in this category')}\n`
@@ -93,21 +93,32 @@ export default {
                 categoryMenuText += `📋 ${font.smallCaps(categoryName + ' Commands')} (${categoryPlugins.length}):\n\n`
                 
                 categoryPlugins.forEach((plugin, index) => {
-                    const aliases = plugin.aliases && plugin.aliases.length > 0 ? ` (${plugin.aliases.join(', ')})` : ''
-                    const usage = plugin.usage ? ` ${plugin.usage}` : ''
-                    const description = plugin.description ? ` - ${plugin.description}` : ''
+                    const aliases = plugin.aliases && plugin.aliases.length > 0 ? ` (${plugin.aliases.map(alias => font.smallCaps(alias)).join(', ')})` : ''
                     
-                    categoryMenuText += `${index + 1}. ${prefix}${plugin.command}${aliases}\n`
-                    if (usage) categoryMenuText += `   ${font.smallCaps('Usage')}: ${prefix}${plugin.command}${usage}\n`
-                    if (description) categoryMenuText += `   ${font.smallCaps('Info')}: ${description}\n`
-                    categoryMenuText += `\n`
+                    // Get usage from plugin, if available, otherwise show dash
+                    let usageText = ''
+                    if (plugin.usage && plugin.usage.trim()) {
+                        // Apply smallcaps to usage content
+                        usageText = ` - ${plugin.usage.replace(/<([^>]+)>/g, (match, content) => {
+                            return `<${font.smallCaps(content)}>`
+                        }).replace(/\[([^\]]+)\]/g, (match, content) => {
+                            return `[${font.smallCaps(content)}]`
+                        }).replace(/@(\w+)/g, (match, content) => {
+                            return `@${font.smallCaps(content)}`
+                        })}`
+                    }
+                    
+                    // Convert command name to smallcaps
+                    const commandName = font.smallCaps(plugin.command)
+                    
+                    categoryMenuText += `${index + 1}. ${prefix}${commandName}${aliases}${usageText}\n`
                 })
             }
 
-            categoryMenuText += `━━━━━━━━━━━━━━━━━━━━━━━━━\n`
+            categoryMenuText += `\n━━━━━━━━━━━━━━━\n`
             categoryMenuText += `💡 ${font.smallCaps('Tips')}:\n`
-            categoryMenuText += `• ${font.smallCaps('Use')} ${prefix}menu ${font.smallCaps('to see all categories')}\n`
-            categoryMenuText += `• ${font.smallCaps('Use')} ${prefix}allmenu ${font.smallCaps('to see all commands')}\n\n`
+            categoryMenuText += `• ${font.smallCaps('Use')} ${prefix}${font.smallCaps('menu')} ${font.smallCaps('to see all categories')}\n`
+            categoryMenuText += `• ${font.smallCaps('Use')} ${prefix}${font.smallCaps('allmenu')} ${font.smallCaps('to see all commands')}\n\n`
             categoryMenuText += `🤖 ${font.smallCaps('powered by chisato-md | created by kiznavierr')}`
 
             // Send category menu with banner if available
@@ -134,14 +145,14 @@ export default {
         
         // HEADER
         let menuText = ''
-        menuText += `╭─────────────────────────╮\n`
+        menuText += `╭───────────────╮\n`
         menuText += `│    🤖 ${font.smallCaps('chisato - menu')}    │\n`
-        menuText += `╰─────────────────────────╯\n\n`
+        menuText += `╰───────────────╯\n\n`
         menuText += `👤 ${font.smallCaps('user')}: ${userName}\n`
         menuText += `🏷️ ${font.smallCaps('status')}: ${premiumText}\n`
         menuText += `⚡ ${font.smallCaps('limit')}: ${userLimit}/${maxLimit}\n`
         menuText += `🕒 ${font.smallCaps('time')}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
-        menuText += `━━━━━━━━━━━━━━━━━━━━━━━━━\n`
+        menuText += `━━━━━━━━━━━━━━━\n`
         menuText += `📋 ${font.smallCaps('kategori menu')}:\n\n`
         
         // MENU KATEGORI with command count
@@ -151,7 +162,7 @@ export default {
             menuText += `${icon} .${font.smallCaps(cat + 'menu')} (${count})\n`
         })
         
-        menuText += `\n━━━━━━━━━━━━━━━━━━━━━━━━━\n`
+        menuText += `\n━━━━━━━━━━━━━━━\n`
         menuText += `💡 ${font.smallCaps('tips')}:\n`
         menuText += `• ${font.smallCaps('ketik')} .${font.smallCaps('<kategori>menu')} ${font.smallCaps('untuk detail')}\n`
         menuText += `• ${font.smallCaps('contoh')}: .${font.smallCaps('toolsmenu')} ${font.smallCaps('atau')} .${font.smallCaps('funmenu')}\n`
@@ -192,3 +203,4 @@ export default {
         })
     }
 }
+

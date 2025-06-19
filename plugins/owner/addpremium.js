@@ -101,7 +101,7 @@ export default {
 ├ ⏰ ${font.smallCaps('Duration')}: ${duration || font.smallCaps('Lifetime')}
 ├ 🎫 ${font.smallCaps('Daily Limit')}: ${premiumLimit} (${font.smallCaps('was')} ${user.limit})
 ├ 🚀 ${font.smallCaps('Benefits')}: ${font.smallCaps('Unlimited commands, priority support')}
-╰─────────────────────────
+╰───────────────
 
 🎉 ${font.smallCaps('Welcome to premium tier')}!`
 

@@ -45,7 +45,7 @@ export default {
         
         // Build profile text
         let profileText = `╭─「 ${statusIcon} ${font.smallCaps('User Profile')} 」\n`
-        profileText += `├ 👤 ${font.smallCaps('Name')}: ${user.name || 'Anonymous'}\n`
+        profileText += `├ 👤 ${font.smallCaps('Name')}: ${font.smallCaps(user.name || 'Anonymous')}\n`
         profileText += `├ 📱 ${font.smallCaps('Number')}: ${target.split('@')[0]}\n`
         profileText += `├ 🏆 ${font.smallCaps('Status')}: ${statusText}\n`
         
@@ -61,7 +61,7 @@ export default {
             profileText += `├ ❌ ${font.smallCaps('Registered')}: ${font.smallCaps('No')}\n`
         }
         
-        profileText += `├─────────────────────────\n`
+        profileText += `├───────────────\n`
         profileText += `├ 📊 ${font.smallCaps('Statistics')}:\n`
         profileText += `├ 🎯 ${font.smallCaps('Level')}: ${user.level}\n`
         profileText += `├ ⭐ ${font.smallCaps('EXP')}: ${user.exp}/${nextLevelExp}\n`
@@ -77,7 +77,7 @@ export default {
         
         // Premium information
         if (isPremium && !isOwner) {
-            profileText += `├─────────────────────────\n`
+            profileText += `├───────────────\n`
             profileText += `├ 💎 ${font.smallCaps('Premium Info')}:\n`
             
             if (user.premiumSince) {
@@ -97,7 +97,7 @@ export default {
         }
         
         // Additional stats
-        profileText += `├─────────────────────────\n`
+        profileText += `├───────────────\n`
         profileText += `├ 📈 ${font.smallCaps('Activity')}:\n`
         profileText += `├ ⚠️ ${font.smallCaps('Warnings')}: ${user.warning || 0}\n`
         
@@ -113,7 +113,7 @@ export default {
         }
         
         profileText += `├ 👀 ${font.smallCaps('Last Seen')}: ${new Date(user.lastSeen).toLocaleString('id-ID')}\n`
-        profileText += `╰─────────────────────────`
+        profileText += `╰───────────────`
         
         // Add helpful commands for self-profile
         if (isSelf) {

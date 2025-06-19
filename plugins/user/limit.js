@@ -14,7 +14,7 @@ export default {
         const isPremium = db.isPremium(sender)
         
         let limitText = `╭─「 🎫 ${font.smallCaps('Your Usage Limit')} 」\n`
-        limitText += `├ 👤 ${font.smallCaps('User')}: ${user.name || 'Anonymous'}\n`
+        limitText += `├ 👤 ${font.smallCaps('User')}: ${font.smallCaps(user.name || 'Anonymous')}\n`
         
         if (isOwner) {
             limitText += `├ 👑 ${font.smallCaps('Status')}: ${font.smallCaps('Bot Owner')}\n`
@@ -63,18 +63,18 @@ export default {
             }
         }
         
-        limitText += `├─────────────────────────\n`
+        limitText += `├───────────────\n`
         limitText += `├ 🔄 ${font.smallCaps('Reset')}: ${font.smallCaps('Daily at 00:00 WIB')}\n`
         limitText += `├ 🎯 ${font.smallCaps('Level')}: ${user.level} | ⭐ ${font.smallCaps('EXP')}: ${user.exp}\n`
         
         if (!isPremium && !isOwner) {
-            limitText += `├─────────────────────────\n`
+            limitText += `├───────────────\n`
             limitText += `├ 💡 ${font.smallCaps('Want unlimited usage')}?\n`
             limitText += `├ 💎 ${font.smallCaps('Upgrade to Premium')}!\n`
             limitText += `├ 📞 ${font.smallCaps('Contact owner for premium')}\n`
         }
         
-        limitText += `╰─────────────────────────`
+        limitText += `╰───────────────`
         
         await reply(limitText)
     }

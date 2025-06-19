@@ -29,7 +29,7 @@ export default {
         const rankText = `
 ┌─「 ${font.bold(font.smallCaps('YOUR RANK'))} 」
 │ 
-├ 👤 ${font.bold(font.smallCaps('Name'))}: ${pushName}
+├ 👤 ${font.bold(font.smallCaps('Name'))}: ${font.smallCaps(pushName)}
 ├ ⭐ ${font.bold(font.smallCaps('Level'))}: ${user.level}
 ├ 🎯 ${font.bold(font.smallCaps('Experience'))}: ${user.exp}/${requiredExp}
 ├ 📊 ${font.bold(font.smallCaps('Progress'))}: ${progress}%

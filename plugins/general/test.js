@@ -14,7 +14,7 @@ export default {
         testMsg += `📍 ${font.smallCaps('Chat Type')}: ${isGroup ? font.smallCaps('Group') : font.smallCaps('Private')}\n`
         
         if (isGroup && groupMetadata) {
-            testMsg += `👥 ${font.smallCaps('Group')}: ${groupMetadata.subject}\n`
+            testMsg += `👥 ${font.smallCaps('Group')}: ${font.smallCaps(groupMetadata.subject || 'Unknown')}\n`
             testMsg += `👤 ${font.smallCaps('Members')}: ${groupMetadata.participants?.length || 0}\n`
         }
         

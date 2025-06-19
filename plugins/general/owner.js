@@ -16,9 +16,9 @@ export default {
         const ownerText = `
 👨‍💻 ${font.bold(font.smallCaps('BOT OWNER'))}
 
-📱 ${font.bold(font.smallCaps('Name'))}: ${ownerInfo.ownerName || 'Bot Owner'}
-📞 ${font.bold(font.smallCaps('Number'))}: +${ownerInfo.ownerNumber || 'Not Set'}
-🤖 ${font.bold(font.smallCaps('Bot'))}: ${botInfo.botName || 'Chisato-MD'}
+📱 ${font.bold(font.smallCaps('Name'))}: ${font.smallCaps(ownerInfo.ownerName || 'Bot Owner')}
+📞 ${font.bold(font.smallCaps('Number'))}: +${ownerInfo.ownerNumber || font.smallCaps('Not Set')}
+🤖 ${font.bold(font.smallCaps('Bot'))}: ${font.smallCaps(botInfo.botName || 'Chisato-MD')}
 🌐 ${font.bold(font.smallCaps('Version'))}: ${botInfo.version || '1.0.0'}
 
 💻 ${font.bold(font.smallCaps('About Owner'))}:

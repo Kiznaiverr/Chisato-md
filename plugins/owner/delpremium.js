@@ -73,7 +73,7 @@ export default {
 ├ 📅 ${font.smallCaps('Was Premium Since')}: ${wasPremiumSince ? new Date(wasPremiumSince).toLocaleString('id-ID') : 'Unknown'}
 ├ 🎫 ${font.smallCaps('Daily Limit')}: ${regularLimit} (${font.smallCaps('was Unlimited')})
 ├ 📊 ${font.smallCaps('New Status')}: ${font.smallCaps('Regular User')}
-╰─────────────────────────`
+╰───────────────`
 
             if (hadExpiry) {
                 const expiredText = hadExpiry < Date.now() ? font.smallCaps('Expired') : font.smallCaps('Cancelled')

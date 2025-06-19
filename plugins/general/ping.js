@@ -22,11 +22,11 @@ export default {
         
         // Get CPU info
         const cpus = os.cpus()
-        const cpuModel = cpus[0]?.model?.split(' ').slice(0, 3).join(' ') || 'Unknown'
+        const cpuModel = cpus[0]?.model?.split(' ').slice(0, 3).join(' ') || font.smallCaps('Unknown')
         const cpuCores = cpus.length
         
         // Format memory
-        const formatGB = (bytes) => `${(bytes / (1024 ** 3)).toFixed(1)} GB`
+        const formatGB = (bytes) => `${(bytes / (1024 ** 3)).toFixed(1)} ${font.smallCaps('GB')}`
         
         // Bot process memory
         const processMemory = process.memoryUsage()
@@ -43,14 +43,14 @@ export default {
         
         let pingInfo = `┌─「 🏓 ${font.smallCaps('Ping & Quick Info')} 」\n`
         pingInfo += `├ ⚡ ${font.smallCaps('Response')}: ${responseTime}ms ${status}\n`
-        pingInfo += `├─────────────────────\n`
-        pingInfo += `├ 💻 ${font.smallCaps('OS')}: ${platform === 'win32' ? 'Windows' : platform === 'darwin' ? 'macOS' : 'Linux'} ${arch}\n`
+        pingInfo += `├───────────────\n`
+        pingInfo += `├ 💻 ${font.smallCaps('OS')}: ${platform === 'win32' ? font.smallCaps('Windows') : platform === 'darwin' ? font.smallCaps('macOS') : font.smallCaps('Linux')} ${arch}\n`
         pingInfo += `├ 🧠 ${font.smallCaps('CPU')}: ${cpuModel} (${cpuCores} ${font.smallCaps('cores')})\n`
         pingInfo += `├ 🎯 ${font.smallCaps('RAM')}: ${formatGB(usedMem)} / ${formatGB(totalMem)} (${memUsage}%)\n`
-        pingInfo += `├ 🤖 ${font.smallCaps('Bot')}: ${botMemUsed} MB\n`
+        pingInfo += `├ 🤖 ${font.smallCaps('Bot')}: ${botMemUsed} ${font.smallCaps('MB')}\n`
         pingInfo += `├ 📦 ${font.smallCaps('Node')}: ${process.version}\n`
-        pingInfo += `├─────────────────────\n`
-        pingInfo += `└ 💡 ${font.smallCaps('Use')} ${prefix}sysinfo ${font.smallCaps('for detailed info')}`
+        pingInfo += `├───────────────\n`
+        pingInfo += `└ 💡 ${font.smallCaps('Use')} ${prefix}${font.smallCaps('sysinfo')} ${font.smallCaps('for detailed info')}`
         
         await reply(pingInfo)
     }

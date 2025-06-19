@@ -27,15 +27,15 @@ export default {
         const memTotal = (memUsage.heapTotal / 1024 / 1024).toFixed(2)
         
         let infoText = `┌─「 ${font.smallCaps('Bot Information')} 」\n`
-        infoText += `├ 🤖 ${font.smallCaps('Name')}: ${botName}\n`
+        infoText += `├ 🤖 ${font.smallCaps('Name')}: ${font.smallCaps(botName)}\n`
         infoText += `├ 📱 ${font.smallCaps('Number')}: ${sock.user.id.split(':')[0]}\n`
         infoText += `├ 🎯 ${font.smallCaps('Prefix')}: ${prefix}\n`
         infoText += `├ ⏰ ${font.smallCaps('Uptime')}: ${uptimeString}\n`
-        infoText += `├ 💾 ${font.smallCaps('Memory')}: ${memUsed}MB / ${memTotal}MB\n`
-        infoText += `├ 🌐 ${font.smallCaps('Platform')}: ${process.platform}\n`
+        infoText += `├ 💾 ${font.smallCaps('Memory')}: ${memUsed}${font.smallCaps('MB')} / ${memTotal}${font.smallCaps('MB')}\n`
+        infoText += `├ 🌐 ${font.smallCaps('Platform')}: ${font.smallCaps(process.platform)}\n`
         infoText += `├ 📦 ${font.smallCaps('Node.js')}: ${process.version}\n`
-        infoText += `├─────────────────\n`
-        infoText += `├ 👨‍💻 ${font.smallCaps('Developer')}: Kiznavierr\n`
+        infoText += `├───────────────\n`
+        infoText += `├ 👨‍💻 ${font.smallCaps('Developer')}: ${font.smallCaps('Kiznavierr')}\n`
         infoText += `├ 📚 ${font.smallCaps('Library')}: @whiskeysockets/baileys\n`
         infoText += `└ 💝 ${font.smallCaps('Thanks for using')}!`
         

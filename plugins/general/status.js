@@ -40,18 +40,18 @@ export default {
         const admins = db.getSetting('admins')
         const adminCount = admins ? admins.split(',').filter(a => a.trim()).length : 0
         
-        let statusText = `┌─「 ${botName} ${font.smallCaps('Status')} 」\n`
+        let statusText = `┌─「 ${font.smallCaps(botName)} ${font.smallCaps('Status')} 」\n`
         statusText += `├ 🤖 ${font.smallCaps('Bot')}: ${sock.user.id.split(':')[0]}\n`
         statusText += `├ ⏰ ${font.smallCaps('Uptime')}: ${uptimeString}\n`
-        statusText += `├ 💾 ${font.smallCaps('Memory')}: ${memUsed}MB / ${memTotal}MB\n`
+        statusText += `├ 💾 ${font.smallCaps('Memory')}: ${memUsed}${font.smallCaps('MB')} / ${memTotal}${font.smallCaps('MB')}\n`
         statusText += `├ 🎯 ${font.smallCaps('Prefix')}: ${prefix}\n`
-        statusText += `├─────────────────\n`
+        statusText += `├───────────────\n`
         statusText += `├ 📊 ${font.smallCaps('Statistics')}:\n`
         statusText += `├ 👥 ${font.smallCaps('Users')}: ${userCount}\n`
         statusText += `├ 🏘️ ${font.smallCaps('Groups')}: ${groupCount}\n`
         statusText += `├ 👨‍💼 ${font.smallCaps('Admins')}: ${adminCount}\n`
         statusText += `├ 🔌 ${font.smallCaps('Plugins')}: ${plugins.length}\n`
-        statusText += `├─────────────────\n`
+        statusText += `├───────────────\n`
         statusText += `├ 📂 ${font.smallCaps('Plugin Categories')}:\n`
         
         Object.entries(categories).forEach(([category, count], index, arr) => {
