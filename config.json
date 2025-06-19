@@ -74,5 +74,19 @@
     "logCommands": true,
     "logErrors": true,
     "logConnections": true
+  },
+  "replyMessages": {
+    "groupOnly": "❌ This command can only be used in groups.",
+    "privateOnly": "❌ This command can only be used in private chat.",
+    "adminOnly": "❌ This command is only for admins.",
+    "ownerOnly": "❌ This command is only for bot owner.",
+    "premiumOnly": "❌ This command is only for premium users.",
+    "limitReached": "❌ You have reached your daily limit!\n\n📊 Current Status:\n├ 🎫 Remaining: {limit} commands\n├ 💎 Upgrade to Premium for unlimited usage\n├ 🔄 Limit resets daily at 00:00 WIB\n└ 📞 Contact owner for premium access\n\n💡 Use .limit to check your usage.",
+    "botAdmin": "❌ I need admin privileges to execute this command.",
+    "needAdmin": "❌ You need to be a group admin to use this command.",
+    "cooldown": "⏰ Please wait {cooldown} seconds before using this command again.",
+    "error": "❌ An error occurred while executing the command.",
+    "welcome": "👋 Welcome to the group, @{user}!\n\nPlease follow the group rules and enjoy your stay! 🎉",
+    "goodbye": "👋 Goodbye @{user}!\n\nThanks for being part of our group! 🙏"
   }
 }
