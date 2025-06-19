@@ -9,8 +9,9 @@ export default {
     limit: 1,
     cooldown: 5,
 
-    async execute({ args, reply, sock, msg }) {
+    async execute({ args, reply, sock, msg, react }) {
         if (!args[0]) return reply('Masukkan link TikTok yang valid!\nContoh: .tiktok https://www.tiktok.com/@user/video/1234567890');
+        await react('🕔');
         const url = args[0];
         const api = `https://api.nekoyama.my.id/api/tiktok/download?url=${encodeURIComponent(url)}`;
         try {
@@ -18,6 +19,7 @@ export default {
             if (!res.ok) throw new Error('Gagal menghubungi API TikTok!');
             const json = await res.json();
             if (json.status !== 'success' || !json.data) {
+                await react('❌');
                 return reply('Gagal mendapatkan data. Pastikan link TikTok valid dan publik.');
             }
             const { title, thumbnail, download_links, url: tiktokUrl } = json.data;
@@ -30,6 +32,7 @@ export default {
                     video: buffer,
                     caption: `*TIKTOK DOWNLOADER*\n• Judul: ${title || '-'}\n• Link: ${tiktokUrl}\n\nPowered by Chisato API`
                 }, { quoted: msg });
+                await react('✅');
             }
             // Download audio
             if (download_links.audio) {
@@ -42,11 +45,14 @@ export default {
                     ptt: false,
                     caption: `*TIKTOK AUDIO*\n• Judul: ${title || '-'}\n• Link: ${tiktokUrl}\n\nPowered by Chisato API`
                 }, { quoted: msg });
+                await react('✅');
             }
             if (!download_links.video && !download_links.audio) {
+                await react('❌');
                 return reply('Tidak ada media yang bisa diunduh dari link tersebut.');
             }
         } catch (e) {
+            await react('❌');
             return reply('Terjadi kesalahan saat memproses permintaan TikTok.');
         }
     }

@@ -13,12 +13,16 @@ export default {
   async execute(ctx) {
     const query = ctx.args.join(' ');
     if (!query) return ctx.reply('Masukkan judul atau kata kunci YouTube!');
+    await ctx.react('🕔');
     try {
       const url = `https://api.nekoyama.my.id/api/downloader/yt-play?query=${encodeURIComponent(query)}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Gagal fetch API');
       const json = await res.json();
-      if (json.status !== 'success' || !json.data) return ctx.reply('Tidak ada hasil ditemukan!');
+      if (json.status !== 'success' || !json.data) {
+        await ctx.react('❌');
+        return ctx.reply('Tidak ada hasil ditemukan!');
+      }
       const d = json.data;
       const caption = `*YouTube Play Result*
 
@@ -41,7 +45,9 @@ Powered by: ${json.powered_by}`;
         fileName: d.title + '.mp3',
         ptt: false
       }, { quoted: ctx.msg });
+      await ctx.react('✅');
     } catch (e) {
+      await ctx.react('❌');
       ctx.reply('Gagal mengambil audio YouTube!');
     }
   }

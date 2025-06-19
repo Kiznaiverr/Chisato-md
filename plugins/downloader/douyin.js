@@ -11,8 +11,9 @@ export default {
     limit: 1,
     cooldown: 5,
 
-    async execute({ args, reply, sock, msg }) {
+    async execute({ args, reply, sock, msg, react }) {
         if (!args[0]) return reply('Masukkan link atau share text Douyin!\nContoh: .douyin https://v.douyin.com/FOihCb_rYBg/');
+        await react('🕔');
         const url = args.join(' ');
         const api = `https://api.nekoyama.my.id/api/douyin/download?url=${encodeURIComponent(url)}`;
         try {
@@ -20,6 +21,7 @@ export default {
             if (!res.ok) throw new Error('Gagal menghubungi API Douyin!');
             const json = await res.json();
             if (json.status !== 'success' || !json.data) {
+                await react('❌');
                 return reply('Gagal mendapatkan data. Pastikan link Douyin valid dan publik.');
             }
             const { original_text, thumbnail, download_links } = json.data;
@@ -37,7 +39,10 @@ export default {
                 videoUrl = first?.url;
                 label = first?.label;
             }
-            if (!videoUrl) return reply('Tidak ada link video yang bisa diunduh.');
+            if (!videoUrl) {
+                await react('❌');
+                return reply('Tidak ada link video yang bisa diunduh.');
+            }
             // Download video
             const videoRes = await fetch(videoUrl);
             if (!videoRes.ok) throw new Error('Gagal download video Douyin!');
@@ -47,7 +52,9 @@ export default {
                 video: buffer,
                 caption: `*DOUYIN DOWNLOADER*\n• Link/Share: ${original_text || '-'}\n• Kualitas: ${label}\n\nPowered by Chisato API`
             }, { quoted: msg });
+            await react('✅');
         } catch (e) {
+            await react('❌');
             return reply('Terjadi kesalahan saat memproses permintaan Douyin.');
         }
     }

@@ -9,8 +9,9 @@ export default {
     limit: 1,
     cooldown: 5,
 
-    async execute({ args, reply, sock, msg }) {
+    async execute({ args, reply, sock, msg, react }) {
         if (!args[0]) return reply('Masukkan link Instagram yang valid!\nContoh: .instagram https://www.instagram.com/reel/DJGKCPHSi3N/');
+        await react('🕔');
         const url = args[0];
         const api = `https://api.nekoyama.my.id/api/instagram/download?url=${encodeURIComponent(url)}`;
         try {
@@ -18,6 +19,7 @@ export default {
             if (!res.ok) throw new Error('Gagal menghubungi API Instagram!');
             const json = await res.json();
             if (json.status !== 'success' || !json.data) {
+                await react('❌');
                 return reply('Gagal mendapatkan data. Pastikan link Instagram valid dan publik.');
             }
             const { title, username, download_links, url: igurl } = json.data;
@@ -30,6 +32,7 @@ export default {
                     video: buffer,
                     caption: `*INSTAGRAM DOWNLOADER*\n• Judul: ${title || '-'}\n• User: @${username || '-'}\n• Link: ${igurl}\n\nPowered by Chisato API`
                 }, { quoted: msg });
+                await react('✅');
             } else if (download_links.image) {
                 const imgRes = await fetch(download_links.image);
                 if (!imgRes.ok) throw new Error('Gagal download gambar Instagram!');
@@ -38,10 +41,13 @@ export default {
                     image: buffer,
                     caption: `*INSTAGRAM DOWNLOADER*\n• Judul: ${title || '-'}\n• User: @${username || '-'}\n• Link: ${igurl}\n\nPowered by Chisato API`
                 }, { quoted: msg });
+                await react('✅');
             } else {
+                await react('❌');
                 return reply('Tidak ada media yang bisa diunduh dari link tersebut.');
             }
         } catch (e) {
+            await react('❌');
             return reply('Terjadi kesalahan saat memproses permintaan Instagram.');
         }
     }

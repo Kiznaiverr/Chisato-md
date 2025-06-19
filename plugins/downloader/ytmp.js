@@ -38,14 +38,13 @@ export default {
     limit: 1,
     cooldown: 5,
 
-    async execute({ args, reply, sock, msg, command }) {
+    async execute({ args, reply, sock, msg, command, react }) {
         if (!args[0]) return reply('Masukkan link YouTube yang valid!\nContoh: .ytmp https://www.youtube.com/watch?v=xxxx');
+        await react('🕔');
         const url = args[0];
         const isAudio = ['yta', 'ytmp3', 'ytaudio', 'ytvmp3'].includes(command);
         const format = isAudio ? 'mp3' : '720p';
         try {
-            // React with clock emoji to indicate processing
-            await sock.sendMessage(msg.key.remoteJid, { react: { text: '🕔', key: msg.key } });
             // Fetch API and log response for debugging
             const apiResponse = await downloadYoutube(url, format);
             if (!apiResponse || !apiResponse.data) throw new Error('API response kosong atau tidak valid.');
@@ -79,11 +78,10 @@ export default {
                     caption: `🎬 *Here's your video file!*\n\n${info}\nPowered by Chisato API`
                 }, { quoted: msg });
             }
-        } catch (error) {
-            // Log error for debugging
-            console.error('YT Plugin Error:', error);
-            await sock.sendMessage(msg.key.remoteJid, { react: { text: '❌', key: msg.key } });
-            reply('⚠️ *Terjadi kesalahan saat memproses permintaan YouTube.*\n\n' + (error.message || error));
+            await react('✅');
+        } catch (e) {
+            await react('❌');
+            return reply(e.message || 'Terjadi kesalahan saat memproses permintaan YouTube.');
         }
     }
 };

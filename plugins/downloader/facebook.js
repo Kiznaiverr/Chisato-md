@@ -9,8 +9,9 @@ export default {
     limit:1,
     cooldown: 5,
 
-    async execute({ args, reply, sock, msg }) {
+    async execute({ args, reply, sock, msg, react }) {
         if (!args[0]) return reply('Masukkan link Facebook yang valid!\nContoh: .facebook https://www.facebook.com/share/v/1AcEg1sL7A/');
+        await react('🕔');
         const url = args[0];
         const api = `https://api.nekoyama.my.id/api/facebook/download?url=${encodeURIComponent(url)}`;
         try {
@@ -18,6 +19,7 @@ export default {
             if (!res.ok) throw new Error('Gagal menghubungi API Facebook!');
             const json = await res.json();
             if (json.status !== 'success' || !json.data) {
+                await react('❌');
                 return reply('Gagal mendapatkan data. Pastikan link Facebook valid dan publik.');
             }
             const { title, download_links, url: fburl } = json.data;
@@ -33,7 +35,10 @@ export default {
                 videoUrl = download_links.audio;
                 label = 'Audio';
             }
-            if (!videoUrl) return reply('Tidak ada link video yang bisa diunduh.');
+            if (!videoUrl) {
+                await react('❌');
+                return reply('Tidak ada link video yang bisa diunduh.');
+            }
             // Download video
             const videoRes = await fetch(videoUrl);
             if (!videoRes.ok) throw new Error('Gagal download video Facebook!');
@@ -43,7 +48,9 @@ export default {
                 video: buffer,
                 caption: `*FACEBOOK DOWNLOADER*\n• Judul: ${title || '-'}\n• Link: ${fburl}\n• Kualitas: ${label}\n\nPowered by Chisato API`
             }, { quoted: msg });
+            await react('✅');
         } catch (e) {
+            await react('❌');
             return reply('Terjadi kesalahan saat memproses permintaan Facebook.');
         }
     }
