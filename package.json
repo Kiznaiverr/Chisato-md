@@ -23,6 +23,7 @@
     "file-type": "^21.0.0",
     "log-symbols": "^7.0.1",
     "moment-timezone": "^0.5.45",
+    "node-fetch": "^3.3.2",
     "node-webpmux": "^3.2.1",
     "pino": "^8.19.0",
     "pino-pretty": "^13.0.0",
