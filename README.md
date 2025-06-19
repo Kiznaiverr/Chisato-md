@@ -4,10 +4,6 @@
 
 ![Bot Status](https://img.shields.io/badge/Status-Active-brightgreen)
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)
-![Bailey| `.profile` | User profile & premium status | `profile [@user]` |
-| `.limit` | Check daily usage limit | `limit` |
-| `.register` | Register as bot user | `register <name> <age>` |
-| `.rank` | View user rank & level | `rank [@user]` |https://img.shields.io/badge/Baileys-6.7.18-blue)
 ![License](https://img.shields.io/badge/License-ISC-yellow)
 
 A modern, feature-rich WhatsApp bot with dynamic menu system, premium user management, and comprehensive admin tools. Built with Baileys library for reliable WhatsApp Web API integration.
