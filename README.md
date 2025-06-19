@@ -15,8 +15,6 @@ A modern, feature-rich WhatsApp bot with dynamic menu system, premium user manag
 - [⚙️ Configuration](#️-configuration)
 - [💎 Premium System](#-premium-system)
 - [🔌 Plugin Development](#-plugin-development)
-- [🔧 Troubleshooting](#-troubleshooting)
-- [⚡ Quick Reference](#-quick-reference)
 
 ## ✨ Features
 
