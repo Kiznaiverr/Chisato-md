@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'group',
     aliases: ['grup'],
@@ -16,34 +18,34 @@ export default {
         // Check if sender is admin
         const senderAdmin = participants.find(p => p.id === sender)?.admin
         if (!senderAdmin && !db.isOwner(sender)) {
-            return await reply('❌ You need to be an admin to use this command!')
+            return await reply(`❌ ${font.smallCaps('You need to be an admin to use this command')}!`)
         }
         
         const groupData = db.getGroup(msg.key.remoteJid)
         
         if (args.length === 0) {
             const settingsText = `
-┌─「 *GROUP SETTINGS* 」
+┌─「 ${font.bold(font.smallCaps('GROUP SETTINGS'))} 」
 │ 
-├ 🏷️ *Name:* ${groupMetadata.subject}
-├ 👥 *Members:* ${participants.length}
-├ 📝 *Description:* ${groupMetadata.desc || 'No description'}
+├ 🏷️ ${font.bold(font.smallCaps('Name'))}: ${groupMetadata.subject}
+├ 👥 ${font.bold(font.smallCaps('Members'))}: ${participants.length}
+├ 📝 ${font.bold(font.smallCaps('Description'))}: ${groupMetadata.desc || font.smallCaps('No description')}
 │ 
-├ ⚙️ *Bot Settings:*
-├ 👋 *Welcome:* ${groupData.welcome ? '✅ ON' : '❌ OFF'}
-├ 👋 *Goodbye:* ${groupData.bye ? '✅ ON' : '❌ OFF'}
-├ 🔗 *Anti-Link:* ${groupData.antilink ? '✅ ON' : '❌ OFF'}
-├ 🚫 *Anti-Spam:* ${groupData.antispam ? '✅ ON' : '❌ OFF'}
-├ 🔇 *Mute:* ${groupData.mute ? '✅ ON' : '❌ OFF'}
+├ ⚙️ ${font.bold(font.smallCaps('Bot Settings'))}:
+├ 👋 ${font.bold(font.smallCaps('Welcome'))}: ${groupData.welcome ? `✅ ${font.smallCaps('ON')}` : `❌ ${font.smallCaps('OFF')}`}
+├ 👋 ${font.bold(font.smallCaps('Goodbye'))}: ${groupData.bye ? `✅ ${font.smallCaps('ON')}` : `❌ ${font.smallCaps('OFF')}`}
+├ 🔗 ${font.bold(font.smallCaps('Anti-Link'))}: ${groupData.antilink ? `✅ ${font.smallCaps('ON')}` : `❌ ${font.smallCaps('OFF')}`}
+├ 🚫 ${font.bold(font.smallCaps('Anti-Spam'))}: ${groupData.antispam ? `✅ ${font.smallCaps('ON')}` : `❌ ${font.smallCaps('OFF')}`}
+├ 🔇 ${font.bold(font.smallCaps('Mute'))}: ${groupData.mute ? `✅ ${font.smallCaps('ON')}` : `❌ ${font.smallCaps('OFF')}`}
 │ 
 └────
 
-📋 *Usage:*
-• .group welcome on/off
-• .group bye on/off  
-• .group antilink on/off
-• .group antispam on/off
-• .group mute on/off
+📋 ${font.bold(font.smallCaps('Usage'))}:
+• .group ${font.smallCaps('welcome')} ${font.smallCaps('on/off')}
+• .group ${font.smallCaps('bye')} ${font.smallCaps('on/off')}  
+• .group ${font.smallCaps('antilink')} ${font.smallCaps('on/off')}
+• .group ${font.smallCaps('antispam')} ${font.smallCaps('on/off')}
+• .group ${font.smallCaps('mute')} ${font.smallCaps('on/off')}
             `.trim()
             
             return await reply(settingsText)
@@ -53,7 +55,7 @@ export default {
         const value = args[1]?.toLowerCase()
         
         if (!value || (value !== 'on' && value !== 'off')) {
-            return await reply('❌ Please specify on or off!\nExample: .group welcome on')
+            return await reply(`❌ ${font.smallCaps('Please specify on or off')}!\n${font.smallCaps('Example')}: .group ${font.smallCaps('welcome')} ${font.smallCaps('on')}`)
         }
         
         const isOn = value === 'on'
@@ -62,36 +64,36 @@ export default {
             case 'welcome':
                 groupData.welcome = isOn
                 db.saveGroups()
-                await reply(`✅ Welcome message ${isOn ? 'enabled' : 'disabled'}`)
+                await reply(`✅ ${font.smallCaps('Welcome message')} ${isOn ? font.smallCaps('enabled') : font.smallCaps('disabled')}`)
                 break
                 
             case 'bye':
             case 'goodbye':
                 groupData.bye = isOn
                 db.saveGroups()
-                await reply(`✅ Goodbye message ${isOn ? 'enabled' : 'disabled'}`)
+                await reply(`✅ ${font.smallCaps('Goodbye message')} ${isOn ? font.smallCaps('enabled') : font.smallCaps('disabled')}`)
                 break
                 
             case 'antilink':
                 groupData.antilink = isOn
                 db.saveGroups()
-                await reply(`✅ Anti-link ${isOn ? 'enabled' : 'disabled'}`)
+                await reply(`✅ ${font.smallCaps('Anti-link')} ${isOn ? font.smallCaps('enabled') : font.smallCaps('disabled')}`)
                 break
                 
             case 'antispam':
                 groupData.antispam = isOn
                 db.saveGroups()
-                await reply(`✅ Anti-spam ${isOn ? 'enabled' : 'disabled'}`)
+                await reply(`✅ ${font.smallCaps('Anti-spam')} ${isOn ? font.smallCaps('enabled') : font.smallCaps('disabled')}`)
                 break
                 
             case 'mute':
                 groupData.mute = isOn
                 db.saveGroups()
-                await reply(`✅ Group ${isOn ? 'muted' : 'unmuted'}`)
+                await reply(`✅ ${font.smallCaps('Group')} ${isOn ? font.smallCaps('muted') : font.smallCaps('unmuted')}`)
                 break
                 
             default:
-                await reply('❌ Invalid setting! Available: welcome, bye, antilink, antispam, mute')
+                await reply(`❌ ${font.smallCaps('Invalid setting! Available')}: ${font.smallCaps('welcome, bye, antilink, antispam, mute')}`)
         }
     }
 }

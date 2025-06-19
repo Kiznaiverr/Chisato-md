@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'delpremium',
     aliases: ['removepremium', 'delprem'],
@@ -17,17 +19,17 @@ export default {
         } else if (args[0] && args[0].includes('@')) {
             target = args[0].replace('@', '') + '@s.whatsapp.net'
         } else {
-            return reply('❌ Please mention a user or reply to their message.\n\n💡 Example: `delpremium @user`')
+            return reply(`❌ ${font.smallCaps('Please mention a user or reply to their message')}.\n\n💡 ${font.smallCaps('Example')}: \`delpremium @user\``)
         }
 
         // Check if target is valid
         if (!target) {
-            return reply('❌ Invalid user.')
+            return reply(`❌ ${font.smallCaps('Invalid user')}.`)
         }
 
         // Check if target is owner
         if (db.isOwner(target)) {
-            return reply('❌ Cannot remove premium status from bot owner!')
+            return reply(`❌ ${font.smallCaps('Cannot remove premium status from bot owner')}!`)
         }
 
         try {
@@ -38,12 +40,12 @@ export default {
             
             if (!user.premium) {
                 await react('⚠️')
-                return reply(`⚠️ @${target.split('@')[0]} is not a premium member!
+                return reply(`⚠️ @${target.split('@')[0]} ${font.smallCaps('is not a premium member')}!
                 
-📊 Current Status:
-├ 💎 Premium: No
-├ 🎫 Daily Limit: ${user.limit}
-└ 💡 User already has regular status`)
+📊 ${font.smallCaps('Current Status')}:
+├ 💎 ${font.smallCaps('Premium')}: ${font.smallCaps('No')}
+├ 🎫 ${font.smallCaps('Daily Limit')}: ${user.limit}
+└ 💡 ${font.smallCaps('User already has regular status')}`)
             }
             
             // Store premium info for confirmation message
@@ -63,29 +65,29 @@ export default {
             
             await react('✅')
             
-            let successText = `✅ Successfully removed @${target.split('@')[0]} from premium members!
+            let successText = `✅ ${font.smallCaps('Successfully removed')} @${target.split('@')[0]} ${font.smallCaps('from premium members')}!
 
-╭─「 📋 Status Change 」
-├ 👤 User: @${target.split('@')[0]}
-├ 💎 Premium: No (was Premium)
-├ 📅 Was Premium Since: ${wasPremiumSince ? new Date(wasPremiumSince).toLocaleString('id-ID') : 'Unknown'}
-├ 🎫 Daily Limit: ${regularLimit} (was Unlimited)
-├ 📊 New Status: Regular User
+╭─「 📋 ${font.smallCaps('Status Change')} 」
+├ 👤 ${font.smallCaps('User')}: @${target.split('@')[0]}
+├ 💎 ${font.smallCaps('Premium')}: ${font.smallCaps('No')} (${font.smallCaps('was Premium')})
+├ 📅 ${font.smallCaps('Was Premium Since')}: ${wasPremiumSince ? new Date(wasPremiumSince).toLocaleString('id-ID') : 'Unknown'}
+├ 🎫 ${font.smallCaps('Daily Limit')}: ${regularLimit} (${font.smallCaps('was Unlimited')})
+├ 📊 ${font.smallCaps('New Status')}: ${font.smallCaps('Regular User')}
 ╰─────────────────────────`
 
             if (hadExpiry) {
-                const expiredText = hadExpiry < Date.now() ? 'Expired' : 'Cancelled'
+                const expiredText = hadExpiry < Date.now() ? font.smallCaps('Expired') : font.smallCaps('Cancelled')
                 successText += `\n⏰ ${expiredText}: ${new Date(hadExpiry).toLocaleString('id-ID')}`
             }
             
-            successText += `\n\n💡 User can still use regular commands with daily limits.`
+            successText += `\n\n💡 ${font.smallCaps('User can still use regular commands with daily limits')}.`
             
             return reply(successText)
             
         } catch (error) {
             console.error('Error removing premium:', error)
             await react('❌')
-            await reply('❌ Failed to remove premium member.')
+            await reply(`❌ ${font.smallCaps('Failed to remove premium member')}.`)
         }
     }
 }

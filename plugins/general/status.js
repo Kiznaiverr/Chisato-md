@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'status',
     aliases: ['stats'],
@@ -38,25 +40,25 @@ export default {
         const admins = db.getSetting('admins')
         const adminCount = admins ? admins.split(',').filter(a => a.trim()).length : 0
         
-        let statusText = `┌─「 ${botName} Status 」\n`
-        statusText += `├ 🤖 Bot: ${sock.user.id.split(':')[0]}\n`
-        statusText += `├ ⏰ Uptime: ${uptimeString}\n`
-        statusText += `├ 💾 Memory: ${memUsed}MB / ${memTotal}MB\n`
-        statusText += `├ 🎯 Prefix: ${prefix}\n`
+        let statusText = `┌─「 ${botName} ${font.smallCaps('Status')} 」\n`
+        statusText += `├ 🤖 ${font.smallCaps('Bot')}: ${sock.user.id.split(':')[0]}\n`
+        statusText += `├ ⏰ ${font.smallCaps('Uptime')}: ${uptimeString}\n`
+        statusText += `├ 💾 ${font.smallCaps('Memory')}: ${memUsed}MB / ${memTotal}MB\n`
+        statusText += `├ 🎯 ${font.smallCaps('Prefix')}: ${prefix}\n`
         statusText += `├─────────────────\n`
-        statusText += `├ 📊 Statistics:\n`
-        statusText += `├ 👥 Users: ${userCount}\n`
-        statusText += `├ 🏘️ Groups: ${groupCount}\n`
-        statusText += `├ 👨‍💼 Admins: ${adminCount}\n`
-        statusText += `├ 🔌 Plugins: ${plugins.length}\n`
+        statusText += `├ 📊 ${font.smallCaps('Statistics')}:\n`
+        statusText += `├ 👥 ${font.smallCaps('Users')}: ${userCount}\n`
+        statusText += `├ 🏘️ ${font.smallCaps('Groups')}: ${groupCount}\n`
+        statusText += `├ 👨‍💼 ${font.smallCaps('Admins')}: ${adminCount}\n`
+        statusText += `├ 🔌 ${font.smallCaps('Plugins')}: ${plugins.length}\n`
         statusText += `├─────────────────\n`
-        statusText += `├ 📂 Plugin Categories:\n`
+        statusText += `├ 📂 ${font.smallCaps('Plugin Categories')}:\n`
         
         Object.entries(categories).forEach(([category, count], index, arr) => {
             const isLast = index === arr.length - 1
             const symbol = isLast ? '└' : '├'
             const categoryName = category.charAt(0).toUpperCase() + category.slice(1)
-            statusText += `${symbol} ${categoryName}: ${count}\n`
+            statusText += `${symbol} ${font.smallCaps(categoryName)}: ${count}\n`
         })
         
         await reply(statusText)

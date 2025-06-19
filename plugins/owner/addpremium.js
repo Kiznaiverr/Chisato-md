@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'addpremium',
     aliases: ['setpremium', 'addprem'],
@@ -17,12 +19,12 @@ export default {
         } else if (args[0] && args[0].includes('@')) {
             target = args[0].replace('@', '') + '@s.whatsapp.net'
         } else {
-            return reply('❌ Please mention a user or reply to their message.\n\n💡 Example: `addpremium @user` or `addpremium @user 30d`')
+            return reply(`❌ ${font.smallCaps('Please mention a user or reply to their message')}.\n\n💡 ${font.smallCaps('Example')}: \`addpremium @user\` ${font.smallCaps('or')} \`addpremium @user 30d\``)
         }
 
         // Check if target is valid
         if (!target) {
-            return reply('❌ Invalid user.')
+            return reply(`❌ ${font.smallCaps('Invalid user')}.`)
         }
 
         // Parse duration (optional)
@@ -39,16 +41,16 @@ export default {
                 switch (unit) {
                     case 'm':
                         durationMs = value * 60 * 1000
-                        duration = `${value} minute${value > 1 ? 's' : ''}`
+                        duration = `${value} ${font.smallCaps('minute')}${value > 1 ? 's' : ''}`
                         break
                     case 'h':
                         durationMs = value * 60 * 60 * 1000
-                        duration = `${value} hour${value > 1 ? 's' : ''}`
+                        duration = `${value} ${font.smallCaps('hour')}${value > 1 ? 's' : ''}`
                         break
                     case 'd':
                     default:
                         durationMs = value * 24 * 60 * 60 * 1000
-                        duration = `${value} day${value > 1 ? 's' : ''}`
+                        duration = `${value} ${font.smallCaps('day')}${value > 1 ? 's' : ''}`
                         break
                 }
             }
@@ -62,14 +64,14 @@ export default {
             
             if (user.premium) {
                 await react('⚠️')
-                return reply(`⚠️ @${target.split('@')[0]} is already a premium member!
+                return reply(`⚠️ @${target.split('@')[0]} ${font.smallCaps('is already a premium member')}!
                 
-📊 Current Status:
-├ 💎 Premium: Yes
-├ ⏰ Expires: ${user.premiumExpiry ? new Date(user.premiumExpiry).toLocaleString('id-ID') : 'Never'}
-└ 🎫 Limit: Unlimited
+📊 ${font.smallCaps('Current Status')}:
+├ 💎 ${font.smallCaps('Premium')}: ${font.smallCaps('Yes')}
+├ ⏰ ${font.smallCaps('Expires')}: ${user.premiumExpiry ? new Date(user.premiumExpiry).toLocaleString('id-ID') : font.smallCaps('Never')}
+└ 🎫 ${font.smallCaps('Limit')}: ${font.smallCaps('Unlimited')}
 
-💡 Use \`delpremium @user\` to remove premium status first.`)
+💡 ${font.smallCaps('Use')} \`delpremium @user\` ${font.smallCaps('to remove premium status first')}.`)
             }
             
             // Set premium status
@@ -90,21 +92,21 @@ export default {
             
             await react('✅')
             
-            let successText = `✅ Successfully added @${target.split('@')[0]} as premium member!
+            let successText = `✅ ${font.smallCaps('Successfully added')} @${target.split('@')[0]} ${font.smallCaps('as premium member')}!
 
-╭─「 💎 Premium Status 」
-├ 👤 User: @${target.split('@')[0]}
-├ 💎 Status: Premium Member
-├ 📅 Since: ${new Date().toLocaleString('id-ID')}
-├ ⏰ Duration: ${duration || 'Lifetime'}
-├ 🎫 Daily Limit: ${premiumLimit} (was ${user.limit})
-├ 🚀 Benefits: Unlimited commands, priority support
+╭─「 💎 ${font.smallCaps('Premium Status')} 」
+├ 👤 ${font.smallCaps('User')}: @${target.split('@')[0]}
+├ 💎 ${font.smallCaps('Status')}: ${font.smallCaps('Premium Member')}
+├ 📅 ${font.smallCaps('Since')}: ${new Date().toLocaleString('id-ID')}
+├ ⏰ ${font.smallCaps('Duration')}: ${duration || font.smallCaps('Lifetime')}
+├ 🎫 ${font.smallCaps('Daily Limit')}: ${premiumLimit} (${font.smallCaps('was')} ${user.limit})
+├ 🚀 ${font.smallCaps('Benefits')}: ${font.smallCaps('Unlimited commands, priority support')}
 ╰─────────────────────────
 
-🎉 Welcome to premium tier!`
+🎉 ${font.smallCaps('Welcome to premium tier')}!`
 
             if (user.premiumExpiry) {
-                successText += `\n⏰ Expires: ${new Date(user.premiumExpiry).toLocaleString('id-ID')}`
+                successText += `\n⏰ ${font.smallCaps('Expires')}: ${new Date(user.premiumExpiry).toLocaleString('id-ID')}`
             }
             
             return reply(successText)
@@ -112,7 +114,7 @@ export default {
         } catch (error) {
             console.error('Error adding premium:', error)
             await react('❌')
-            await reply('❌ Failed to add premium member.')
+            await reply(`❌ ${font.smallCaps('Failed to add premium member')}.`)
         }
     }
 }

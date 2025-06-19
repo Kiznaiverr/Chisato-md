@@ -1,5 +1,6 @@
 import si from 'systeminformation'
 import os from 'os'
+import font from '../../lib/font.js'
 
 export default {
     command: 'sysinfo',
@@ -70,39 +71,39 @@ export default {
             const botMemUsed = (processMemory.heapUsed / 1024 / 1024).toFixed(1)
             const botMemTotal = (processMemory.heapTotal / 1024 / 1024).toFixed(1)
             
-            let sysInfo = `┌─「 💻 System Information 」\n`
+            let sysInfo = `┌─「 💻 ${font.smallCaps('System Information')} 」\n`
             sysInfo += `├─────────────────────────\n`
-            sysInfo += `├ 🖥️ OS: ${osInfo.distro || platform} ${osInfo.release || ''}\n`
-            sysInfo += `├ 🏠 Host: ${hostname}\n`
-            sysInfo += `├ 🏗️ Arch: ${arch}\n`
-            sysInfo += `├ ⏰ Uptime: ${uptimeStr}\n`
+            sysInfo += `├ 🖥️ ${font.smallCaps('OS')}: ${osInfo.distro || platform} ${osInfo.release || ''}\n`
+            sysInfo += `├ 🏠 ${font.smallCaps('Host')}: ${hostname}\n`
+            sysInfo += `├ 🏗️ ${font.smallCaps('Arch')}: ${arch}\n`
+            sysInfo += `├ ⏰ ${font.smallCaps('Uptime')}: ${uptimeStr}\n`
             sysInfo += `├─────────────────────────\n`
-            sysInfo += `├ 🧠 CPU: ${cpu.manufacturer} ${cpu.brand}\n`
-            sysInfo += `├ ⚙️ Cores: ${cpu.cores} cores / ${cpu.physicalCores} physical\n`
-            sysInfo += `├ 🚀 Speed: Base ${cpu.speed} GHz, Max ${cpu.speedMax} GHz\n`
+            sysInfo += `├ 🧠 ${font.smallCaps('CPU')}: ${cpu.manufacturer} ${cpu.brand}\n`
+            sysInfo += `├ ⚙️ ${font.smallCaps('Cores')}: ${cpu.cores} ${font.smallCaps('cores')} / ${cpu.physicalCores} ${font.smallCaps('physical')}\n`
+            sysInfo += `├ 🚀 ${font.smallCaps('Speed')}: ${font.smallCaps('Base')} ${cpu.speed} GHz, ${font.smallCaps('Max')} ${cpu.speedMax} GHz\n`
             sysInfo += `├─────────────────────────\n`
-            sysInfo += `├ 🎯 RAM: ${formatBytes(mem.used)} / ${formatBytes(mem.total)} (${memUsagePercent}%)\n`
-            sysInfo += `├ 🆓 Free: ${formatBytes(mem.free)}\n`
-            sysInfo += `├ 🤖 Bot RAM: ${botMemUsed} MB / ${botMemTotal} MB\n`
+            sysInfo += `├ 🎯 ${font.smallCaps('RAM')}: ${formatBytes(mem.used)} / ${formatBytes(mem.total)} (${memUsagePercent}%)\n`
+            sysInfo += `├ 🆓 ${font.smallCaps('Free')}: ${formatBytes(mem.free)}\n`
+            sysInfo += `├ 🤖 ${font.smallCaps('Bot RAM')}: ${botMemUsed} MB / ${botMemTotal} MB\n`
             sysInfo += `├─────────────────────────\n`
-            sysInfo += `├ 💾 Storage: ${formatBytes(storageUsed)} / ${formatBytes(storageTotal)} (${storagePercent}%)\n`
-            sysInfo += `├ 📁 Free: ${formatBytes(storageTotal - storageUsed)}\n`
-            sysInfo += `├ 🎮 GPU: ${gpuInfo}\n`
+            sysInfo += `├ 💾 ${font.smallCaps('Storage')}: ${formatBytes(storageUsed)} / ${formatBytes(storageTotal)} (${storagePercent}%)\n`
+            sysInfo += `├ 📁 ${font.smallCaps('Free')}: ${formatBytes(storageTotal - storageUsed)}\n`
+            sysInfo += `├ 🎮 ${font.smallCaps('GPU')}: ${gpuInfo}\n`
             
             if (graphics.controllers && graphics.controllers[0] && graphics.controllers[0].vram) {
-                sysInfo += `├ 🎨 VRAM: ${graphics.controllers[0].vram} MB\n`
+                sysInfo += `├ 🎨 ${font.smallCaps('VRAM')}: ${graphics.controllers[0].vram} MB\n`
             }
             
             sysInfo += `├─────────────────────────\n`
-            sysInfo += `├ 🌐 Network: ${networkInfo}\n`
+            sysInfo += `├ 🌐 ${font.smallCaps('Network')}: ${networkInfo}\n`
             
             if (battery.hasBattery) {
-                sysInfo += `├ 🔋 Battery: ${battery.percent}% ${battery.isCharging ? '(Charging)' : ''}\n`
+                sysInfo += `├ 🔋 ${font.smallCaps('Battery')}: ${battery.percent}% ${battery.isCharging ? `(${font.smallCaps('Charging')})` : ''}\n`
             }
             
-            sysInfo += `├ 📦 Node.js: ${process.version}\n`
-            sysInfo += `├ 💻 Platform: ${process.platform}\n`
-            sysInfo += `└ 🕒 Time: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`
+            sysInfo += `├ 📦 ${font.smallCaps('Node.js')}: ${process.version}\n`
+            sysInfo += `├ 💻 ${font.smallCaps('Platform')}: ${process.platform}\n`
+            sysInfo += `└ 🕒 ${font.smallCaps('Time')}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`
             
             await react('✅')
             await reply(sysInfo)
@@ -110,7 +111,7 @@ export default {
         } catch (error) {
             console.error('Error getting system info:', error)
             await react('❌')
-            await reply('❌ Failed to get system information.')
+            await reply(`❌ ${font.smallCaps('Failed to get system information')}.`)
         }
     }
 }

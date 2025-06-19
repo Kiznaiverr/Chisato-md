@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { uploadToChisatoCDN } from '../../lib/chisato-CDN.js';
 import { downloadMediaMessage, getContentType } from '@whiskeysockets/baileys';
+import font from '../../lib/font.js';
 
 export default {
   command: 'remini',
@@ -27,7 +28,7 @@ export default {
         const quotedMessage = msg.message.extendedTextMessage?.contextInfo?.quotedMessage;
         
         if (!quotedMessage) {
-          return reply('Kirim atau balas gambar dengan perintah .remini');
+          return reply(`${font.smallCaps('Kirim atau balas gambar dengan perintah .remini')}`);
         }
         
         const quotedType = getContentType(quotedMessage);
@@ -52,12 +53,12 @@ export default {
             message: quotedMessage
           };
         } else {
-          return reply('File yang dibalas bukan gambar. Kirim atau balas gambar dengan perintah .remini');
+          return reply(`${font.smallCaps('File yang dibalas bukan gambar. Kirim atau balas gambar dengan perintah .remini')}`);
         }
       }
 
       if (!mediaMessage) {
-        return reply('Kirim atau balas gambar dengan perintah .remini');
+        return reply(`${font.smallCaps('Kirim atau balas gambar dengan perintah .remini')}`);
       }
 
       let buffer = await downloadMediaMessage(downloadMessage, sock);
@@ -66,16 +67,17 @@ export default {
       }
 
       if (!buffer || buffer.length === 0) {
-        throw new Error('Gagal mengunduh gambar dari WhatsApp!');
+        throw new Error(`${font.smallCaps('Gagal mengunduh gambar dari WhatsApp')}!`);
       }
       let uploadRes;
       try {
         uploadRes = await uploadToChisatoCDN(buffer, 'photo.jpg');
       } catch (err) {
-        throw new Error('Gagal upload ke CDN!');
+        throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
       }
+
       const cdnUrl = uploadRes?.data?.url || uploadRes?.url;
-      if (!cdnUrl) throw new Error('Gagal upload ke CDN!');
+      if (!cdnUrl) throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
       const apiUrl = `https://api.nekoyama.my.id/api/images/remini?url=${encodeURIComponent(cdnUrl)}`;
       let json;
       try {
@@ -88,18 +90,18 @@ export default {
         });
         json = res.data;
       } catch (err) {
-        throw new Error('Gagal menghubungi API Remini!');
+        throw new Error(`${font.smallCaps('Gagal menghubungi API Remini')}!`);
       }
-      if (json.status !== 'success' || !json.data || !json.data.enhanced_image_url) throw new Error('Gagal enhance gambar!');
+      if (json.status !== 'success' || !json.data || !json.data.enhanced_image_url) throw new Error(`${font.smallCaps('Gagal enhance gambar')}!`);
       await react('✅');
       await sock.sendMessage(msg.key.remoteJid, {
         image: { url: json.data.enhanced_image_url },
-        caption: `✨ Foto kamu sudah diperjelas! Semoga makin cakep ya~ || '-'}\n\nPowered by Chisato API`
+        caption: `✨ ${font.smallCaps('Foto kamu sudah diperjelas! Semoga makin cakep ya')}~ || '-'}\n\n${font.smallCaps('Powered by Chisato API')}`
       }, { quoted: msg });
     } catch (e) {
       console.error('Remini error:', e);
       await react('❌');
-      reply('Gagal enhance gambar. Pastikan file yang dikirim adalah gambar dan coba lagi!');
+      reply(`${font.smallCaps('Gagal enhance gambar. Pastikan file yang dikirim adalah gambar dan coba lagi')}!`);
     }
   }
 };

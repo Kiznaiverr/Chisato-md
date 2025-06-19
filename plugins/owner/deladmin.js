@@ -1,4 +1,5 @@
 import config from '../../lib/config.js'
+import font from '../../lib/font.js'
 
 export default {
     command: 'deladmin',
@@ -19,20 +20,20 @@ export default {
         } else if (args[0] && args[0].includes('@')) {
             target = args[0].replace('@', '') + '@s.whatsapp.net'
         } else {
-            return reply('❌ Please mention a user or reply to their message.\n\nExample: `deladmin @user`')
+            return reply(`❌ ${font.smallCaps('Please mention a user or reply to their message')}.\n\n${font.smallCaps('Example')}: \`deladmin @user\``)
         }
 
         // Check if target is valid
         if (!target) {
-            return reply('❌ Invalid user.')
+            return reply(`❌ ${font.smallCaps('Invalid user')}.`)
         }        // Check if target is owner
         if (db.isOwner(target)) {
-            return reply('❌ Cannot remove owner from admin!')
+            return reply(`❌ ${font.smallCaps('Cannot remove owner from admin')}!`)
         }
 
         // Check if target is admin
         if (!db.isAdmin(target)) {
-            return reply('❌ User is not an admin!')
+            return reply(`❌ ${font.smallCaps('User is not an admin')}!`)
         }
 
         try {
@@ -42,19 +43,19 @@ export default {
             
             if (success) {
                 await react('✅')
-                await reply(`✅ Successfully removed @${target.split('@')[0]} from bot admin!
+                await reply(`✅ ${font.smallCaps('Successfully removed')} @${target.split('@')[0]} ${font.smallCaps('from bot admin')}!
                 
-📋 Remaining admins: ${config.getAdmins().length}
-⚙️ Use .config list adminSettings to see all admins`)
+📋 ${font.smallCaps('Remaining admins')}: ${config.getAdmins().length}
+⚙️ ${font.smallCaps('Use .config list adminSettings to see all admins')}`)
             } else {
                 await react('❌')
-                await reply('❌ Cannot remove owner or user is not an admin!')
+                await reply(`❌ ${font.smallCaps('Cannot remove owner or user is not an admin')}!`)
             }
             
         } catch (error) {
             console.error('Error removing admin:', error)
             await react('❌')
-            await reply('❌ Failed to remove admin.')
+            await reply(`❌ ${font.smallCaps('Failed to remove admin')}.`)
         }
     }
 }

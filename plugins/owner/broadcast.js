@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'broadcast',
     aliases: ['bc'],
@@ -10,10 +12,10 @@ export default {
         const { reply, text, sock, db } = context
         
         if (!text) {
-            return await reply('❌ Please provide message to broadcast!\nExample: .broadcast Hello everyone!')
+            return await reply(`❌ ${font.smallCaps('Please provide message to broadcast')}!\n${font.smallCaps('Example')}: .broadcast ${font.smallCaps('Hello everyone')}!`)
         }
         
-        await reply('📡 Starting broadcast...')
+        await reply(`📡 ${font.smallCaps('Starting broadcast')}...`)
         
         // Get all user chats
         const users = Object.values(db.users)
@@ -21,13 +23,13 @@ export default {
         let failed = 0
         
         const broadcastMessage = `
-📢 *BROADCAST MESSAGE*
+📢 ${font.bold(font.smallCaps('BROADCAST MESSAGE'))}
 
 ${text}
 
 ━━━━━━━━━━━━━━━━━━━━━━
-🤖 From: ${db.getSetting('botName')}
-📅 Time: ${new Date().toLocaleString()}
+🤖 ${font.smallCaps('From')}: ${db.getSetting('botName')}
+📅 ${font.smallCaps('Time')}: ${new Date().toLocaleString()}
         `.trim()
         
         for (const user of users) {
@@ -48,14 +50,14 @@ ${text}
         }
         
         const resultText = `
-✅ *BROADCAST COMPLETED*
+✅ ${font.bold(font.smallCaps('BROADCAST COMPLETED'))}
 
-📊 *Statistics:*
-• ✅ Sent: ${sent} users
-• ❌ Failed: ${failed} users
-• 📈 Success Rate: ${Math.round((sent / (sent + failed)) * 100) || 0}%
+📊 ${font.bold(font.smallCaps('Statistics'))}:
+• ✅ ${font.smallCaps('Sent')}: ${sent} ${font.smallCaps('users')}
+• ❌ ${font.smallCaps('Failed')}: ${failed} ${font.smallCaps('users')}
+• 📈 ${font.smallCaps('Success Rate')}: ${Math.round((sent / (sent + failed)) * 100) || 0}%
 
-🕐 Completed at: ${new Date().toLocaleString()}
+🕐 ${font.smallCaps('Completed at')}: ${new Date().toLocaleString()}
         `.trim()
         
         await reply(resultText)

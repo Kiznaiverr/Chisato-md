@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'profile',
     aliases: ['prof', 'me'],
@@ -29,57 +31,57 @@ export default {
         
         // Determine user status
         let statusIcon = '👤'
-        let statusText = 'Regular User'
+        let statusText = font.smallCaps('Regular User')
         if (isOwner) {
             statusIcon = '👑'
-            statusText = 'Bot Owner'
+            statusText = font.smallCaps('Bot Owner')
         } else if (isPremium) {
             statusIcon = '💎'
-            statusText = 'Premium Member'
+            statusText = font.smallCaps('Premium Member')
         } else if (isAdmin) {
             statusIcon = '👨‍💼'
-            statusText = 'Bot Admin'
+            statusText = font.smallCaps('Bot Admin')
         }
         
         // Build profile text
-        let profileText = `╭─「 ${statusIcon} User Profile 」\n`
-        profileText += `├ 👤 Name: ${user.name || 'Anonymous'}\n`
-        profileText += `├ 📱 Number: ${target.split('@')[0]}\n`
-        profileText += `├ 🏆 Status: ${statusText}\n`
+        let profileText = `╭─「 ${statusIcon} ${font.smallCaps('User Profile')} 」\n`
+        profileText += `├ 👤 ${font.smallCaps('Name')}: ${user.name || 'Anonymous'}\n`
+        profileText += `├ 📱 ${font.smallCaps('Number')}: ${target.split('@')[0]}\n`
+        profileText += `├ 🏆 ${font.smallCaps('Status')}: ${statusText}\n`
         
         if (user.registered) {
-            profileText += `├ ✅ Registered: Yes\n`
+            profileText += `├ ✅ ${font.smallCaps('Registered')}: ${font.smallCaps('Yes')}\n`
             if (user.regTime) {
-                profileText += `├ 📅 Reg Date: ${new Date(user.regTime).toLocaleDateString('id-ID')}\n`
+                profileText += `├ 📅 ${font.smallCaps('Reg Date')}: ${new Date(user.regTime).toLocaleDateString('id-ID')}\n`
             }
             if (user.age) {
-                profileText += `├ 🎂 Age: ${user.age} years\n`
+                profileText += `├ 🎂 ${font.smallCaps('Age')}: ${user.age} ${font.smallCaps('years')}\n`
             }
         } else {
-            profileText += `├ ❌ Registered: No\n`
+            profileText += `├ ❌ ${font.smallCaps('Registered')}: ${font.smallCaps('No')}\n`
         }
         
         profileText += `├─────────────────────────\n`
-        profileText += `├ 📊 Statistics:\n`
-        profileText += `├ 🎯 Level: ${user.level}\n`
-        profileText += `├ ⭐ EXP: ${user.exp}/${nextLevelExp}\n`
-        profileText += `├ 📈 Progress: ${progressBar} ${progressPercent}%\n`
+        profileText += `├ 📊 ${font.smallCaps('Statistics')}:\n`
+        profileText += `├ 🎯 ${font.smallCaps('Level')}: ${user.level}\n`
+        profileText += `├ ⭐ ${font.smallCaps('EXP')}: ${user.exp}/${nextLevelExp}\n`
+        profileText += `├ 📈 ${font.smallCaps('Progress')}: ${progressBar} ${progressPercent}%\n`
         
         // Limit information
         if (isOwner || isPremium) {
-            profileText += `├ 🎫 Daily Limit: ∞ Unlimited\n`
+            profileText += `├ 🎫 ${font.smallCaps('Daily Limit')}: ∞ ${font.smallCaps('Unlimited')}\n`
         } else {
             const maxLimit = db.getSetting('dailyLimit') || 50
-            profileText += `├ 🎫 Daily Limit: ${user.limit}/${maxLimit}\n`
+            profileText += `├ 🎫 ${font.smallCaps('Daily Limit')}: ${user.limit}/${maxLimit}\n`
         }
         
         // Premium information
         if (isPremium && !isOwner) {
             profileText += `├─────────────────────────\n`
-            profileText += `├ 💎 Premium Info:\n`
+            profileText += `├ 💎 ${font.smallCaps('Premium Info')}:\n`
             
             if (user.premiumSince) {
-                profileText += `├ 📅 Since: ${new Date(user.premiumSince).toLocaleDateString('id-ID')}\n`
+                profileText += `├ 📅 ${font.smallCaps('Since')}: ${new Date(user.premiumSince).toLocaleDateString('id-ID')}\n`
             }
             
             if (user.premiumExpiry) {
@@ -87,39 +89,39 @@ export default {
                 const now = new Date()
                 const daysLeft = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24))
                 
-                profileText += `├ ⏰ Expires: ${expiry.toLocaleDateString('id-ID')}\n`
-                profileText += `├ 🕔 Days Left: ${daysLeft > 0 ? daysLeft : 'Expired'}\n`
+                profileText += `├ ⏰ ${font.smallCaps('Expires')}: ${expiry.toLocaleDateString('id-ID')}\n`
+                profileText += `├ 🕔 ${font.smallCaps('Days Left')}: ${daysLeft > 0 ? daysLeft : font.smallCaps('Expired')}\n`
             } else {
-                profileText += `├ ⏰ Expires: Lifetime\n`
+                profileText += `├ ⏰ ${font.smallCaps('Expires')}: ${font.smallCaps('Lifetime')}\n`
             }
         }
         
         // Additional stats
         profileText += `├─────────────────────────\n`
-        profileText += `├ 📈 Activity:\n`
-        profileText += `├ ⚠️ Warnings: ${user.warning || 0}\n`
+        profileText += `├ 📈 ${font.smallCaps('Activity')}:\n`
+        profileText += `├ ⚠️ ${font.smallCaps('Warnings')}: ${user.warning || 0}\n`
         
         if (user.banned) {
-            profileText += `├ 🚫 Status: Banned\n`
+            profileText += `├ 🚫 ${font.smallCaps('Status')}: ${font.smallCaps('Banned')}\n`
         }
         
         if (user.afk) {
-            profileText += `├ 😴 AFK: Yes\n`
+            profileText += `├ 😴 ${font.smallCaps('AFK')}: ${font.smallCaps('Yes')}\n`
             if (user.afkReason) {
-                profileText += `├ 💭 Reason: ${user.afkReason}\n`
+                profileText += `├ 💭 ${font.smallCaps('Reason')}: ${user.afkReason}\n`
             }
         }
         
-        profileText += `├ 👀 Last Seen: ${new Date(user.lastSeen).toLocaleString('id-ID')}\n`
+        profileText += `├ 👀 ${font.smallCaps('Last Seen')}: ${new Date(user.lastSeen).toLocaleString('id-ID')}\n`
         profileText += `╰─────────────────────────`
         
         // Add helpful commands for self-profile
         if (isSelf) {
-            profileText += `\n\n💡 Quick Commands:\n`
-            profileText += `• .limit - Check usage limit\n`
-            profileText += `• .register - Register as user\n`
+            profileText += `\n\n💡 ${font.smallCaps('Quick Commands')}:\n`
+            profileText += `• .limit - ${font.smallCaps('Check usage limit')}\n`
+            profileText += `• .register - ${font.smallCaps('Register as user')}\n`
             if (!user.registered) {
-                profileText += `• .register <name> <age> - Complete registration\n`
+                profileText += `• .register <${font.smallCaps('name')}> <${font.smallCaps('age')}> - ${font.smallCaps('Complete registration')}\n`
             }
         }
         

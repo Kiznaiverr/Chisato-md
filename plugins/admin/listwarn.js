@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'listwarn',
     aliases: ['warnlist', 'warninglist'],
@@ -14,7 +16,7 @@ export default {
 
             // Check if it's a group
             if (!isGroup) {
-                return reply('❌ This command can only be used in groups!')
+                return reply(`❌ ${font.smallCaps('This command can only be used in groups')}!`)
             }
 
             // Get group participants
@@ -25,7 +27,7 @@ export default {
                 participants = groupInfo.participants.map(p => p.id)
             } catch (error) {
                 console.error('Error getting group metadata:', error)
-                return reply('❌ Failed to get group information.')
+                return reply(`❌ ${font.smallCaps('Failed to get group information')}.`)
             }
 
             // Get all users with warnings in this group
@@ -45,37 +47,37 @@ export default {
             // Sort by warning count (highest first)
             warnedUsers.sort((a, b) => b.warnings - a.warnings)
 
-            let listMessage = `📋 *WARNING LIST* 📋\n`
-            listMessage += `🏠 *Group:* ${groupInfo.subject || 'Unknown'}\n`
-            listMessage += `📊 *Total Warned Users:* ${warnedUsers.length}\n\n`
+            let listMessage = `📋 ${font.bold(font.smallCaps('WARNING LIST'))} 📋\n`
+            listMessage += `🏠 ${font.bold(font.smallCaps('Group'))}: ${groupInfo.subject || 'Unknown'}\n`
+            listMessage += `📊 ${font.bold(font.smallCaps('Total Warned Users'))}: ${warnedUsers.length}\n\n`
 
             if (warnedUsers.length === 0) {
-                listMessage += `✅ *Great news!* No users have warnings in this group.\n\n`
-                listMessage += `🎉 Everyone is following the rules perfectly!`
+                listMessage += `✅ ${font.bold(font.smallCaps('Great news!'))} ${font.smallCaps('No users have warnings in this group')}.\n\n`
+                listMessage += `🎉 ${font.smallCaps('Everyone is following the rules perfectly')}!`
             } else {
-                listMessage += `⚠️ *Users with Warnings:*\n\n`
+                listMessage += `⚠️ ${font.bold(font.smallCaps('Users with Warnings'))}:\n\n`
                 
                 warnedUsers.forEach((user, index) => {
                     const riskLevel = user.warnings === 3 ? '🔴' : user.warnings === 2 ? '🟡' : '🟢'
                     listMessage += `${index + 1}. ${riskLevel} @${user.number}\n`
-                    listMessage += `   └ ${user.warnings}/3 warnings`
+                    listMessage += `   └ ${user.warnings}/3 ${font.smallCaps('warnings')}`
                     
                     if (user.lastWarning) {
                         const date = new Date(user.lastWarning.timestamp).toLocaleDateString('id-ID')
-                        listMessage += ` (Last: ${date})`
+                        listMessage += ` (${font.smallCaps('Last')}: ${date})`
                     }
                     listMessage += `\n`
                 })
 
-                listMessage += `\n📊 *Legend:*\n`
-                listMessage += `🟢 Low risk (1 warning)\n`
-                listMessage += `🟡 Medium risk (2 warnings)\n`
-                listMessage += `🔴 High risk (3 warnings)\n\n`
+                listMessage += `\n📊 ${font.bold(font.smallCaps('Legend'))}:\n`
+                listMessage += `🟢 ${font.smallCaps('Low risk')} (1 ${font.smallCaps('warning')})\n`
+                listMessage += `🟡 ${font.smallCaps('Medium risk')} (2 ${font.smallCaps('warnings')})\n`
+                listMessage += `🔴 ${font.smallCaps('High risk')} (3 ${font.smallCaps('warnings')})\n\n`
                 
-                listMessage += `🛠️ *Admin Commands:*\n`
-                listMessage += `• \`.cekwarn @user\` - Check user details\n`
-                listMessage += `• \`.unwarn @user\` - Remove a warning\n`
-                listMessage += `• \`.clearwarn @user\` - Clear all warnings`
+                listMessage += `🛠️ ${font.bold(font.smallCaps('Admin Commands'))}:\n`
+                listMessage += `• \`.cekwarn @user\` - ${font.smallCaps('Check user details')}\n`
+                listMessage += `• \`.unwarn @user\` - ${font.smallCaps('Remove a warning')}\n`
+                listMessage += `• \`.clearwarn @user\` - ${font.smallCaps('Clear all warnings')}`
             }
 
             await sock.sendMessage(msg.key.remoteJid, {
@@ -88,7 +90,7 @@ export default {
         } catch (error) {
             console.error('Error in listwarn command:', error)
             await react('❌')
-            await reply('❌ An error occurred while getting warning list.')
+            await reply(`❌ ${font.smallCaps('An error occurred while getting warning list')}.`)
         }
     }
 }

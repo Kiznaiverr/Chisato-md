@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import font from '../../lib/font.js';
 
 export default {
     command: 'truth',
@@ -10,21 +11,21 @@ export default {
         const { reply } = context
         try {
             const res = await fetch('https://api.nekoyama.my.id/api/kata-kata/truth')
-            if (!res.ok) throw new Error('Gagal mengambil truth dari API!')
+            if (!res.ok) throw new Error(`${font.smallCaps('Gagal mengambil truth dari API')}!`)
             const json = await res.json()
-            if (json.status !== 'success' || !json.data) throw new Error('Truth tidak ditemukan!')
+            if (json.status !== 'success' || !json.data) throw new Error(`${font.smallCaps('Truth tidak ditemukan')}!`)
             const truth = json.data.truth || json.data.dare || '-'
             const truthText = `
-🎯 *TRUTH QUESTION*
+🎯 ${font.bold(font.smallCaps('TRUTH QUESTION'))}
 
 ❓ ${truth}
 
-💭 Answer honestly and have fun!
+💭 ${font.smallCaps('Answer honestly and have fun')}!
             `.trim()
             
             await reply(truthText)
         } catch (e) {
-            await reply('Gagal mengambil truth, coba lagi nanti.')
+            await reply(`${font.smallCaps('Gagal mengambil truth, coba lagi nanti')}.`)
         }
     }
 }

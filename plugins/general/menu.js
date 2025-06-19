@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import font from '../../lib/font.js'
 
 export default {
     command: 'menu',
@@ -36,16 +37,14 @@ export default {
         const sortedCats = Object.keys(categories).sort()        // HEADER
         let menuText = ''
         menuText += `╭─────────────────────────╮\n`
-        menuText += `│  🤖 *${botName} - WhatsApp Bot*  │\n`
+        menuText += `│    🤖 ${font.smallCaps('chisato - menu')}    │\n`
         menuText += `╰─────────────────────────╯\n\n`
-        menuText += `👤 *User:* ${userName}\n`
-        menuText += `🏷️ *Status:* ${premiumText}\n`
-        menuText += `⚡ *Limit:* ${userLimit}/${maxLimit}\n`
-        menuText += `🕒 *Time:* ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
+        menuText += `👤 ${font.smallCaps('user')}: ${userName}\n`
+        menuText += `🏷️ ${font.smallCaps('status')}: ${premiumText}\n`
+        menuText += `⚡ ${font.smallCaps('limit')}: ${userLimit}/${maxLimit}\n`
+        menuText += `🕒 ${font.smallCaps('time')}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
         menuText += `━━━━━━━━━━━━━━━━━━━━━━━━━\n`
-        menuText += `🎯 *Selamat datang di Chisato!*\n\n`
-        menuText += `Semua fitur bot dikelompokkan berdasarkan kategori. Pilih kategori yang ingin kamu gunakan:\n\n`
-        menuText += `📋 *KATEGORI MENU:*\n`
+        menuText += `📋 ${font.smallCaps('kategori menu')}:\n\n`
         // MENU KATEGORI
         const categoryIcons = {
             'admin': '👑',
@@ -59,16 +58,14 @@ export default {
             'search': '🔍',
             'downloader': '📥'
         }
-        
-        sortedCats.forEach(cat => {
+          sortedCats.forEach(cat => {
             const icon = categoryIcons[cat] || '📂'
-            const categoryName = cat.charAt(0).toUpperCase() + cat.slice(1)
-            menuText += `${icon} \`.${cat}menu\` - ${categoryName}\n`
+            menuText += `${icon} .${font.smallCaps(cat + 'menu')}\n`
         })
         
         menuText += `\n━━━━━━━━━━━━━━━━━━━━━━━━━\n`
-        menuText += `💡 *Tips:* Ketik \`.menu <kategori>\` untuk melihat detail commands di kategori tersebut.\n\n`
-        menuText += `🤖 *Powered by Chisato-MD* | Created by Kiznavierr`
+        menuText += `💡 ${font.smallCaps('tips')}: ${font.smallCaps('ketik .menu <kategori> untuk detail')}\n\n`
+        menuText += `🤖 ${font.smallCaps('powered by chisato-md | created by kiznavierr')}`
         
         // Send menu with banner image
         try {

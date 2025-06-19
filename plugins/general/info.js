@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'info',
     aliases: ['botinfo'],
@@ -24,18 +26,18 @@ export default {
         const memUsed = (memUsage.heapUsed / 1024 / 1024).toFixed(2)
         const memTotal = (memUsage.heapTotal / 1024 / 1024).toFixed(2)
         
-        let infoText = `┌─「 Bot Information 」\n`
-        infoText += `├ 🤖 Name: ${botName}\n`
-        infoText += `├ 📱 Number: ${sock.user.id.split(':')[0]}\n`
-        infoText += `├ 🎯 Prefix: ${prefix}\n`
-        infoText += `├ ⏰ Uptime: ${uptimeString}\n`
-        infoText += `├ 💾 Memory: ${memUsed}MB / ${memTotal}MB\n`
-        infoText += `├ 🌐 Platform: ${process.platform}\n`
-        infoText += `├ 📦 Node.js: ${process.version}\n`
+        let infoText = `┌─「 ${font.smallCaps('Bot Information')} 」\n`
+        infoText += `├ 🤖 ${font.smallCaps('Name')}: ${botName}\n`
+        infoText += `├ 📱 ${font.smallCaps('Number')}: ${sock.user.id.split(':')[0]}\n`
+        infoText += `├ 🎯 ${font.smallCaps('Prefix')}: ${prefix}\n`
+        infoText += `├ ⏰ ${font.smallCaps('Uptime')}: ${uptimeString}\n`
+        infoText += `├ 💾 ${font.smallCaps('Memory')}: ${memUsed}MB / ${memTotal}MB\n`
+        infoText += `├ 🌐 ${font.smallCaps('Platform')}: ${process.platform}\n`
+        infoText += `├ 📦 ${font.smallCaps('Node.js')}: ${process.version}\n`
         infoText += `├─────────────────\n`
-        infoText += `├ 👨‍💻 Developer: Kiznavierr\n`
-        infoText += `├ 📚 Library: @whiskeysockets/baileys\n`
-        infoText += `└ 💝 Thanks for using!`
+        infoText += `├ 👨‍💻 ${font.smallCaps('Developer')}: Kiznavierr\n`
+        infoText += `├ 📚 ${font.smallCaps('Library')}: @whiskeysockets/baileys\n`
+        infoText += `└ 💝 ${font.smallCaps('Thanks for using')}!`
         
         await reply(infoText)
     }

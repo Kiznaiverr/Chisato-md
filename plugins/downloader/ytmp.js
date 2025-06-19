@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import font from '../../lib/font.js';
 
 // Helper to fetch with timeout
 async function fetchWithTimeout(resource, options = {}) {
@@ -39,7 +40,7 @@ export default {
     cooldown: 5,
 
     async execute({ args, reply, sock, msg, command, react }) {
-        if (!args[0]) return reply('Masukkan link YouTube yang valid!\nContoh: .ytmp https://www.youtube.com/watch?v=xxxx');
+        if (!args[0]) return reply(`${font.smallCaps('Masukkan link YouTube yang valid')}!\n${font.smallCaps('Contoh')}: .ytmp https://www.youtube.com/watch?v=xxxx`);
         await react('🕔');
         const url = args[0];
         const isAudio = ['yta', 'ytmp3', 'ytaudio', 'ytvmp3'].includes(command);
@@ -47,21 +48,21 @@ export default {
         try {
             // Fetch API and log response for debugging
             const apiResponse = await downloadYoutube(url, format);
-            if (!apiResponse || !apiResponse.data) throw new Error('API response kosong atau tidak valid.');
+            if (!apiResponse || !apiResponse.data) throw new Error(`${font.smallCaps('API response kosong atau tidak valid')}.`);
             const data = apiResponse.data;
             // Compose info
-            const info = `🎵 *Title*: ${data.title || '-'}\n👤 *Uploader*: ${data.uploader || '-'}\n⏱️ *Duration*: ${data.duration || '-'}\n🔗 *Link*: https://youtu.be/${data.video_id || '-'}\n`;
+            const info = `🎵 ${font.bold(font.smallCaps('Title'))}: ${data.title || '-'}\n👤 ${font.bold(font.smallCaps('Uploader'))}: ${data.uploader || '-'}\n⏱️ ${font.bold(font.smallCaps('Duration'))}: ${data.duration || '-'}\n🔗 ${font.bold(font.smallCaps('Link'))}: https://youtu.be/${data.video_id || '-'}\n`;
             // Determine media URL
             let fileUrl = data.download_url;
-            if (!fileUrl) throw new Error('Tidak ada URL media yang bisa diunduh dari API.');
+            if (!fileUrl) throw new Error(`${font.smallCaps('Tidak ada URL media yang bisa diunduh dari API')}.`);
             // Download media with timeout
             let fileRes;
             try {
                 fileRes = await fetchWithTimeout(fileUrl, { timeout: 30000 });
             } catch (err) {
-                throw new Error('Gagal mengunduh file media (timeout atau error jaringan).');
+                throw new Error(`${font.smallCaps('Gagal mengunduh file media (timeout atau error jaringan)')}.`);
             }
-            if (!fileRes.ok) throw new Error('Gagal download file YouTube!');
+            if (!fileRes.ok) throw new Error(`${font.smallCaps('Gagal download file YouTube')}!`);
             const buffer = Buffer.from(await fileRes.arrayBuffer());
             // Send media
             if (isAudio) {
@@ -69,19 +70,19 @@ export default {
                     audio: buffer,
                     mimetype: 'audio/mp4',
                     ptt: false,
-                    caption: `🎧 *Here's your audio file!*\n\n${info}\nPowered by Chisato API`
+                    caption: `🎧 ${font.bold(font.smallCaps('Here\'s your audio file'))}!\n\n${info}${font.smallCaps('Powered by Chisato API')}`
                 }, { quoted: msg });
             } else {
                 await sock.sendMessage(msg.key.remoteJid, {
                     video: buffer,
                     mimetype: 'video/mp4',
-                    caption: `🎬 *Here's your video file!*\n\n${info}\nPowered by Chisato API`
+                    caption: `🎬 ${font.bold(font.smallCaps('Here\'s your video file'))}!\n\n${info}${font.smallCaps('Powered by Chisato API')}`
                 }, { quoted: msg });
             }
             await react('✅');
         } catch (e) {
             await react('❌');
-            return reply(e.message || 'Terjadi kesalahan saat memproses permintaan YouTube.');
+            return reply(e.message || `${font.smallCaps('Terjadi kesalahan saat memproses permintaan YouTube')}.`);
         }
     }
 };

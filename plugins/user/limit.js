@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'limit',
     aliases: ['mylimit', 'checklimit'],
@@ -11,21 +13,21 @@ export default {
         const isOwner = db.isOwner(sender)
         const isPremium = db.isPremium(sender)
         
-        let limitText = `╭─「 🎫 Your Usage Limit 」\n`
-        limitText += `├ 👤 User: ${user.name || 'Anonymous'}\n`
+        let limitText = `╭─「 🎫 ${font.smallCaps('Your Usage Limit')} 」\n`
+        limitText += `├ 👤 ${font.smallCaps('User')}: ${user.name || 'Anonymous'}\n`
         
         if (isOwner) {
-            limitText += `├ 👑 Status: Bot Owner\n`
-            limitText += `├ 🎫 Daily Limit: ∞ Unlimited\n`
-            limitText += `├ 💎 Premium: Yes (Owner)\n`
-            limitText += `├ 🚀 Priority: Highest\n`
+            limitText += `├ 👑 ${font.smallCaps('Status')}: ${font.smallCaps('Bot Owner')}\n`
+            limitText += `├ 🎫 ${font.smallCaps('Daily Limit')}: ∞ ${font.smallCaps('Unlimited')}\n`
+            limitText += `├ 💎 ${font.smallCaps('Premium')}: ${font.smallCaps('Yes')} (${font.smallCaps('Owner')})\n`
+            limitText += `├ 🚀 ${font.smallCaps('Priority')}: ${font.smallCaps('Highest')}\n`
         } else if (isPremium) {
-            limitText += `├ 💎 Status: Premium Member\n`
-            limitText += `├ 🎫 Daily Limit: ∞ Unlimited\n`
-            limitText += `├ 🚀 Priority: High\n`
+            limitText += `├ 💎 ${font.smallCaps('Status')}: ${font.smallCaps('Premium Member')}\n`
+            limitText += `├ 🎫 ${font.smallCaps('Daily Limit')}: ∞ ${font.smallCaps('Unlimited')}\n`
+            limitText += `├ 🚀 ${font.smallCaps('Priority')}: ${font.smallCaps('High')}\n`
             
             if (user.premiumSince) {
-                limitText += `├ 📅 Premium Since: ${new Date(user.premiumSince).toLocaleDateString('id-ID')}\n`
+                limitText += `├ 📅 ${font.smallCaps('Premium Since')}: ${new Date(user.premiumSince).toLocaleDateString('id-ID')}\n`
             }
             
             if (user.premiumExpiry) {
@@ -33,43 +35,43 @@ export default {
                 const now = new Date()
                 const daysLeft = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24))
                 
-                limitText += `├ ⏰ Expires: ${expiryDate.toLocaleDateString('id-ID')}\n`
-                limitText += `├ 🕔 Days Left: ${daysLeft > 0 ? daysLeft : 'Expired'}\n`
+                limitText += `├ ⏰ ${font.smallCaps('Expires')}: ${expiryDate.toLocaleDateString('id-ID')}\n`
+                limitText += `├ 🕔 ${font.smallCaps('Days Left')}: ${daysLeft > 0 ? daysLeft : font.smallCaps('Expired')}\n`
             } else {
-                limitText += `├ ⏰ Expires: Never (Lifetime)\n`
+                limitText += `├ ⏰ ${font.smallCaps('Expires')}: ${font.smallCaps('Never')} (${font.smallCaps('Lifetime')})\n`
             }
         } else {
             const maxLimit = db.getSetting('dailyLimit') || 50
             const usedLimit = maxLimit - user.limit
             const percentage = Math.round((usedLimit / maxLimit) * 100)
             
-            limitText += `├ 🆓 Status: Regular User\n`
-            limitText += `├ 🎫 Daily Limit: ${user.limit}/${maxLimit}\n`
-            limitText += `├ 📊 Used: ${usedLimit} (${percentage}%)\n`
-            limitText += `├ 🚀 Priority: Normal\n`
+            limitText += `├ 🆓 ${font.smallCaps('Status')}: ${font.smallCaps('Regular User')}\n`
+            limitText += `├ 🎫 ${font.smallCaps('Daily Limit')}: ${user.limit}/${maxLimit}\n`
+            limitText += `├ 📊 ${font.smallCaps('Used')}: ${usedLimit} (${percentage}%)\n`
+            limitText += `├ 🚀 ${font.smallCaps('Priority')}: ${font.smallCaps('Normal')}\n`
             
             // Progress bar
             const barLength = 10
             const filledBars = Math.round((usedLimit / maxLimit) * barLength)
             const emptyBars = barLength - filledBars
             const progressBar = '█'.repeat(filledBars) + '░'.repeat(emptyBars)
-            limitText += `├ 📈 Progress: ${progressBar}\n`
+            limitText += `├ 📈 ${font.smallCaps('Progress')}: ${progressBar}\n`
             
             // Warning if low limit
             if (user.limit <= 5) {
-                limitText += `├ ⚠️ Warning: Low limit remaining!\n`
+                limitText += `├ ⚠️ ${font.smallCaps('Warning')}: ${font.smallCaps('Low limit remaining')}!\n`
             }
         }
         
         limitText += `├─────────────────────────\n`
-        limitText += `├ 🔄 Reset: Daily at 00:00 WIB\n`
-        limitText += `├ 🎯 Level: ${user.level} | ⭐ EXP: ${user.exp}\n`
+        limitText += `├ 🔄 ${font.smallCaps('Reset')}: ${font.smallCaps('Daily at 00:00 WIB')}\n`
+        limitText += `├ 🎯 ${font.smallCaps('Level')}: ${user.level} | ⭐ ${font.smallCaps('EXP')}: ${user.exp}\n`
         
         if (!isPremium && !isOwner) {
             limitText += `├─────────────────────────\n`
-            limitText += `├ 💡 Want unlimited usage?\n`
-            limitText += `├ 💎 Upgrade to Premium!\n`
-            limitText += `├ 📞 Contact owner for premium\n`
+            limitText += `├ 💡 ${font.smallCaps('Want unlimited usage')}?\n`
+            limitText += `├ 💎 ${font.smallCaps('Upgrade to Premium')}!\n`
+            limitText += `├ 📞 ${font.smallCaps('Contact owner for premium')}\n`
         }
         
         limitText += `╰─────────────────────────`

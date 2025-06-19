@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import { getContentType, downloadMediaMessage } from '@whiskeysockets/baileys'
 import { fileTypeFromBuffer } from 'file-type'
+import font from '../../lib/font.js';
 
 export default {
     command: 'douyin',
@@ -12,17 +13,17 @@ export default {
     cooldown: 5,
 
     async execute({ args, reply, sock, msg, react }) {
-        if (!args[0]) return reply('Masukkan link atau share text Douyin!\nContoh: .douyin https://v.douyin.com/FOihCb_rYBg/');
+        if (!args[0]) return reply(`${font.smallCaps('Masukkan link atau share text Douyin')}!\n${font.smallCaps('Contoh')}: .douyin https://v.douyin.com/FOihCb_rYBg/`);
         await react('🕔');
         const url = args.join(' ');
         const api = `https://api.nekoyama.my.id/api/douyin/download?url=${encodeURIComponent(url)}`;
         try {
             const res = await fetch(api);
-            if (!res.ok) throw new Error('Gagal menghubungi API Douyin!');
+            if (!res.ok) throw new Error(`${font.smallCaps('Gagal menghubungi API Douyin')}!`);
             const json = await res.json();
             if (json.status !== 'success' || !json.data) {
                 await react('❌');
-                return reply('Gagal mendapatkan data. Pastikan link Douyin valid dan publik.');
+                return reply(`${font.smallCaps('Gagal mendapatkan data. Pastikan link Douyin valid dan publik')}.`);
             }
             const { original_text, thumbnail, download_links } = json.data;
             // Pilih kualitas terbaik (urutan: hd > normal > lainnya)
@@ -41,21 +42,21 @@ export default {
             }
             if (!videoUrl) {
                 await react('❌');
-                return reply('Tidak ada link video yang bisa diunduh.');
+                return reply(`${font.smallCaps('Tidak ada link video yang bisa diunduh')}.`);
             }
             // Download video
             const videoRes = await fetch(videoUrl);
-            if (!videoRes.ok) throw new Error('Gagal download video Douyin!');
+            if (!videoRes.ok) throw new Error(`${font.smallCaps('Gagal download video Douyin')}!`);
             const buffer = Buffer.from(await videoRes.arrayBuffer());
             // Kirim video ke user
             await sock.sendMessage(msg.key.remoteJid, {
                 video: buffer,
-                caption: `*DOUYIN DOWNLOADER*\n• Link/Share: ${original_text || '-'}\n• Kualitas: ${label}\n\nPowered by Chisato API`
+                caption: `${font.bold(font.smallCaps('DOUYIN DOWNLOADER'))}\n• ${font.smallCaps('Link/Share')}: ${original_text || '-'}\n• ${font.smallCaps('Kualitas')}: ${label}\n\n${font.smallCaps('Powered by Chisato API')}`
             }, { quoted: msg });
             await react('✅');
         } catch (e) {
             await react('❌');
-            return reply('Terjadi kesalahan saat memproses permintaan Douyin.');
+            return reply(`${font.smallCaps('Terjadi kesalahan saat memproses permintaan Douyin')}.`);
         }
     }
 };

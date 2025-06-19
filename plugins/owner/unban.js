@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'unban',
     description: 'Unban user',
@@ -12,19 +14,19 @@ export default {
         const mentioned = msg.message.extendedTextMessage?.contextInfo?.mentionedJid || []
         
         if (mentioned.length === 0) {
-            return await reply('❌ Please mention a user to unban!\nExample: .unban @user')
+            return await reply(`❌ ${font.smallCaps('Please mention a user to unban')}!\n${font.smallCaps('Example')}: .unban @user`)
         }
         
         const target = mentioned[0]
         const user = db.getUser(target)
         
         if (!user.banned) {
-            return await reply('❌ User is not banned!')
+            return await reply(`❌ ${font.smallCaps('User is not banned')}!`)
         }
         
         user.banned = false
         db.saveUsers()
         
-        await reply(`✅ Successfully unbanned @${target.split('@')[0]}!`)
+        await reply(`✅ ${font.smallCaps('Successfully unbanned')} @${target.split('@')[0]}!`)
     }
 }

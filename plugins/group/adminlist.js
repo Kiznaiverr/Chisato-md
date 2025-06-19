@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'adminlist',
     aliases: ['listadmin', 'admins'],
@@ -18,16 +20,16 @@ export default {
             const regularAdmins = admins.filter(p => p.admin === 'admin')
             
             let adminText = `
-┌─「 *GROUP ADMINS* 」
+┌─「 ${font.bold(font.smallCaps('GROUP ADMINS'))} 」
 │ 
-├ 🏷️ *Group:* ${groupMetadata.subject}
-├ 👥 *Total Members:* ${participants.length}
-├ 👑 *Total Admins:* ${admins.length}
+├ 🏷️ ${font.bold(font.smallCaps('Group'))}: ${groupMetadata.subject}
+├ 👥 ${font.bold(font.smallCaps('Total Members'))}: ${participants.length}
+├ 👑 ${font.bold(font.smallCaps('Total Admins'))}: ${admins.length}
 │ 
 `
             
             if (superAdmins.length > 0) {
-                adminText += `├ 👑 *SUPER ADMINS:*\n`
+                adminText += `├ 👑 ${font.bold(font.smallCaps('SUPER ADMINS'))}:\n`
                 superAdmins.forEach((admin, index) => {
                     const number = admin.id.split('@')[0]
                     adminText += `│ ${index + 1}. @${number}\n`
@@ -36,7 +38,7 @@ export default {
             }
             
             if (regularAdmins.length > 0) {
-                adminText += `├ 🛡️ *ADMINS:*\n`
+                adminText += `├ 🛡️ ${font.bold(font.smallCaps('ADMINS'))}:\n`
                 regularAdmins.forEach((admin, index) => {
                     const number = admin.id.split('@')[0]
                     adminText += `│ ${index + 1}. @${number}\n`
@@ -53,7 +55,7 @@ export default {
             })
             
         } catch (error) {
-            await reply('❌ Failed to get group information!')
+            await reply(`❌ ${font.smallCaps('Failed to get group information')}!`)
         }
     }
 }

@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+import font from '../../lib/font.js'
 
 export default {
     command: 'allmenu',
@@ -30,14 +31,14 @@ export default {
         const sortedCats = Object.keys(categories).sort()        // HEADER
         let menuText = ''
         menuText += `╭─────────────────────────╮\n`
-        menuText += `│  🤖 *${botName} - All Commands*  │\n`
+        menuText += `│   🤖 ${font.smallCaps('chisato - all cmd')}   │\n`
         menuText += `╰─────────────────────────╯\n\n`
-        menuText += `👤 *User:* ${userName}\n`
-        menuText += `🏷️ *Status:* ${premiumText}\n`
-        menuText += `⚡ *Limit:* ${userLimit}/${maxLimit}\n`
-        menuText += `🕒 *Time:* ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
+        menuText += `👤 ${font.smallCaps('user')}: ${userName}\n`
+        menuText += `🏷️ ${font.smallCaps('status')}: ${premiumText}\n`
+        menuText += `⚡ ${font.smallCaps('limit')}: ${userLimit}/${maxLimit}\n`
+        menuText += `🕒 ${font.smallCaps('time')}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
         menuText += `━━━━━━━━━━━━━━━━━━━━━━━━━\n`
-        menuText += `📚 *SEMUA COMMAND TERSEDIA:*\n\n`
+        menuText += `📚 ${font.smallCaps('semua command tersedia')}:\n\n`
         // MENU KATEGORI
         const categoryIcons = {
             'admin': '👑',
@@ -51,29 +52,27 @@ export default {
             'search': '🔍',
             'downloader': '📥'
         }
-        
-        sortedCats.forEach(cat => {
+          sortedCats.forEach(cat => {
             const icon = categoryIcons[cat] || '📂'
             const categoryName = cat.charAt(0).toUpperCase() + cat.slice(1)
-            menuText += `${icon} *${categoryName.toUpperCase()} COMMANDS:*\n`
+            menuText += `${icon} ${font.smallCaps(categoryName + ' commands')}:\n`
             
-            // List all commands in this category
+            // List all commands in this category - only command and usage
             categories[cat].forEach(plugin => {
-                const aliases = plugin.aliases ? ` (${plugin.aliases.join(', ')})` : ''
-                const description = plugin.description ? ` - ${plugin.description}` : ''
-                menuText += `• \`${prefix}${plugin.command}\`${aliases}${description}\n`
+                const usage = plugin.usage ? ` • ${plugin.usage}` : ''
+                menuText += `  ◦ ${prefix}${plugin.command}${usage}\n`
             })
             menuText += `\n`
         })
         
         menuText += `━━━━━━━━━━━━━━━━━━━━━━━━━\n`
-        menuText += `📊 *Total Commands:* ${plugins.filter(p => {
+        menuText += `📊 ${font.smallCaps('total commands')}: ${plugins.filter(p => {
             if (p.ownerOnly && !isOwner) return false
             if (p.adminOnly && !isAdmin && !isOwner) return false
             return true
         }).length}\n\n`
-        menuText += `💡 *Tips:* Gunakan \`.menu\` untuk tampilan kategori yang lebih ringkas\n\n`
-        menuText += `🤖 *Powered by Chisato-MD* | Created by Kiznavierr`
+        menuText += `💡 ${font.smallCaps('tips')}: ${font.smallCaps('gunakan .menu untuk tampilan kategori')}\n\n`
+        menuText += `🤖 ${font.smallCaps('powered by chisato-md | created by kiznavierr')}`
         
         // Send allmenu with banner image
         try {

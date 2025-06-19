@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'cekwarn',
     aliases: ['checkwarn', 'warningku', 'mywarnings'],
@@ -13,7 +15,7 @@ export default {
 
             // Check if it's a group
             if (!isGroup) {
-                return reply('❌ This command can only be used in groups!')
+                return reply(`❌ ${font.smallCaps('This command can only be used in groups')}!`)
             }
 
             let targetJid = msg.key.participant || msg.key.remoteJid
@@ -41,7 +43,7 @@ export default {
                 }
             } else if (args[0]) {
                 // Non-admin trying to check someone else's warnings
-                return reply('❌ Only admins can check other users\' warnings!')
+                return reply(`❌ ${font.smallCaps('Only admins can check other users\' warnings')}!`)
             }
 
             // Get warnings data
@@ -50,58 +52,58 @@ export default {
             const targetUser = db.getUser(targetJid)
 
             // Create warning status message
-            let statusMessage = `📋 *WARNING STATUS* 📋\n\n`
+            let statusMessage = `📋 ${font.bold(font.smallCaps('WARNING STATUS'))} 📋\n\n`
             
             if (isCheckingOther) {
-                statusMessage += `👤 *User:* @${targetNumber}\n`
+                statusMessage += `👤 ${font.bold(font.smallCaps('User'))}: @${targetNumber}\n`
             } else {
-                statusMessage += `👤 *Your Status*\n`
+                statusMessage += `👤 ${font.bold(font.smallCaps('Your Status'))}\n`
             }
             
-            statusMessage += `⚠️ *Current Warnings:* ${warnings.count}/3\n`
+            statusMessage += `⚠️ ${font.bold(font.smallCaps('Current Warnings'))}: ${warnings.count}/3\n`
             
             if (warnings.count === 0) {
-                statusMessage += `✅ *Status:* Clean record! 🎉\n\n`
-                statusMessage += `💡 Keep following group rules to maintain your good standing.`
+                statusMessage += `✅ ${font.bold(font.smallCaps('Status'))}: ${font.smallCaps('Clean record')}! 🎉\n\n`
+                statusMessage += `💡 ${font.smallCaps('Keep following group rules to maintain your good standing')}.`
             } else {
                 const remaining = 3 - warnings.count
-                statusMessage += `🚨 *Risk Level:* ${warnings.count === 2 ? 'HIGH' : warnings.count === 1 ? 'MEDIUM' : 'LOW'}\n`
-                statusMessage += `⏳ *Warnings until kick:* ${remaining}\n\n`
+                statusMessage += `🚨 ${font.bold(font.smallCaps('Risk Level'))}: ${warnings.count === 2 ? font.smallCaps('HIGH') : warnings.count === 1 ? font.smallCaps('MEDIUM') : font.smallCaps('LOW')}\n`
+                statusMessage += `⏳ ${font.bold(font.smallCaps('Warnings until kick'))}: ${remaining}\n\n`
                 
                 // Show last warning details
                 if (warnings.lastWarning) {
-                    statusMessage += `📝 *Last Warning:*\n`
-                    statusMessage += `   • Reason: ${warnings.lastWarning.reason}\n`
-                    statusMessage += `   • By: ${warnings.lastWarning.warnedBy}\n`
-                    statusMessage += `   • Date: ${new Date(warnings.lastWarning.timestamp).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
+                    statusMessage += `📝 ${font.bold(font.smallCaps('Last Warning'))}:\n`
+                    statusMessage += `   • ${font.smallCaps('Reason')}: ${warnings.lastWarning.reason}\n`
+                    statusMessage += `   • ${font.smallCaps('By')}: ${warnings.lastWarning.warnedBy}\n`
+                    statusMessage += `   • ${font.smallCaps('Date')}: ${new Date(warnings.lastWarning.timestamp).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
                 }
                 
                 if (warnings.count >= 2) {
-                    statusMessage += `🚨 *WARNING:* You are close to being kicked!\n`
-                    statusMessage += `💡 Please follow group rules carefully.`
+                    statusMessage += `🚨 ${font.bold(font.smallCaps('WARNING'))}: ${font.smallCaps('You are close to being kicked')}!\n`
+                    statusMessage += `💡 ${font.smallCaps('Please follow group rules carefully')}.`
                 } else {
-                    statusMessage += `💡 Please be more careful to avoid additional warnings.`
+                    statusMessage += `💡 ${font.smallCaps('Please be more careful to avoid additional warnings')}.`
                 }
             }
 
             // Add warning history for admins
             if (isCheckingOther && warnings.history && warnings.history.length > 0) {
-                statusMessage += `\n\n📊 *Warning History:*\n`
+                statusMessage += `\n\n📊 ${font.bold(font.smallCaps('Warning History'))}:\n`
                 warnings.history.slice(-5).forEach((warning, index) => {
                     statusMessage += `${index + 1}. ${warning.reason} - ${new Date(warning.timestamp).toLocaleDateString('id-ID')}\n`
                 })
                 
                 if (warnings.history.length > 5) {
-                    statusMessage += `... and ${warnings.history.length - 5} more\n`
+                    statusMessage += `... ${font.smallCaps('and')} ${warnings.history.length - 5} ${font.smallCaps('more')}\n`
                 }
             }
 
             // Add admin actions info for admins
             if (isCheckingOther) {
-                statusMessage += `\n\n🛠️ *Admin Actions:*\n`
-                statusMessage += `• Use \`.warn @user [reason]\` to warn\n`
-                statusMessage += `• Use \`.unwarn @user [reason]\` to remove warning\n`
-                statusMessage += `• Use \`.clearwarn @user\` to reset all warnings`
+                statusMessage += `\n\n🛠️ ${font.bold(font.smallCaps('Admin Actions'))}:\n`
+                statusMessage += `• ${font.smallCaps('Use')} \`.warn @user [${font.smallCaps('reason')}]\` ${font.smallCaps('to warn')}\n`
+                statusMessage += `• ${font.smallCaps('Use')} \`.unwarn @user [${font.smallCaps('reason')}]\` ${font.smallCaps('to remove warning')}\n`
+                statusMessage += `• ${font.smallCaps('Use')} \`.clearwarn @user\` ${font.smallCaps('to reset all warnings')}`
             }
 
             await sock.sendMessage(msg.key.remoteJid, {
@@ -114,7 +116,7 @@ export default {
         } catch (error) {
             console.error('Error in cekwarn command:', error)
             await react('❌')
-            await reply('❌ An error occurred while checking warnings.')
+            await reply(`❌ ${font.smallCaps('An error occurred while checking warnings')}.`)
         }
     }
 }

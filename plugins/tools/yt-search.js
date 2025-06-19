@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import font from '../../lib/font.js';
 
 export default {
   command: 'ytsearch',
@@ -12,29 +13,29 @@ export default {
   desc: 'Cari video YouTube dan kirim thumbnail + info',
   async execute(ctx) {
     const query = ctx.args.join(' ');
-    if (!query) return ctx.reply('Masukkan kata kunci pencarian YouTube!');
+    if (!query) return ctx.reply(`${font.smallCaps('Masukkan kata kunci pencarian YouTube')}!`);
     try {
       const url = `https://api.nekoyama.my.id/api/tools/yt-search?query=${encodeURIComponent(query)}`;
       const res = await fetch(url);
-      if (!res.ok) throw new Error('Gagal fetch API');
+      if (!res.ok) throw new Error(`${font.smallCaps('Gagal fetch API')}`);
       const json = await res.json();
-      if (json.status !== 'success' || !json.data) return ctx.reply('Tidak ada hasil ditemukan!');
+      if (json.status !== 'success' || !json.data) return ctx.reply(`${font.smallCaps('Tidak ada hasil ditemukan')}!`);
       const d = json.data;
-      const caption = `*YouTube Search Result*
+      const caption = `${font.bold(font.smallCaps('YouTube Search Result'))}
 
-*Judul:* ${d.title}
-*Durasi:* ${d.duration}
-*Video ID:* ${d.video_id}
-*URL:* ${d.url}
+${font.bold(font.smallCaps('Judul'))}: ${d.title}
+${font.bold(font.smallCaps('Durasi'))}: ${d.duration}
+${font.bold(font.smallCaps('Video ID'))}: ${d.video_id}
+${font.bold(font.smallCaps('URL'))}: ${d.url}
 
-Powered by: ${json.powered_by}`;
+${font.smallCaps('Powered by')}: ${json.powered_by}`;
       await ctx.sock.sendMessage(ctx.msg.key.remoteJid, {
         image: { url: d.thumbnail },
         caption,
         jpegThumbnail: undefined
       }, { quoted: ctx.msg });
     } catch (e) {
-      ctx.reply('Gagal mengambil data YouTube!');
+      ctx.reply(`${font.smallCaps('Gagal mengambil data YouTube')}!`);
     }
   }
 };

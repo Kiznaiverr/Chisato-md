@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'rank',
     aliases: ['level', 'lvl'],
@@ -25,20 +27,20 @@ export default {
         const userRank = allUsers.findIndex(u => u.jid === sender) + 1
         
         const rankText = `
-┌─「 *YOUR RANK* 」
+┌─「 ${font.bold(font.smallCaps('YOUR RANK'))} 」
 │ 
-├ 👤 *Name:* ${pushName}
-├ ⭐ *Level:* ${user.level}
-├ 🎯 *Experience:* ${user.exp}/${requiredExp}
-├ 📊 *Progress:* ${progress}%
-├ ${progressBar} *${progress}%*
-├ 🏆 *Rank:* #${userRank} of ${allUsers.length}
-├ 🎫 *Limit:* ${user.limit}
-├ 💎 *Premium:* ${user.premium ? 'Yes' : 'No'}
+├ 👤 ${font.bold(font.smallCaps('Name'))}: ${pushName}
+├ ⭐ ${font.bold(font.smallCaps('Level'))}: ${user.level}
+├ 🎯 ${font.bold(font.smallCaps('Experience'))}: ${user.exp}/${requiredExp}
+├ 📊 ${font.bold(font.smallCaps('Progress'))}: ${progress}%
+├ ${progressBar} ${font.bold(`${progress}%`)}
+├ 🏆 ${font.bold(font.smallCaps('Rank'))}: #${userRank} ${font.smallCaps('of')} ${allUsers.length}
+├ 🎫 ${font.bold(font.smallCaps('Limit'))}: ${user.limit}
+├ 💎 ${font.bold(font.smallCaps('Premium'))}: ${user.premium ? font.smallCaps('Yes') : font.smallCaps('No')}
 │ 
 └────
 
-💡 *Tip:* Use commands to gain more experience!
+💡 ${font.bold(font.smallCaps('Tip'))}: ${font.smallCaps('Use commands to gain more experience')}!
         `.trim()
         
         await reply(rankText)

@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'unwarn',
     aliases: ['uw', 'removewarn'],
@@ -14,7 +16,7 @@ export default {
 
             // Check if it's a group
             if (!isGroup) {
-                return reply('❌ This command can only be used in groups!')
+                return reply(`❌ ${font.smallCaps('This command can only be used in groups')}!`)
             }
 
             // Get target user
@@ -41,14 +43,14 @@ export default {
             }
 
             if (!targetJid) {
-                return reply(`❌ Please specify a user to unwarn!\n\n*Usage:*\n• Reply to user's message: \`.unwarn [reason]\`\n• Mention user: \`.unwarn @user [reason]\`\n• Use number: \`.unwarn 628xxxxx [reason]\``)
+                return reply(`❌ ${font.smallCaps('Please specify a user to unwarn')}!\n\n${font.bold(font.smallCaps('Usage'))}:\n• ${font.smallCaps('Reply to user\'s message')}: \`.unwarn [${font.smallCaps('reason')}]\`\n• ${font.smallCaps('Mention user')}: \`.unwarn @user [${font.smallCaps('reason')}]\`\n• ${font.smallCaps('Use number')}: \`.unwarn 628xxxxx [${font.smallCaps('reason')}]\``)
             }
 
             // Get current warnings
             const warnings = db.getWarnings(targetJid)
             
             if (warnings.count === 0) {
-                return reply(`ℹ️ @${targetJid.split('@')[0]} has no warnings to remove.`, [targetJid])
+                return reply(`ℹ️ @${targetJid.split('@')[0]} ${font.smallCaps('has no warnings to remove')}.`, [targetJid])
             }
 
             // Get sender info for logging
@@ -60,17 +62,17 @@ export default {
             const targetNumber = targetJid.split('@')[0]
 
             // Create unwarn message
-            let unwarnMessage = `✅ *WARNING REMOVED* ✅\n\n`
-            unwarnMessage += `👤 *Target:* @${targetNumber}\n`
-            unwarnMessage += `📝 *Reason:* ${reason}\n`
-            unwarnMessage += `⚡ *New Warning Count:* ${newWarningCount}/3\n`
-            unwarnMessage += `👮 *Removed by:* ${senderName}\n`
-            unwarnMessage += `🕒 *Time:* ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
+            let unwarnMessage = `✅ ${font.bold(font.smallCaps('WARNING REMOVED'))} ✅\n\n`
+            unwarnMessage += `👤 ${font.bold(font.smallCaps('Target'))}: @${targetNumber}\n`
+            unwarnMessage += `📝 ${font.bold(font.smallCaps('Reason'))}: ${reason}\n`
+            unwarnMessage += `⚡ ${font.bold(font.smallCaps('New Warning Count'))}: ${newWarningCount}/3\n`
+            unwarnMessage += `👮 ${font.bold(font.smallCaps('Removed by'))}: ${senderName}\n`
+            unwarnMessage += `🕒 ${font.bold(font.smallCaps('Time'))}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
             
             if (newWarningCount === 0) {
-                unwarnMessage += `🎉 User now has a clean record!`
+                unwarnMessage += `🎉 ${font.smallCaps('User now has a clean record')}!`
             } else {
-                unwarnMessage += `📊 User still has ${newWarningCount} warning(s).`
+                unwarnMessage += `📊 ${font.smallCaps('User still has')} ${newWarningCount} ${font.smallCaps('warning(s)')}.`
             }
 
             await sock.sendMessage(msg.key.remoteJid, {
@@ -83,7 +85,7 @@ export default {
         } catch (error) {
             console.error('Error in unwarn command:', error)
             await react('❌')
-            await reply('❌ An error occurred while removing the warning.')
+            await reply(`❌ ${font.smallCaps('An error occurred while removing the warning')}.`)
         }
     }
 }

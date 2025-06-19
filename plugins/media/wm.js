@@ -1,6 +1,7 @@
 import { getContentType, downloadMediaMessage } from '@whiskeysockets/baileys'
 import { sticker } from '../../lib/sticker.js'
 import { fileTypeFromBuffer } from 'file-type'
+import font from '../../lib/font.js'
 
 export default {
     command: 'wm',
@@ -22,7 +23,7 @@ export default {
             
             if (!packname) {
                 await react('❌')
-                return await reply('❌ Please provide packname!\n\n💡 Usage:\n.wm PackName | AuthorName')
+                return await reply(`❌ ${font.smallCaps('Please provide packname')}!\n\n💡 ${font.smallCaps('Usage')}:\n.wm ${font.smallCaps('PackName')} | ${font.smallCaps('AuthorName')}`)
             }
             
             if (!author) author = ''
@@ -32,7 +33,7 @@ export default {
             
             if (!quotedMessage) {
                 await react('❌')
-                return await reply('❌ Please reply to an image or video!\n\n💡 Usage:\n1. Reply to an image/video\n2. Type .wm PackName | AuthorName')
+                return await reply(`❌ ${font.smallCaps('Please reply to an image or video')}!\n\n💡 ${font.smallCaps('Usage')}:\n1. ${font.smallCaps('Reply to an image/video')}\n2. ${font.smallCaps('Type .wm PackName | AuthorName')}`)
             }
             
             const quotedType = getContentType(quotedMessage)
@@ -63,11 +64,11 @@ export default {
                 fileSize = mediaMessage.fileLength || 0
             } else {
                 await react('❌')
-                return await reply('❌ Please reply to an image, video, or sticker!')
+                return await reply(`❌ ${font.smallCaps('Please reply to an image, video, or sticker')}!`)
             }
             if (fileSize > 15 * 1024 * 1024) {
                 await react('❌')
-                return await reply('❌ File too large! Maximum size is 15MB.')
+                return await reply(`❌ ${font.smallCaps('File too large! Maximum size is 15MB')}.`)
             }
             // Download media
             let buffer = await downloadMediaMessage(downloadMessage, sock)
@@ -76,14 +77,14 @@ export default {
             }
             if (!buffer || buffer.length === 0) {
                 await react('❌')
-                return await reply('❌ Failed to download media! Please try again.')
+                return await reply(`❌ ${font.smallCaps('Failed to download media! Please try again')}.`)
             }
             // Get file type
             const fileType = await fileTypeFromBuffer(buffer)
             const isVideo = fileType && fileType.mime.startsWith('video/')
             if (isVideo) {
                 await react('❌')
-                return await reply('❌ Watermark for videos is not supported yet!\n💡 Use .sticker for video stickers without custom watermark.')
+                return await reply(`❌ ${font.smallCaps('Watermark for videos is not supported yet')}!\n💡 ${font.smallCaps('Use .sticker for video stickers without custom watermark')}.`)
             }
             // Buat sticker baru dari buffer (baik dari sticker, image, atau video)
             const stickerBuffer = await sticker(buffer, null, packname, author, ['🎨'], {
@@ -93,7 +94,7 @@ export default {
             })
             if (!stickerBuffer || stickerBuffer.length === 0) {
                 await react('❌')
-                return await reply('❌ Failed to create watermarked sticker! Please try again.')
+                return await reply(`❌ ${font.smallCaps('Failed to create watermarked sticker! Please try again')}.`)
             }
             // Send as sticker
             await sock.sendMessage(msg.key.remoteJid, {
@@ -106,18 +107,18 @@ export default {
             console.error('Watermark error:', error)
             await react('❌')
             
-            let errorMessage = '❌ Failed to create watermarked sticker!'
+            let errorMessage = `❌ ${font.smallCaps('Failed to create watermarked sticker')}!`
             
             if (error.message.includes('download')) {
-                errorMessage += '\n💡 The media might be too old or corrupted.'
+                errorMessage += `\n💡 ${font.smallCaps('The media might be too old or corrupted')}.`
             } else if (error.message.includes('format') || error.message.includes('type')) {
-                errorMessage += '\n💡 Please use a valid image format (JPG, PNG, etc.).'
+                errorMessage += `\n💡 ${font.smallCaps('Please use a valid image format (JPG, PNG, etc.)')}.`
             } else if (error.message.includes('size')) {
-                errorMessage += '\n💡 The file is too large. Try with a smaller image.'
+                errorMessage += `\n💡 ${font.smallCaps('The file is too large. Try with a smaller image')}.`
             } else if (error.message.includes('wa-sticker-formatter')) {
-                errorMessage += '\n💡 Watermark library error. Please try again.'
+                errorMessage += `\n💡 ${font.smallCaps('Watermark library error. Please try again')}.`
             } else {
-                errorMessage += '\n💡 Please try again with a different image.'
+                errorMessage += `\n💡 ${font.smallCaps('Please try again with a different image')}.`
             }
             
             await reply(errorMessage)

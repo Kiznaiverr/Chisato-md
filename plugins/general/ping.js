@@ -1,4 +1,5 @@
 import os from 'os'
+import font from '../../lib/font.js'
 
 export default {
     command: 'ping',
@@ -35,21 +36,21 @@ export default {
         const responseTime = end - start
         
         // Response time status
-        let status = '🟢 Excellent'
-        if (responseTime > 1000) status = '🔴 Slow'
-        else if (responseTime > 500) status = '🟡 Good'
-        else if (responseTime > 200) status = '🟠 Fair'
+        let status = `🟢 ${font.smallCaps('Excellent')}`
+        if (responseTime > 1000) status = `🔴 ${font.smallCaps('Slow')}`
+        else if (responseTime > 500) status = `🟡 ${font.smallCaps('Good')}`
+        else if (responseTime > 200) status = `🟠 ${font.smallCaps('Fair')}`
         
-        let pingInfo = `┌─「 🏓 Ping & Quick Info 」\n`
-        pingInfo += `├ ⚡ Response: ${responseTime}ms ${status}\n`
+        let pingInfo = `┌─「 🏓 ${font.smallCaps('Ping & Quick Info')} 」\n`
+        pingInfo += `├ ⚡ ${font.smallCaps('Response')}: ${responseTime}ms ${status}\n`
         pingInfo += `├─────────────────────\n`
-        pingInfo += `├ 💻 OS: ${platform === 'win32' ? 'Windows' : platform === 'darwin' ? 'macOS' : 'Linux'} ${arch}\n`
-        pingInfo += `├ 🧠 CPU: ${cpuModel} (${cpuCores} cores)\n`
-        pingInfo += `├ 🎯 RAM: ${formatGB(usedMem)} / ${formatGB(totalMem)} (${memUsage}%)\n`
-        pingInfo += `├ 🤖 Bot: ${botMemUsed} MB\n`
-        pingInfo += `├ 📦 Node: ${process.version}\n`
+        pingInfo += `├ 💻 ${font.smallCaps('OS')}: ${platform === 'win32' ? 'Windows' : platform === 'darwin' ? 'macOS' : 'Linux'} ${arch}\n`
+        pingInfo += `├ 🧠 ${font.smallCaps('CPU')}: ${cpuModel} (${cpuCores} ${font.smallCaps('cores')})\n`
+        pingInfo += `├ 🎯 ${font.smallCaps('RAM')}: ${formatGB(usedMem)} / ${formatGB(totalMem)} (${memUsage}%)\n`
+        pingInfo += `├ 🤖 ${font.smallCaps('Bot')}: ${botMemUsed} MB\n`
+        pingInfo += `├ 📦 ${font.smallCaps('Node')}: ${process.version}\n`
         pingInfo += `├─────────────────────\n`
-        pingInfo += `└ 💡 Use ${prefix}sysinfo for detailed info`
+        pingInfo += `└ 💡 ${font.smallCaps('Use')} ${prefix}sysinfo ${font.smallCaps('for detailed info')}`
         
         await reply(pingInfo)
     }

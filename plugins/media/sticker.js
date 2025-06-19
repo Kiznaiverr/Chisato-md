@@ -2,6 +2,7 @@ import { getContentType, downloadMediaMessage } from '@whiskeysockets/baileys'
 import { sticker, video2webp } from '../../lib/sticker.js'
 import { fileTypeFromBuffer } from 'file-type'
 import { Buffer } from 'buffer'
+import font from '../../lib/font.js'
 
 export default {
     command: 'sticker',
@@ -33,7 +34,7 @@ export default {
                 
                 if (!quotedMessage) {
                     await react('❌')
-                    return await reply('❌ Please reply to an image/video or send media with caption .s\n\n💡 Usage:\n• Reply to image/video and type .sticker\n• Send image/video with caption .s\n• Use .sticker "pack name" "author" for custom watermark')
+                    return await reply(`❌ ${font.smallCaps('Please reply to an image/video or send media with caption .s')}\n\n💡 ${font.smallCaps('Usage')}:\n• ${font.smallCaps('Reply to image/video and type .sticker')}\n• ${font.smallCaps('Send image/video with caption .s')}\n• ${font.smallCaps('Use .sticker "pack name" "author" for custom watermark')}`)
                 }
                 
                 const quotedType = getContentType(quotedMessage)
@@ -49,22 +50,20 @@ export default {
                     }
                 } else {
                     await react('❌')
-                    return await reply('❌ Please reply to an image or video only!')
+                    return await reply(`❌ ${font.smallCaps('Please reply to an image or video only')}!`)
                 }
             }
             
             if (!mediaMessage) {
                 await react('❌')
-                return await reply('❌ No valid media found!')
+                return await reply(`❌ ${font.smallCaps('No valid media found')}!`)
             }
             
-            // Validate media type and size
-            const fileSize = mediaMessage.fileLength || 0
-            
             // Check file size (max 15MB for stickers)
+            const fileSize = mediaMessage.fileLength || 0
             if (fileSize > 15 * 1024 * 1024) {
                 await react('❌')
-                return await reply('❌ File too large! Maximum size is 15MB for stickers.')
+                return await reply(`❌ ${font.smallCaps('File too large! Maximum size is 15MB for stickers')}.`)
             }
             
             // Download media
@@ -75,7 +74,7 @@ export default {
             
             if (!buffer || buffer.length === 0) {
                 await react('❌')
-                return await reply('❌ Failed to download media! Please try again.')
+                return await reply(`❌ ${font.smallCaps('Failed to download media! Please try again')}.`)
             }
             
             // Get file type
@@ -97,7 +96,7 @@ export default {
             
             if (isVideo) {
                 // Convert video to animated sticker
-                await reply('🎬 Converting video to animated sticker...')
+                await reply(`🎬 ${font.smallCaps('Converting video to animated sticker')}...`)
                 stickerBuffer = await video2webp(buffer, 15)
             } else {
                 // Convert image to sticker with watermark
@@ -109,7 +108,7 @@ export default {
             
             if (!stickerBuffer || stickerBuffer.length === 0) {
                 await react('❌')
-                return await reply('❌ Failed to create sticker! Please try with a different image/video.')
+                return await reply(`❌ ${font.smallCaps('Failed to create sticker! Please try with a different image/video')}.`)
             }
             
             // Send as sticker
@@ -123,18 +122,18 @@ export default {
             console.error('Sticker error:', error)
             await react('❌')
             
-            let errorMessage = '❌ Failed to create sticker!'
+            let errorMessage = `❌ ${font.smallCaps('Failed to create sticker')}!`
             
             if (error.message.includes('download')) {
-                errorMessage += '\n💡 The media might be too old or corrupted.'
+                errorMessage += `\n💡 ${font.smallCaps('The media might be too old or corrupted')}.`
             } else if (error.message.includes('format') || error.message.includes('type')) {
-                errorMessage += '\n💡 Please use a valid image or video format (JPG, PNG, MP4, etc.).'
+                errorMessage += `\n💡 ${font.smallCaps('Please use a valid image or video format (JPG, PNG, MP4, etc.)')}.`
             } else if (error.message.includes('size')) {
-                errorMessage += '\n💡 The file is too large. Try with a smaller image/video.'
+                errorMessage += `\n💡 ${font.smallCaps('The file is too large. Try with a smaller image/video')}.`
             } else if (error.message.includes('ffmpeg')) {
-                errorMessage += '\n💡 Media conversion failed. Try with a different file.'
+                errorMessage += `\n💡 ${font.smallCaps('Media conversion failed. Try with a different file')}.`
             } else {
-                errorMessage += '\n💡 Please try again with a different image/video.'
+                errorMessage += `\n💡 ${font.smallCaps('Please try again with a different image/video')}.`
             }
             
             await reply(errorMessage)
@@ -150,3 +149,4 @@ async function streamToBuffer(stream) {
     }
     return Buffer.concat(chunks)
 }
+

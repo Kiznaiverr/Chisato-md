@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'promote',
     aliases: ['admin'],
@@ -10,7 +12,7 @@ export default {
     cooldown: 5,
     
     async execute({ sock, msg, args, reply, react, isGroup, groupMetadata }) {
-        if (!isGroup) return reply('❌ This command can only be used in groups.')
+        if (!isGroup) return reply(`❌ ${font.smallCaps('This command can only be used in groups')}.`)
         
         // Check if user mentioned someone or replied to a message
         let target
@@ -21,23 +23,23 @@ export default {
         } else if (args[0] && args[0].includes('@')) {
             target = args[0].replace('@', '') + '@s.whatsapp.net'
         } else {
-            return reply('❌ Please mention a user or reply to their message.\n\nExample: `promote @user`')
+            return reply(`❌ ${font.smallCaps('Please mention a user or reply to their message')}.\n\n${font.smallCaps('Example')}: \`promote @user\``)
         }
 
         // Check if target is valid
         if (!target) {
-            return reply('❌ Invalid user.')
+            return reply(`❌ ${font.smallCaps('Invalid user')}.`)
         }
 
         // Check if target is the bot itself
         if (target === sock.user.id) {
-            return reply('❌ I cannot promote myself!')
+            return reply(`❌ ${font.smallCaps('I cannot promote myself')}!`)
         }
 
         // Check if target is already an admin
         const groupAdmins = groupMetadata.participants.filter(p => p.admin).map(p => p.id)
         if (groupAdmins.includes(target)) {
-            return reply('❌ User is already an admin!')
+            return reply(`❌ ${font.smallCaps('User is already an admin')}!`)
         }
 
         try {
@@ -47,12 +49,12 @@ export default {
             await sock.groupParticipantsUpdate(msg.key.remoteJid, [target], 'promote')
             
             await react('✅')
-            await reply(`✅ Successfully promoted @${target.split('@')[0]} to admin!`)
+            await reply(`✅ ${font.smallCaps('Successfully promoted')} @${target.split('@')[0]} ${font.smallCaps('to admin')}!`)
             
         } catch (error) {
             console.error('Error promoting user:', error)
             await react('❌')
-            await reply('❌ Failed to promote user. Make sure I have admin privileges.')
+            await reply(`❌ ${font.smallCaps('Failed to promote user. Make sure I have admin privileges')}.`)
         }
     }
 }

@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'warn',
     aliases: ['w'],
@@ -14,7 +16,7 @@ export default {
 
             // Check if it's a group
             if (!isGroup) {
-                return reply('❌ This command can only be used in groups!')
+                return reply(`❌ ${font.smallCaps('This command can only be used in groups')}!`)
             }
 
             // Get target user
@@ -41,17 +43,17 @@ export default {
             }
 
             if (!targetJid) {
-                return reply(`❌ Please specify a user to warn!\n\n*Usage:*\n• Reply to user's message: \`.warn [reason]\`\n• Mention user: \`.warn @user [reason]\`\n• Use number: \`.warn 628xxxxx [reason]\``)
+                return reply(`❌ ${font.smallCaps('Please specify a user to warn')}!\n\n${font.bold(font.smallCaps('Usage'))}:\n• ${font.smallCaps('Reply to user\'s message')}: \`.warn [${font.smallCaps('reason')}]\`\n• ${font.smallCaps('Mention user')}: \`.warn @user [${font.smallCaps('reason')}]\`\n• ${font.smallCaps('Use number')}: \`.warn 628xxxxx [${font.smallCaps('reason')}]\``)
             }
 
             // Check if target is bot owner
             if (db.isOwner(targetJid)) {
-                return reply('❌ Cannot warn bot owner!')
+                return reply(`❌ ${font.smallCaps('Cannot warn bot owner')}!`)
             }
 
             // Check if target is admin (optional - remove if you want admins to warn each other)
             if (db.isAdmin(targetJid)) {
-                return reply('❌ Cannot warn another admin!')
+                return reply(`❌ ${font.smallCaps('Cannot warn another admin')}!`)
             }
 
             // Get group participants to check if user is in group
@@ -66,7 +68,7 @@ export default {
 
             // Check if target is in the group
             if (!participants.includes(targetJid)) {
-                return reply('❌ User is not in this group!')
+                return reply(`❌ ${font.smallCaps('User is not in this group')}!`)
             }
 
             // Get sender info for logging
@@ -79,17 +81,17 @@ export default {
             const targetUser = db.getUser(targetJid)
 
             // Create warning message
-            let warnMessage = `⚠️ *USER WARNED* ⚠️\n\n`
-            warnMessage += `👤 *Target:* @${targetNumber}\n`
-            warnMessage += `📝 *Reason:* ${reason}\n`
-            warnMessage += `⚡ *Warning Count:* ${warningCount}/3\n`
-            warnMessage += `👮 *Warned by:* ${senderName}\n`
-            warnMessage += `🕒 *Time:* ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
+            let warnMessage = `⚠️ ${font.bold(font.smallCaps('USER WARNED'))} ⚠️\n\n`
+            warnMessage += `👤 ${font.bold(font.smallCaps('Target'))}: @${targetNumber}\n`
+            warnMessage += `📝 ${font.bold(font.smallCaps('Reason'))}: ${reason}\n`
+            warnMessage += `⚡ ${font.bold(font.smallCaps('Warning Count'))}: ${warningCount}/3\n`
+            warnMessage += `👮 ${font.bold(font.smallCaps('Warned by'))}: ${senderName}\n`
+            warnMessage += `🕒 ${font.bold(font.smallCaps('Time'))}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
 
             if (warningCount >= 3) {
-                warnMessage += `🚨 *MAXIMUM WARNINGS REACHED!*\n`
-                warnMessage += `🥾 User will be kicked from the group.\n\n`
-                warnMessage += `⚖️ To appeal this decision, contact group admins.`
+                warnMessage += `🚨 ${font.bold(font.smallCaps('MAXIMUM WARNINGS REACHED'))}!\n`
+                warnMessage += `🥾 ${font.smallCaps('User will be kicked from the group')}.\n\n`
+                warnMessage += `⚖️ ${font.smallCaps('To appeal this decision, contact group admins')}.`
 
                 // Send warning message first
                 await sock.sendMessage(groupId, {
@@ -104,7 +106,7 @@ export default {
                         
                         // Send kick confirmation
                         await sock.sendMessage(groupId, {
-                            text: `✅ @${targetNumber} has been kicked due to 3 warnings.\n\n🔄 Warnings have been reset.`,
+                            text: `✅ @${targetNumber} ${font.smallCaps('has been kicked due to 3 warnings')}.\n\n🔄 ${font.smallCaps('Warnings have been reset')}.`,
                             mentions: [targetJid]
                         })
 
@@ -113,14 +115,14 @@ export default {
                         
                     } catch (kickError) {
                         console.error('Error kicking user:', kickError)
-                        await reply(`❌ Failed to kick user. Please check bot permissions.\n\n⚠️ User still has ${warningCount} warnings.`)
+                        await reply(`❌ ${font.smallCaps('Failed to kick user. Please check bot permissions')}.\n\n⚠️ ${font.smallCaps('User still has')} ${warningCount} ${font.smallCaps('warnings')}.`)
                     }
                 }, 2000)
 
             } else {
                 const remaining = 3 - warningCount
-                warnMessage += `⏳ *Remaining warnings:* ${remaining}\n`
-                warnMessage += `💡 *Note:* User will be auto-kicked at 3 warnings.`
+                warnMessage += `⏳ ${font.bold(font.smallCaps('Remaining warnings'))}: ${remaining}\n`
+                warnMessage += `💡 ${font.bold(font.smallCaps('Note'))}: ${font.smallCaps('User will be auto-kicked at 3 warnings')}.`
 
                 await sock.sendMessage(groupId, {
                     text: warnMessage,
@@ -133,7 +135,7 @@ export default {
         } catch (error) {
             console.error('Error in warn command:', error)
             await react('❌')
-            await reply('❌ An error occurred while processing the warning.')
+            await reply(`❌ ${font.smallCaps('An error occurred while processing the warning')}.`)
         }
     }
 }

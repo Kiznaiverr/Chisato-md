@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'listpremium',
     aliases: ['premiumlist', 'listprem'],
@@ -13,13 +15,13 @@ export default {
             const premiumUsers = allUsers.filter(user => user.premium)
             const owners = allUsers.filter(user => db.isOwner(user.jid))
             
-            let listText = `╭─「 💎 Premium Users List 」\n`
-            listText += `├ 📊 Total Premium: ${premiumUsers.length}\n`
-            listText += `├ 👑 Total Owners: ${owners.length}\n`
+            let listText = `╭─「 💎 ${font.smallCaps('Premium Users List')} 」\n`
+            listText += `├ 📊 ${font.smallCaps('Total Premium')}: ${premiumUsers.length}\n`
+            listText += `├ 👑 ${font.smallCaps('Total Owners')}: ${owners.length}\n`
             listText += `├─────────────────────────\n`
             
             if (owners.length > 0) {
-                listText += `├ 👑 BOT OWNERS:\n`
+                listText += `├ 👑 ${font.smallCaps('BOT OWNERS')}:\n`
                 owners.forEach((user, index) => {
                     const isLast = index === owners.length - 1 && premiumUsers.length === 0
                     const symbol = isLast ? '╰' : '├'
@@ -28,7 +30,7 @@ export default {
                     
                     listText += `${symbol} 👑 ${name} (${number})\n`
                     if (!isLast || premiumUsers.length > 0) {
-                        listText += `│   ↳ Status: Owner (Unlimited)\n`
+                        listText += `│   ↳ ${font.smallCaps('Status')}: ${font.smallCaps('Owner')} (${font.smallCaps('Unlimited')})\n`
                     }
                 })
             }
@@ -37,7 +39,7 @@ export default {
                 if (owners.length > 0) {
                     listText += `├─────────────────────────\n`
                 }
-                listText += `├ 💎 PREMIUM MEMBERS:\n`
+                listText += `├ 💎 ${font.smallCaps('PREMIUM MEMBERS')}:\n`
                 
                 premiumUsers.forEach((user, index) => {
                     const isLast = index === premiumUsers.length - 1
@@ -50,54 +52,54 @@ export default {
                     if (!isLast) {
                         if (user.premiumSince) {
                             const since = new Date(user.premiumSince).toLocaleDateString('id-ID')
-                            listText += `│   ├ Since: ${since}\n`
+                            listText += `│   ├ ${font.smallCaps('Since')}: ${since}\n`
                         }
                         
                         if (user.premiumExpiry) {
                             const expiry = new Date(user.premiumExpiry)
                             const now = new Date()
                             const daysLeft = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24))
-                            const status = daysLeft > 0 ? `${daysLeft} days left` : 'Expired'
+                            const status = daysLeft > 0 ? `${daysLeft} ${font.smallCaps('days left')}` : font.smallCaps('Expired')
                             
-                            listText += `│   ╰ Expires: ${expiry.toLocaleDateString('id-ID')} (${status})\n`
+                            listText += `│   ╰ ${font.smallCaps('Expires')}: ${expiry.toLocaleDateString('id-ID')} (${status})\n`
                         } else {
-                            listText += `│   ╰ Expires: Lifetime\n`
+                            listText += `│   ╰ ${font.smallCaps('Expires')}: ${font.smallCaps('Lifetime')}\n`
                         }
                     } else {
                         if (user.premiumSince) {
                             const since = new Date(user.premiumSince).toLocaleDateString('id-ID')
-                            listText += `    ├ Since: ${since}\n`
+                            listText += `    ├ ${font.smallCaps('Since')}: ${since}\n`
                         }
                         
                         if (user.premiumExpiry) {
                             const expiry = new Date(user.premiumExpiry)
                             const now = new Date()
                             const daysLeft = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24))
-                            const status = daysLeft > 0 ? `${daysLeft} days left` : 'Expired'
+                            const status = daysLeft > 0 ? `${daysLeft} ${font.smallCaps('days left')}` : font.smallCaps('Expired')
                             
-                            listText += `    ╰ Expires: ${expiry.toLocaleDateString('id-ID')} (${status})\n`
+                            listText += `    ╰ ${font.smallCaps('Expires')}: ${expiry.toLocaleDateString('id-ID')} (${status})\n`
                         } else {
-                            listText += `    ╰ Expires: Lifetime\n`
+                            listText += `    ╰ ${font.smallCaps('Expires')}: ${font.smallCaps('Lifetime')}\n`
                         }
                     }
                 })
             }
             
             if (premiumUsers.length === 0 && owners.length === 0) {
-                listText += `├ ℹ️ No premium users found\n`
-                listText += `╰ Use .addpremium @user to add premium members`
+                listText += `├ ℹ️ ${font.smallCaps('No premium users found')}\n`
+                listText += `╰ ${font.smallCaps('Use .addpremium @user to add premium members')}`
             } else {
-                listText += `\n💡 Management Commands:\n`
-                listText += `• .addpremium @user [duration] - Add premium\n`
-                listText += `• .delpremium @user - Remove premium\n`
-                listText += `• .config get limitSettings - View limit settings`
+                listText += `\n💡 ${font.smallCaps('Management Commands')}:\n`
+                listText += `• .addpremium @user [${font.smallCaps('duration')}] - ${font.smallCaps('Add premium')}\n`
+                listText += `• .delpremium @user - ${font.smallCaps('Remove premium')}\n`
+                listText += `• .config get limitSettings - ${font.smallCaps('View limit settings')}`
             }
             
             await reply(listText)
             
         } catch (error) {
             console.error('Error listing premium users:', error)
-            await reply('❌ Failed to get premium users list.')
+            await reply(`❌ ${font.smallCaps('Failed to get premium users list')}.`)
         }
     }
 }

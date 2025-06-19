@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'clearwarn',
     aliases: ['resetwarn', 'clearwarnings'],
@@ -14,7 +16,7 @@ export default {
 
             // Check if it's a group
             if (!isGroup) {
-                return reply('❌ This command can only be used in groups!')
+                return reply(`❌ ${font.smallCaps('This command can only be used in groups')}!`)
             }
 
             // Get target user
@@ -41,14 +43,14 @@ export default {
             }
 
             if (!targetJid) {
-                return reply(`❌ Please specify a user to clear warnings!\n\n*Usage:*\n• Reply to user's message: \`.clearwarn [reason]\`\n• Mention user: \`.clearwarn @user [reason]\`\n• Use number: \`.clearwarn 628xxxxx [reason]\``)
+                return reply(`❌ ${font.smallCaps('Please specify a user to clear warnings')}!\n\n${font.bold(font.smallCaps('Usage'))}:\n• ${font.smallCaps('Reply to user\'s message')}: \`.clearwarn [${font.smallCaps('reason')}]\`\n• ${font.smallCaps('Mention user')}: \`.clearwarn @user [${font.smallCaps('reason')}]\`\n• ${font.smallCaps('Use number')}: \`.clearwarn 628xxxxx [${font.smallCaps('reason')}]\``)
             }
 
             // Get current warnings
             const warnings = db.getWarnings(targetJid)
             
             if (warnings.count === 0) {
-                return reply(`ℹ️ @${targetJid.split('@')[0]} has no warnings to clear.`, [targetJid])
+                return reply(`ℹ️ @${targetJid.split('@')[0]} ${font.smallCaps('has no warnings to clear')}.`, [targetJid])
             }
 
             // Get sender info for logging
@@ -60,14 +62,14 @@ export default {
             const targetNumber = targetJid.split('@')[0]
 
             // Create clear message
-            let clearMessage = `🧹 *ALL WARNINGS CLEARED* 🧹\n\n`
-            clearMessage += `👤 *Target:* @${targetNumber}\n`
-            clearMessage += `📝 *Reason:* ${reason}\n`
-            clearMessage += `🗑️ *Warnings Cleared:* ${clearedCount}\n`
-            clearMessage += `👮 *Cleared by:* ${senderName}\n`
-            clearMessage += `🕒 *Time:* ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
-            clearMessage += `✨ User now has a clean record!\n`
-            clearMessage += `💡 This is a fresh start - please follow group rules.`
+            let clearMessage = `🧹 ${font.bold(font.smallCaps('ALL WARNINGS CLEARED'))} 🧹\n\n`
+            clearMessage += `👤 ${font.bold(font.smallCaps('Target'))}: @${targetNumber}\n`
+            clearMessage += `📝 ${font.bold(font.smallCaps('Reason'))}: ${reason}\n`
+            clearMessage += `🗑️ ${font.bold(font.smallCaps('Warnings Cleared'))}: ${clearedCount}\n`
+            clearMessage += `👮 ${font.bold(font.smallCaps('Cleared by'))}: ${senderName}\n`
+            clearMessage += `🕒 ${font.bold(font.smallCaps('Time'))}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
+            clearMessage += `✨ ${font.smallCaps('User now has a clean record')}!\n`
+            clearMessage += `💡 ${font.smallCaps('This is a fresh start - please follow group rules')}.`
 
             await sock.sendMessage(msg.key.remoteJid, {
                 text: clearMessage,
@@ -79,7 +81,7 @@ export default {
         } catch (error) {
             console.error('Error in clearwarn command:', error)
             await react('❌')
-            await reply('❌ An error occurred while clearing warnings.')
+            await reply(`❌ ${font.smallCaps('An error occurred while clearing warnings')}.`)
         }
     }
 }

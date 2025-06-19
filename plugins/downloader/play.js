@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import font from '../../lib/font.js';
 
 export default {
   command: 'play',
@@ -12,26 +13,26 @@ export default {
   desc: 'play youtube audio',
   async execute(ctx) {
     const query = ctx.args.join(' ');
-    if (!query) return ctx.reply('Masukkan judul atau kata kunci YouTube!');
+    if (!query) return ctx.reply(`${font.smallCaps('Masukkan judul atau kata kunci YouTube')}!`);
     await ctx.react('🕔');
     try {
       const url = `https://api.nekoyama.my.id/api/downloader/yt-play?query=${encodeURIComponent(query)}`;
       const res = await fetch(url);
-      if (!res.ok) throw new Error('Gagal fetch API');
+      if (!res.ok) throw new Error(`${font.smallCaps('Gagal fetch API')}`);
       const json = await res.json();
       if (json.status !== 'success' || !json.data) {
         await ctx.react('❌');
-        return ctx.reply('Tidak ada hasil ditemukan!');
+        return ctx.reply(`${font.smallCaps('Tidak ada hasil ditemukan')}!`);
       }
       const d = json.data;
-      const caption = `*YouTube Play Result*
+      const caption = `${font.bold(font.smallCaps('YouTube Play Result'))}
 
-*Judul:* ${d.title}
-*Durasi:* ${d.duration}
-*Video ID:* ${d.video_id}
-*URL:* ${d.url}
+${font.bold(font.smallCaps('Judul'))}: ${d.title}
+${font.bold(font.smallCaps('Durasi'))}: ${d.duration}
+${font.bold(font.smallCaps('Video ID'))}: ${d.video_id}
+${font.bold(font.smallCaps('URL'))}: ${d.url}
 
-Powered by: ${json.powered_by}`;
+${font.smallCaps('Powered by')}: ${json.powered_by}`;
       // Kirim thumbnail + caption
       await ctx.sock.sendMessage(ctx.msg.key.remoteJid, {
         image: { url: d.thumbnail },
@@ -48,7 +49,7 @@ Powered by: ${json.powered_by}`;
       await ctx.react('✅');
     } catch (e) {
       await ctx.react('❌');
-      ctx.reply('Gagal mengambil audio YouTube!');
+      ctx.reply(`${font.smallCaps('Gagal mengambil audio YouTube')}!`);
     }
   }
 };

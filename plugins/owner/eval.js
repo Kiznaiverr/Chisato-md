@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'eval',
     aliases: ['exec', 'run'],
@@ -10,7 +12,7 @@ export default {
         const { reply, text, sock, db, msg, sender } = context
         
         if (!text) {
-            return await reply('❌ Please provide code to execute!\nExample: .eval console.log("Hello World")')
+            return await reply(`❌ ${font.smallCaps('Please provide code to execute')}!\n${font.smallCaps('Example')}: .eval console.log("Hello World")`)
         }
         
         try {
@@ -26,38 +28,38 @@ export default {
             }
             
             const output = `
-📝 *CODE EXECUTION*
+📝 ${font.bold(font.smallCaps('CODE EXECUTION'))}
 
-💻 *Input:*
+💻 ${font.bold(font.smallCaps('Input'))}:
 \`\`\`javascript
 ${text}
 \`\`\`
 
-📤 *Output:*
+📤 ${font.bold(font.smallCaps('Output'))}:
 \`\`\`
 ${result}
 \`\`\`
 
-⏱️ *Executed at:* ${new Date().toLocaleString()}
+⏱️ ${font.bold(font.smallCaps('Executed at'))}: ${new Date().toLocaleString()}
             `.trim()
             
             await reply(output)
             
         } catch (error) {
             const errorOutput = `
-❌ *EXECUTION ERROR*
+❌ ${font.bold(font.smallCaps('EXECUTION ERROR'))}
 
-💻 *Input:*
+💻 ${font.bold(font.smallCaps('Input'))}:
 \`\`\`javascript
 ${text}
 \`\`\`
 
-💥 *Error:*
+💥 ${font.bold(font.smallCaps('Error'))}:
 \`\`\`
 ${error.message}
 \`\`\`
 
-📍 *Stack:*
+📍 ${font.bold(font.smallCaps('Stack'))}:
 \`\`\`
 ${error.stack}
 \`\`\`

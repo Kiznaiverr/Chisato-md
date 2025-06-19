@@ -1,3 +1,5 @@
+import font from '../../lib/font.js'
+
 export default {
     command: 'owner',
     aliases: ['creator', 'dev'],
@@ -12,34 +14,34 @@ export default {
         const botInfo = config.get('botSettings')
         
         const ownerText = `
-👨‍💻 *BOT OWNER*
+👨‍💻 ${font.bold(font.smallCaps('BOT OWNER'))}
 
-📱 *Name:* ${ownerInfo.ownerName || 'Bot Owner'}
-📞 *Number:* +${ownerInfo.ownerNumber || 'Not Set'}
-🤖 *Bot:* ${botInfo.botName || 'Chisato-MD'}
-🌐 *Version:* ${botInfo.version || '1.0.0'}
+📱 ${font.bold(font.smallCaps('Name'))}: ${ownerInfo.ownerName || 'Bot Owner'}
+📞 ${font.bold(font.smallCaps('Number'))}: +${ownerInfo.ownerNumber || 'Not Set'}
+🤖 ${font.bold(font.smallCaps('Bot'))}: ${botInfo.botName || 'Chisato-MD'}
+🌐 ${font.bold(font.smallCaps('Version'))}: ${botInfo.version || '1.0.0'}
 
-💻 *About Owner:*
-Passionate developer specializing in WhatsApp bot development using modern technologies like Baileys, Node.js, and JavaScript.
+💻 ${font.bold(font.smallCaps('About Owner'))}:
+${font.smallCaps('Passionate developer specializing in WhatsApp bot development using modern technologies like Baileys, Node.js, and JavaScript')}
 
-🛠️ *Services:*
-• WhatsApp Bot Development
-• Custom Plugin Development
-• Bot Maintenance & Support
-• API Integration
+🛠️ ${font.bold(font.smallCaps('Services'))}:
+• ${font.smallCaps('WhatsApp Bot Development')}
+• ${font.smallCaps('Custom Plugin Development')}
+• ${font.smallCaps('Bot Maintenance & Support')}
+• ${font.smallCaps('API Integration')}
 
-💎 *This Bot Features:*
-• Modern Plugin System
-• Local JSON Database
-• User Profile Management
-• Group Administration
-• Auto Response System
+💎 ${font.bold(font.smallCaps('This Bot Features'))}:
+• ${font.smallCaps('Modern Plugin System')}
+• ${font.smallCaps('Local JSON Database')}
+• ${font.smallCaps('User Profile Management')}
+• ${font.smallCaps('Group Administration')}
+• ${font.smallCaps('Auto Response System')}
 
-📝 *Want a custom bot?*
-Contact the owner through the number above for bot services!
+📝 ${font.bold(font.smallCaps('Want a custom bot'))}?
+${font.smallCaps('Contact the owner through the number above for bot services')}!
 
-🙏 *Support the project:*
-Give a ⭐ if you like this bot!
+🙏 ${font.bold(font.smallCaps('Support the project'))}:
+${font.smallCaps('Give a')} ⭐ ${font.smallCaps('if you like this bot')}!
         `.trim()
           await reply(ownerText)
     }
