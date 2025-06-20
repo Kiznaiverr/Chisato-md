@@ -46,16 +46,12 @@ export default {
         const isAudio = ['yta', 'ytmp3', 'ytaudio', 'ytvmp3'].includes(command);
         const format = isAudio ? 'mp3' : '720p';
         try {
-            // Fetch API and log response for debugging
             const apiResponse = await downloadYoutube(url, format);
             if (!apiResponse || !apiResponse.data) throw new Error(`${font.smallCaps('API response kosong atau tidak valid')}.`);
             const data = apiResponse.data;
-            // Compose info
             const info = `🎵 ${font.bold(font.smallCaps('Title'))}: ${data.title || '-'}\n👤 ${font.bold(font.smallCaps('Uploader'))}: ${data.uploader || '-'}\n⏱️ ${font.bold(font.smallCaps('Duration'))}: ${data.duration || '-'}\n🔗 ${font.bold(font.smallCaps('Link'))}: https://youtu.be/${data.video_id || '-'}\n`;
-            // Determine media URL
             let fileUrl = data.download_url;
             if (!fileUrl) throw new Error(`${font.smallCaps('Tidak ada URL media yang bisa diunduh dari API')}.`);
-            // Download media with timeout
             let fileRes;
             try {
                 fileRes = await fetchWithTimeout(fileUrl, { timeout: 30000 });
@@ -64,7 +60,6 @@ export default {
             }
             if (!fileRes.ok) throw new Error(`${font.smallCaps('Gagal download file YouTube')}!`);
             const buffer = Buffer.from(await fileRes.arrayBuffer());
-            // Send media
             if (isAudio) {
                 await sock.sendMessage(msg.key.remoteJid, {
                     audio: buffer,

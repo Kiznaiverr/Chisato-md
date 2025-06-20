@@ -24,7 +24,6 @@ export default {
             const newDesc = args.join(' ')
             const oldDesc = groupMetadata.desc || font.smallCaps('No description')
             
-            // Change group description
             await sock.groupUpdateDescription(msg.key.remoteJid, newDesc)
             
             await react('✅')

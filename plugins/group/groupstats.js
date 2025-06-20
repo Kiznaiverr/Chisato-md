@@ -13,7 +13,6 @@ export default {
     async execute(sock, m, args) {        try {
             const groupId = m.key.remoteJid;
             
-            // Get group metadata
             const groupMetadata = await sock.groupMetadata(groupId);
             const groupName = groupMetadata.subject;
             const totalMembers = groupMetadata.participants.length;
@@ -21,7 +20,6 @@ export default {
             const regularMembers = totalMembers - admins;
             const creationDate = new Date(groupMetadata.creation * 1000).toDateString();
 
-            // Get group data from database
             const dbPath = './database/groups.json';
             let db = {};
             if (fs.existsSync(dbPath)) {
@@ -30,12 +28,10 @@ export default {
 
             const groupData = db[groupId] || {};
 
-            // Calculate activity stats
             const messagesCount = groupData.messageCount || 0;
             const commandsUsed = groupData.commandsUsed || 0;
             const lastActivity = groupData.lastActivity ? new Date(groupData.lastActivity).toDateString() : 'Unknown';
 
-            // Get most active members (if tracking is enabled)
             let topMembers = [];
             if (groupData.memberStats) {
                 topMembers = Object.entries(groupData.memberStats)
@@ -43,7 +39,6 @@ export default {
                     .slice(0, 5);
             }
 
-            // Group features status
             const features = {
                 'Welcome Messages': groupData.welcomeEnabled ? '✅' : '❌',
                 'Anti-Link': groupData.antilinkEnabled ? '✅' : '❌',
@@ -51,7 +46,6 @@ export default {
                 'Message Logging': groupData.loggingEnabled ? '✅' : '❌'
             };
 
-            // Calculate group activity level
             let activityLevel = 'Low';
             const dailyAverage = messagesCount / Math.max(1, (Date.now() - (groupMetadata.creation * 1000)) / (1000 * 60 * 60 * 24));
             
@@ -76,12 +70,10 @@ export default {
                 convertToSmallCaps(`• Last activity: ${lastActivity}\n\n`) +
                 convertToSmallCaps(`⚙️ FEATURES:\n`);
 
-            // Add features status
             Object.entries(features).forEach(([feature, status]) => {
                 statsMessage += convertToSmallCaps(`• ${feature}: ${status}\n`);
             });
 
-            // Add top members if available
             if (topMembers.length > 0) {
                 statsMessage += convertToSmallCaps(`\n🔥 MOST ACTIVE MEMBERS:\n`);
                 topMembers.forEach(([memberId, stats], index) => {
@@ -91,7 +83,6 @@ export default {
                 });
             }
 
-            // Add group health indicators
             const memberRatio = (admins / totalMembers * 100).toFixed(1);
             const commandRatio = totalMembers > 0 ? (commandsUsed / totalMembers).toFixed(1) : 0;
 

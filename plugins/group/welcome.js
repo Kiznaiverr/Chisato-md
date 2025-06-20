@@ -68,7 +68,7 @@ export default {
                     
                     const newMessage = args.slice(1).join(' ');
                     db[groupId].welcomeMessage = newMessage;
-                    db[groupId].welcomeEnabled = true; // Auto-enable when setting message
+                    db[groupId].welcomeEnabled = true; 
                     
                     await sock.sendMessage(m.key.remoteJid, {
                         text: convertToSmallCaps(`✅ Welcome message updated and enabled!\n\n📝 New message:\n${newMessage}\n\n💡 Use .welcome preview to see how it looks`)

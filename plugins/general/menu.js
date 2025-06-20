@@ -5,7 +5,6 @@ import font from '../../lib/font.js'
 export default {
     command: 'menu',
     aliases: function() {
-        // Dynamic alias generation
         const baseAliases = ['help', 'commands', 'm']
         const pluginDir = path.join(process.cwd(), 'plugins')
         
@@ -32,7 +31,6 @@ export default {
         const userName = font.smallCaps(user?.name || 'User')
         const premiumText = isOwner ? font.smallCaps('Owner') : (isPremium ? font.smallCaps('Premium') : font.smallCaps('Free'))
 
-        // Dynamic category menu detection
         const categoryMenus = {}
         const pluginDir = path.join(process.cwd(), 'plugins')
         
@@ -47,7 +45,6 @@ export default {
 
         const requestedCategory = categoryMenus[command]
 
-        // Group plugins by category
         const categories = {}
         for (const plugin of plugins) {
             if (plugin.ownerOnly && !isOwner) continue
@@ -57,7 +54,6 @@ export default {
             categories[cat].push(plugin)
         }
 
-        // Dynamic category icons (with fallback)
         const categoryIcons = {
             'admin': '👑',
             'owner': '🔱',
@@ -71,7 +67,6 @@ export default {
             'downloader': '📥'
         }
 
-        // If requesting a specific category menu
         if (requestedCategory) {
             const categoryPlugins = categories[requestedCategory] || []
             const icon = categoryIcons[requestedCategory] || '📂'
@@ -95,10 +90,8 @@ export default {
                 categoryPlugins.forEach((plugin, index) => {
                     const aliases = plugin.aliases && plugin.aliases.length > 0 ? ` (${plugin.aliases.map(alias => font.smallCaps(alias)).join(', ')})` : ''
                     
-                    // Get usage from plugin, if available, otherwise show dash
                     let usageText = ''
                     if (plugin.usage && plugin.usage.trim()) {
-                        // Apply smallcaps to usage content
                         usageText = ` - ${plugin.usage.replace(/<([^>]+)>/g, (match, content) => {
                             return `<${font.smallCaps(content)}>`
                         }).replace(/\[([^\]]+)\]/g, (match, content) => {
@@ -108,7 +101,6 @@ export default {
                         })}`
                     }
                     
-                    // Convert command name to smallcaps
                     const commandName = font.smallCaps(plugin.command)
                     
                     categoryMenuText += `${index + 1}. ${prefix}${commandName}${aliases}${usageText}\n`
@@ -121,7 +113,6 @@ export default {
             categoryMenuText += `• ${font.smallCaps('Use')} ${prefix}${font.smallCaps('allmenu')} ${font.smallCaps('to see all commands')}\n\n`
             categoryMenuText += `🤖 ${font.smallCaps('powered by chisato-md | created by kiznavierr')}`
 
-            // Send category menu with banner if available
             try {
                 const bannerPath = path.join(process.cwd(), 'images', 'banner', 'Chisato.jpg')
                 
@@ -155,7 +146,6 @@ export default {
         menuText += `━━━━━━━━━━━━━━━\n`
         menuText += `📋 ${font.smallCaps('kategori menu')}:\n\n`
         
-        // MENU KATEGORI with command count
         sortedCats.forEach(cat => {
             const icon = categoryIcons[cat] || '📂'
             const count = categories[cat].length
@@ -169,7 +159,6 @@ export default {
         menuText += `• ${font.smallCaps('gunakan')} .${font.smallCaps('allmenu')} ${font.smallCaps('untuk semua command')}\n\n`
         menuText += `🤖 ${font.smallCaps('powered by chisato-md | created by kiznavierr')}`
         
-        // Send menu with banner image
         try {
             const bannerPath = path.join(process.cwd(), 'images', 'banner', 'Chisato.jpg')
             
@@ -179,12 +168,10 @@ export default {
                     caption: menuText
                 }, { quoted: msg })
             } else {
-                // Fallback to text only if image not found
                 return reply(menuText)
             }
         } catch (error) {
             console.error('Error sending menu with image:', error)
-            // Fallback to text only on error
             return reply(menuText)
         }
     },

@@ -43,7 +43,6 @@ export default {
         throw new Error(`${font.smallCaps('Gagal generate brat image')}!`);
       }
 
-      // Download the generated image
       let imageBuffer;
       try {
         const imageRes = await axios.get(json.data.file_url, {
@@ -55,7 +54,6 @@ export default {
         throw new Error(`${font.smallCaps('Gagal download gambar brat')}!`);
       }
 
-      // Convert to sticker
       let stickerBuffer;
       try {
         stickerBuffer = await sticker(imageBuffer, null, 'Chisato-MD', 'Kiznavierr', ['💚'], {

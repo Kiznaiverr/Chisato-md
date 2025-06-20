@@ -14,11 +14,9 @@ export default {
       const text = args.slice(0, -1).join(' ') || args.join(' ');
       let speed = 'medium';
       
-      // Check if last argument is a valid speed
       const lastArg = args[args.length - 1]?.toLowerCase();
       if (['slow', 'medium', 'fast'].includes(lastArg)) {
         speed = lastArg;
-        // Remove speed from text if it was specified
         if (args.length > 1) {
           const textArgs = args.slice(0, -1);
           if (textArgs.length > 0) {

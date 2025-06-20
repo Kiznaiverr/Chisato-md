@@ -24,7 +24,6 @@ export default {
                 return reply(`${font.smallCaps('Gagal mendapatkan data. Pastikan link Twitter/X valid dan publik')}.`);
             }
             const { title, tweet_text, download_links, url: twurl } = json.data;
-            // Prioritaskan video, jika tidak ada kirim gambar
             if (download_links.video) {
                 const videoRes = await fetch(download_links.video);
                 if (!videoRes.ok) throw new Error(`${font.smallCaps('Gagal download video Twitter')}!`);

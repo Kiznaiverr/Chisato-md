@@ -61,12 +61,9 @@ export default {
             const categoryName = cat.charAt(0).toUpperCase() + cat.slice(1)
             menuText += `${icon} ${font.smallCaps(categoryName + ' commands')}:\n`
             
-            // List all commands in this category - command and usage with smallcaps
             categories[cat].forEach(plugin => {
-                // Apply smallcaps to command name and usage text content
                 let usage = ''
                 if (plugin.usage) {
-                    // Convert the usage content to smallcaps while preserving structure
                     usage = ` • ${plugin.usage.replace(/<([^>]+)>/g, (match, content) => {
                         return `<${font.smallCaps(content)}>`
                     }).replace(/\[([^\]]+)\]/g, (match, content) => {
@@ -76,7 +73,6 @@ export default {
                     })}`
                 }
                 
-                // Convert command name to smallcaps too
                 const commandName = font.smallCaps(plugin.command)
                 menuText += `  ◦ ${prefix}${commandName}${usage}\n`
             })
@@ -92,7 +88,6 @@ export default {
         menuText += `💡 ${font.smallCaps('tips')}: ${font.smallCaps('gunakan')} .${font.smallCaps('menu')} ${font.smallCaps('untuk tampilan kategori')}\n\n`
         menuText += `🤖 ${font.smallCaps('powered by chisato-md | created by kiznavierr')}`
         
-        // Send allmenu with banner image
         try {
             const bannerPath = path.join(process.cwd(), 'images', 'banner', 'Chisato.jpg')
             
@@ -102,12 +97,10 @@ export default {
                     caption: menuText
                 }, { quoted: msg })
             } else {
-                // Fallback to text only if image not found
                 return reply(menuText)
             }
         } catch (error) {
             console.error('Error sending allmenu with image:', error)
-            // Fallback to text only on error
             return reply(menuText)
         }
     }

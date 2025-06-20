@@ -113,7 +113,6 @@ export default {
   }
 };
 
-// Helper function to convert Readable stream to Buffer
 async function streamToBuffer(stream) {
   const chunks = [];
   for await (const chunk of stream) {

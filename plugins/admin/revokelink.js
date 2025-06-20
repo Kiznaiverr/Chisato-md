@@ -17,10 +17,8 @@ export default {
         try {
             await react('🕔')
             
-            // Revoke current invite link
             await sock.groupRevokeInvite(msg.key.remoteJid)
             
-            // Get new invite code
             const newInviteCode = await sock.groupInviteCode(msg.key.remoteJid)
             const newInviteLink = `https://chat.whatsapp.com/${newInviteCode}`
             

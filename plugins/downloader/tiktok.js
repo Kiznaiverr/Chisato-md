@@ -24,7 +24,6 @@ export default {
                 return reply(`${font.smallCaps('Gagal mendapatkan data. Pastikan link TikTok valid dan publik')}.`);
             }
             const { title, thumbnail, download_links, url: tiktokUrl } = json.data;
-            // Download video
             if (download_links.video) {
                 const videoRes = await fetch(download_links.video);
                 if (!videoRes.ok) throw new Error(`${font.smallCaps('Gagal download video TikTok')}!`);
@@ -35,7 +34,6 @@ export default {
                 }, { quoted: msg });
                 await react('✅');
             }
-            // Download audio
             if (download_links.audio) {
                 const audioRes = await fetch(download_links.audio);
                 if (!audioRes.ok) throw new Error(`${font.smallCaps('Gagal download audio TikTok')}!`);

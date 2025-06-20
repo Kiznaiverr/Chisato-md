@@ -17,9 +17,7 @@ export default {
             await react('🔄')
             await reply(`🔄 ${font.smallCaps('Restarting Node.js process')}...\n\n⏳ ${font.smallCaps('Bot will be back online shortly')}...\n\n💡 ${font.smallCaps('This may take 10-30 seconds')}`)
             
-            // Give time for the message to be sent
             setTimeout(() => {
-                // Get the current process arguments
                 const args = process.argv.slice(1);
                 const executable = process.execPath;
                 
@@ -27,7 +25,6 @@ export default {
                 console.log('📂 Executable:', executable);
                 console.log('📋 Arguments:', args);
                 
-                // Spawn a new process with the same arguments
                 const child = spawn(executable, args, {
                     detached: true,
                     stdio: 'inherit',
@@ -35,10 +32,8 @@ export default {
                     env: process.env
                 });
                 
-                // Detach the child process so it can continue running
                 child.unref();
                 
-                // Exit the current process
                 process.exit(0);
             }, 3000);
             

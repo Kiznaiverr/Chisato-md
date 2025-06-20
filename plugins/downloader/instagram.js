@@ -24,7 +24,6 @@ export default {
                 return reply(`${font.smallCaps('Gagal mendapatkan data. Pastikan link Instagram valid dan publik')}.`);
             }
             const { title, username, download_links, url: igurl } = json.data;
-            // Prioritaskan video, jika tidak ada kirim gambar
             if (download_links.video) {
                 const videoRes = await fetch(download_links.video);
                 if (!videoRes.ok) throw new Error(`${font.smallCaps('Gagal download video Instagram')}!`);

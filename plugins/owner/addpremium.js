@@ -10,7 +10,6 @@ export default {
     cooldown: 5,
     
     async execute({ msg, args, reply, react, db }) {
-        // Check if user mentioned someone or replied to a message
         let target
         if (msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.length > 0) {
             target = msg.message.extendedTextMessage.contextInfo.mentionedJid[0]
@@ -22,15 +21,13 @@ export default {
             return reply(`❌ ${font.smallCaps('Please mention a user or reply to their message')}.\n\n💡 ${font.smallCaps('Example')}: \`addpremium @user\` ${font.smallCaps('or')} \`addpremium @user 30d\``)
         }
 
-        // Check if target is valid
         if (!target) {
             return reply(`❌ ${font.smallCaps('Invalid user')}.`)
         }
 
-        // Parse duration (optional)
         let duration = null
         let durationMs = 0
-        const durationArg = args[1] || args[0] // Support both positions
+        const durationArg = args[1] || args[0] 
         
         if (durationArg && !durationArg.includes('@')) {
             const durationMatch = durationArg.match(/(\d+)([dhm]?)/)
@@ -59,7 +56,6 @@ export default {
         try {
             await react('🕔')
             
-            // Get user data
             const user = db.getUser(target)
             
             if (user.premium) {
@@ -74,17 +70,15 @@ export default {
 💡 ${font.smallCaps('Use')} \`delpremium @user\` ${font.smallCaps('to remove premium status first')}.`)
             }
             
-            // Set premium status
             user.premium = true
             user.premiumSince = Date.now()
             
             if (duration && durationMs > 0) {
                 user.premiumExpiry = Date.now() + durationMs
             } else {
-                user.premiumExpiry = null // Lifetime premium
+                user.premiumExpiry = null
             }
             
-            // Reset daily limit to premium amount
             const premiumLimit = db.getSetting('premiumLimit') || 999
             user.limit = premiumLimit
             

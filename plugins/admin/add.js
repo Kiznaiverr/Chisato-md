@@ -21,7 +21,6 @@ export default {
         try {
             await react('🕔')
             
-            // Clean and format phone number
             let number = args[0].replace(/[^0-9]/g, '')
             if (number.startsWith('0')) {
                 number = '62' + number.slice(1)

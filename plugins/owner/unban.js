@@ -10,7 +10,6 @@ export default {
     async execute(context) {
         const { reply, msg, db } = context
         
-        // Get mentioned users
         const mentioned = msg.message.extendedTextMessage?.contextInfo?.mentionedJid || []
         
         if (mentioned.length === 0) {

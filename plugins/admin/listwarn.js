@@ -14,12 +14,10 @@ export default {
         try {
             await react('📋');
 
-            // Check if it's a group
             if (!isGroup) {
                 return reply(`❌ ${font.smallCaps('This command can only be used in groups')}!`)
             }
 
-            // Get group participants
             const groupId = msg.key.remoteJid
             let participants = []
             try {
@@ -30,7 +28,6 @@ export default {
                 return reply(`❌ ${font.smallCaps('Failed to get group information')}.`)
             }
 
-            // Get all users with warnings in this group
             const warnedUsers = []
             for (const participantJid of participants) {
                 const warnings = db.getWarnings(participantJid)
@@ -44,7 +41,6 @@ export default {
                 }
             }
 
-            // Sort by warning count (highest first)
             warnedUsers.sort((a, b) => b.warnings - a.warnings)
 
             let listMessage = `📋 ${font.bold(font.smallCaps('WARNING LIST'))} 📋\n`

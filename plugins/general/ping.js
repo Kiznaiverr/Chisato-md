@@ -12,7 +12,6 @@ export default {
     async execute({ reply, prefix }) {
         const start = Date.now()
         
-        // Get basic system info
         const platform = os.platform()
         const arch = os.arch()
         const totalMem = os.totalmem()
@@ -20,22 +19,18 @@ export default {
         const usedMem = totalMem - freeMem
         const memUsage = ((usedMem / totalMem) * 100).toFixed(1)
         
-        // Get CPU info
         const cpus = os.cpus()
         const cpuModel = cpus[0]?.model?.split(' ').slice(0, 3).join(' ') || font.smallCaps('Unknown')
         const cpuCores = cpus.length
         
-        // Format memory
         const formatGB = (bytes) => `${(bytes / (1024 ** 3)).toFixed(1)} ${font.smallCaps('GB')}`
         
-        // Bot process memory
         const processMemory = process.memoryUsage()
         const botMemUsed = (processMemory.heapUsed / 1024 / 1024).toFixed(1)
         
         const end = Date.now()
         const responseTime = end - start
         
-        // Response time status
         let status = `🟢 ${font.smallCaps('Excellent')}`
         if (responseTime > 1000) status = `🔴 ${font.smallCaps('Slow')}`
         else if (responseTime > 500) status = `🟡 ${font.smallCaps('Good')}`

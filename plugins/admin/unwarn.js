@@ -14,26 +14,21 @@ export default {
         try {
             await react('🔄');
 
-            // Check if it's a group
             if (!isGroup) {
                 return reply(`❌ ${font.smallCaps('This command can only be used in groups')}!`)
             }
 
-            // Get target user
             let targetJid = null
             let reason = 'No reason provided'
 
-            // Check if replying to a message
             if (msg.message.extendedTextMessage?.contextInfo?.quotedMessage) {
                 targetJid = msg.message.extendedTextMessage.contextInfo.participant
                 reason = args.join(' ') || reason
             }
-            // Check if mentioning a user
             else if (msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.length > 0) {
                 targetJid = msg.message.extendedTextMessage.contextInfo.mentionedJid[0]
                 reason = args.slice(1).join(' ') || reason
             }
-            // Check if providing number manually
             else if (args[0]) {
                 let number = args[0].replace(/[^0-9]/g, '')
                 if (number.startsWith('0')) number = '62' + number.slice(1)
@@ -46,22 +41,18 @@ export default {
                 return reply(`❌ ${font.smallCaps('Please specify a user to unwarn')}!\n\n${font.bold(font.smallCaps('Usage'))}:\n• ${font.smallCaps('Reply to user\'s message')}: \`.unwarn [${font.smallCaps('reason')}]\`\n• ${font.smallCaps('Mention user')}: \`.unwarn @user [${font.smallCaps('reason')}]\`\n• ${font.smallCaps('Use number')}: \`.unwarn 628xxxxx [${font.smallCaps('reason')}]\``)
             }
 
-            // Get current warnings
             const warnings = db.getWarnings(targetJid)
             
             if (warnings.count === 0) {
                 return reply(`ℹ️ @${targetJid.split('@')[0]} ${font.smallCaps('has no warnings to remove')}.`, [targetJid])
             }
 
-            // Get sender info for logging
             const senderNumber = msg.key.participant?.split('@')[0] || msg.key.remoteJid.split('@')[0]
             const senderName = msg.pushName || 'Admin'
 
-            // Remove warning
             const newWarningCount = db.removeWarning(targetJid, `${senderName} (${senderNumber})`)
             const targetNumber = targetJid.split('@')[0]
 
-            // Create unwarn message
             let unwarnMessage = `✅ ${font.bold(font.smallCaps('WARNING REMOVED'))} ✅\n\n`
             unwarnMessage += `👤 ${font.bold(font.smallCaps('Target'))}: @${targetNumber}\n`
             unwarnMessage += `📝 ${font.bold(font.smallCaps('Reason'))}: ${reason}\n`

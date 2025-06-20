@@ -17,7 +17,6 @@ export default {
         
         await reply(`📡 ${font.smallCaps('Starting broadcast')}...`)
         
-        // Get all user chats
         const users = Object.values(db.users)
         let sent = 0
         let failed = 0
@@ -40,7 +39,6 @@ ${text}
                     })
                     sent++
                     
-                    // Small delay to prevent spam detection
                     await new Promise(resolve => setTimeout(resolve, 100))
                 } catch (error) {
                     failed++

@@ -24,7 +24,6 @@ export default {
                 return reply(`${font.smallCaps('Gagal mendapatkan data. Pastikan link Facebook valid dan publik')}.`);
             }
             const { title, download_links, url: fburl } = json.data;
-            // Pilih kualitas terbaik (HD > SD > Audio)
             let videoUrl = null, label = '';
             if (download_links.hd) {
                 videoUrl = download_links.hd;
@@ -40,11 +39,9 @@ export default {
                 await react('❌');
                 return reply(`${font.smallCaps('Tidak ada link video yang bisa diunduh')}.`);
             }
-            // Download video
             const videoRes = await fetch(videoUrl);
             if (!videoRes.ok) throw new Error(`${font.smallCaps('Gagal download video Facebook')}!`);
             const buffer = Buffer.from(await videoRes.arrayBuffer());
-            // Kirim video ke user
             await sock.sendMessage(msg.key.remoteJid, {
                 video: buffer,
                 caption: `${font.bold(font.smallCaps('FACEBOOK DOWNLOADER'))}\n• ${font.smallCaps('Judul')}: ${title || '-'}\n• ${font.smallCaps('Link')}: ${fburl}\n• ${font.smallCaps('Kualitas')}: ${label}\n\n${font.smallCaps('Powered by Chisato API')}`

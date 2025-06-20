@@ -10,7 +10,6 @@ export default {
     cooldown: 5,
     
     async execute({ msg, args, reply, react, db }) {
-        // Check if user mentioned someone or replied to a message
         let target
         if (msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.length > 0) {
             target = msg.message.extendedTextMessage.contextInfo.mentionedJid[0]
@@ -22,12 +21,10 @@ export default {
             return reply(`❌ ${font.smallCaps('Please mention a user or reply to their message')}.\n\n💡 ${font.smallCaps('Example')}: \`delpremium @user\``)
         }
 
-        // Check if target is valid
         if (!target) {
             return reply(`❌ ${font.smallCaps('Invalid user')}.`)
         }
 
-        // Check if target is owner
         if (db.isOwner(target)) {
             return reply(`❌ ${font.smallCaps('Cannot remove premium status from bot owner')}!`)
         }
@@ -35,7 +32,6 @@ export default {
         try {
             await react('🕔')
             
-            // Get user data
             const user = db.getUser(target)
             
             if (!user.premium) {
@@ -48,16 +44,13 @@ export default {
 └ 💡 ${font.smallCaps('User already has regular status')}`)
             }
             
-            // Store premium info for confirmation message
             const wasPremiumSince = user.premiumSince
             const hadExpiry = user.premiumExpiry
             
-            // Remove premium status
             user.premium = false
             user.premiumSince = null
             user.premiumExpiry = null
             
-            // Reset to regular daily limit
             const regularLimit = db.getSetting('dailyLimit') || 20
             user.limit = regularLimit
             

@@ -11,7 +11,6 @@ export default {
     cooldown: 5,
     
     async execute({ msg, args, reply, react, db }) {
-        // Check if user mentioned someone or replied to a message
         let target
         if (msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.length > 0) {
             target = msg.message.extendedTextMessage.contextInfo.mentionedJid[0]
@@ -23,15 +22,13 @@ export default {
             return reply(`❌ ${font.smallCaps('Please mention a user or reply to their message')}.\n\n${font.smallCaps('Example')}: \`addadmin @user\``)
         }
 
-        // Check if target is valid
         if (!target) {
             return reply(`❌ ${font.smallCaps('Invalid user')}.`)
-        }        // Check if target is already admin
+        }        
         if (db.isAdmin(target)) {
             return reply(`❌ ${font.smallCaps('User is already an admin')}!`)
         }try {
             await react('🕔')
-              // Add admin using config manager
             const success = db.addAdmin(target)
               if (success) {
                 await react('✅')

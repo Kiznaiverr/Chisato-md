@@ -17,7 +17,6 @@ export default {
         try {
             await react('🕔')
             
-            // Mute the group
             await sock.groupSettingUpdate(msg.key.remoteJid, 'announcement')
             
             await react('🔇')

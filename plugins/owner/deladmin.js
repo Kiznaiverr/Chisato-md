@@ -11,7 +11,6 @@ export default {
     cooldown: 5,
     
     async execute({ msg, args, reply, react, db }) {
-        // Check if user mentioned someone or replied to a message
         let target
         if (msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.length > 0) {
             target = msg.message.extendedTextMessage.contextInfo.mentionedJid[0]
@@ -23,22 +22,19 @@ export default {
             return reply(`❌ ${font.smallCaps('Please mention a user or reply to their message')}.\n\n${font.smallCaps('Example')}: \`deladmin @user\``)
         }
 
-        // Check if target is valid
         if (!target) {
             return reply(`❌ ${font.smallCaps('Invalid user')}.`)
-        }        // Check if target is owner
+        }        
         if (db.isOwner(target)) {
             return reply(`❌ ${font.smallCaps('Cannot remove owner from admin')}!`)
         }
 
-        // Check if target is admin
         if (!db.isAdmin(target)) {
             return reply(`❌ ${font.smallCaps('User is not an admin')}!`)
         }
 
         try {
             await react('🕔')
-              // Remove admin using config manager
             const success = db.removeAdmin(target)
             
             if (success) {

@@ -24,7 +24,6 @@ export default {
             tagMessage += `💬 ${font.bold(font.smallCaps('Message'))}: ${font.smallCaps(message)}\n\n`
             tagMessage += `👥 ${font.bold(font.smallCaps('Tagged Members'))} (${participants.length}):\n`
             
-            // Create mention list
             participants.forEach((participant, index) => {
                 const number = participant.id.split('@')[0]
                 tagMessage += `${index + 1}. @${number}\n`

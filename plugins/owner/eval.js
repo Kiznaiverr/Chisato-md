@@ -16,7 +16,6 @@ export default {
         }
         
         try {
-            // Create execution context
             const util = await import('util')
             const fs = await import('fs')
             const path = await import('path')

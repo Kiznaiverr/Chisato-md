@@ -26,7 +26,6 @@ export default {
                 return reply(`${font.smallCaps('Gagal mendapatkan data. Pastikan link Douyin valid dan publik')}.`);
             }
             const { original_text, thumbnail, download_links } = json.data;
-            // Pilih kualitas terbaik (urutan: hd > normal > lainnya)
             let videoUrl = null, label = '';
             if (download_links.hd) {
                 videoUrl = download_links.hd.url;
@@ -35,7 +34,6 @@ export default {
                 videoUrl = download_links.normal.url;
                 label = download_links.normal.label;
             } else {
-                // Ambil salah satu jika tidak ada hd/normal
                 const first = Object.values(download_links)[0];
                 videoUrl = first?.url;
                 label = first?.label;
@@ -44,11 +42,9 @@ export default {
                 await react('❌');
                 return reply(`${font.smallCaps('Tidak ada link video yang bisa diunduh')}.`);
             }
-            // Download video
             const videoRes = await fetch(videoUrl);
             if (!videoRes.ok) throw new Error(`${font.smallCaps('Gagal download video Douyin')}!`);
             const buffer = Buffer.from(await videoRes.arrayBuffer());
-            // Kirim video ke user
             await sock.sendMessage(msg.key.remoteJid, {
                 video: buffer,
                 caption: `${font.bold(font.smallCaps('DOUYIN DOWNLOADER'))}\n• ${font.smallCaps('Link/Share')}: ${original_text || '-'}\n• ${font.smallCaps('Kualitas')}: ${label}\n\n${font.smallCaps('Powered by Chisato API')}`

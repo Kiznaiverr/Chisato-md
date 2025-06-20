@@ -17,7 +17,6 @@ export default {
         try {
             await react('🕔')
             
-            // Get group invite code
             const inviteCode = await sock.groupInviteCode(msg.key.remoteJid)
             const inviteLink = `https://chat.whatsapp.com/${inviteCode}`
             

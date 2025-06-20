@@ -33,13 +33,11 @@ ${font.bold(font.smallCaps('Video ID'))}: ${d.video_id}
 ${font.bold(font.smallCaps('URL'))}: ${d.url}
 
 ${font.smallCaps('Powered by')}: ${json.powered_by}`;
-      // Kirim thumbnail + caption
       await ctx.sock.sendMessage(ctx.msg.key.remoteJid, {
         image: { url: d.thumbnail },
         caption,
         jpegThumbnail: undefined
       }, { quoted: ctx.msg });
-      // Kirim audio
       await ctx.sock.sendMessage(ctx.msg.key.remoteJid, {
         audio: { url: d.url },
         mimetype: 'audio/mp4',

@@ -13,25 +13,21 @@ export default {
     cooldown: 10,
     
     async execute(sock, m, args) {        try {
-            // Get system info
             const totalMem = os.totalmem();
             const freeMem = os.freemem();
             const usedMem = totalMem - freeMem;
             const memUsage = ((usedMem / totalMem) * 100).toFixed(2);
 
-            // Get CPU info
             const cpus = os.cpus();
             const cpuModel = cpus[0].model;
             const cpuCount = cpus.length;
 
-            // Get uptime
             const uptime = process.uptime();
             const days = Math.floor(uptime / 86400);
             const hours = Math.floor((uptime % 86400) / 3600);
             const minutes = Math.floor((uptime % 3600) / 60);
             const seconds = Math.floor(uptime % 60);
 
-            // Get disk usage
             let diskUsage = 'unknown';
             try {
                 const stats = fs.statSync('./');
@@ -40,12 +36,10 @@ export default {
                 diskUsage = 'error reading';
             }
 
-            // Get process memory
             const processMemory = process.memoryUsage();
             const heapUsed = (processMemory.heapUsed / 1024 / 1024).toFixed(2);
             const heapTotal = (processMemory.heapTotal / 1024 / 1024).toFixed(2);
 
-            // Get platform info
             const platform = os.platform();
             const arch = os.arch();
             const nodeVersion = process.version;

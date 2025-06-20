@@ -13,7 +13,6 @@ export default {
         const prefix = db.getSetting('prefix')
         const uptime = process.uptime()
         
-        // Format uptime
         const days = Math.floor(uptime / 86400)
         const hours = Math.floor((uptime % 86400) / 3600)
         const minutes = Math.floor((uptime % 3600) / 60)
@@ -21,7 +20,6 @@ export default {
         
         const uptimeString = `${days}d ${hours}h ${minutes}m ${seconds}s`
         
-        // Get memory usage
         const memUsage = process.memoryUsage()
         const memUsed = (memUsage.heapUsed / 1024 / 1024).toFixed(2)
         const memTotal = (memUsage.heapTotal / 1024 / 1024).toFixed(2)

@@ -22,7 +22,6 @@ export default {
             const regularAdmins = admins.filter(p => p.admin === 'admin')
             const members = participants.filter(p => !p.admin)
             
-            // Get group creation date
             const creationDate = groupMetadata.creation ? new Date(groupMetadata.creation * 1000) : null
             
             let infoText = `📋 ${font.bold(font.smallCaps('GROUP INFORMATION'))}
@@ -74,7 +73,6 @@ export default {
             infoText += `╰───────────────\n\n`
             infoText += `🕒 ${font.smallCaps('Retrieved at')}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`
             
-            // Get mentions for admins
             const mentions = [...superAdmins, ...regularAdmins.slice(0, 5)].map(admin => admin.id)
             
             await sock.sendMessage(msg.key.remoteJid, {

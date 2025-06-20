@@ -17,7 +17,6 @@ export default {
         try {
             await react('🕔')
             
-            // Gabungkan args jadi satu string, lalu split dengan '|'
             const text = args.join(' ').trim()
             let [packname, author] = text.split('|').map(s => s && s.trim())
             
@@ -28,7 +27,6 @@ export default {
             
             if (!author) author = ''
             
-            // Check if replying to media
             const quotedMessage = msg.message.extendedTextMessage?.contextInfo?.quotedMessage
             
             if (!quotedMessage) {
@@ -37,7 +35,6 @@ export default {
             }
             
             const quotedType = getContentType(quotedMessage)
-            // Cek jika reply ke sticker juga
             let mediaMessage, downloadMessage, fileSize = 0, isSticker = false
             if (quotedType === 'imageMessage' || quotedType === 'videoMessage') {
                 mediaMessage = quotedMessage[quotedType]
@@ -70,7 +67,6 @@ export default {
                 await react('❌')
                 return await reply(`❌ ${font.smallCaps('File too large! Maximum size is 15MB')}.`)
             }
-            // Download media
             let buffer = await downloadMediaMessage(downloadMessage, sock)
             if (buffer && typeof buffer.read === 'function') {
                 buffer = await streamToBuffer(buffer)
@@ -79,14 +75,12 @@ export default {
                 await react('❌')
                 return await reply(`❌ ${font.smallCaps('Failed to download media! Please try again')}.`)
             }
-            // Get file type
             const fileType = await fileTypeFromBuffer(buffer)
             const isVideo = fileType && fileType.mime.startsWith('video/')
             if (isVideo) {
                 await react('❌')
                 return await reply(`❌ ${font.smallCaps('Watermark for videos is not supported yet')}!\n💡 ${font.smallCaps('Use .sticker for video stickers without custom watermark')}.`)
             }
-            // Buat sticker baru dari buffer (baik dari sticker, image, atau video)
             const stickerBuffer = await sticker(buffer, null, packname, author, ['🎨'], {
                 'android-app-store-link': 'https://github.com/kiznaiverr/chisato-md',
                 'ios-app-store-link': 'https://github.com/kiznaiverr/chisato-md',
@@ -96,7 +90,6 @@ export default {
                 await react('❌')
                 return await reply(`❌ ${font.smallCaps('Failed to create watermarked sticker! Please try again')}.`)
             }
-            // Send as sticker
             await sock.sendMessage(msg.key.remoteJid, {
                 sticker: stickerBuffer
             })
@@ -126,7 +119,6 @@ export default {
     }
 }
 
-// Helper function to convert Readable stream to Buffer
 async function streamToBuffer(stream) {
     const chunks = []
     for await (const chunk of stream) {

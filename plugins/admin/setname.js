@@ -24,7 +24,6 @@ export default {
             const newName = args.join(' ')
             const oldName = groupMetadata.subject
             
-            // Change group name
             await sock.groupUpdateSubject(msg.key.remoteJid, newName)
             
             await react('✅')

@@ -22,14 +22,11 @@ export default {
             let mediaMessage = null
             let downloadMessage = null
             
-            // Check if command sent with media (caption mode)
             const messageType = getContentType(msg.message)
             if (messageType === 'imageMessage' || messageType === 'videoMessage') {
-                // Media sent with caption .s
                 mediaMessage = msg.message[messageType]
                 downloadMessage = msg
             } else {
-                // Check if replying to media
                 const quotedMessage = msg.message.extendedTextMessage?.contextInfo?.quotedMessage
                 
                 if (!quotedMessage) {
@@ -59,14 +56,12 @@ export default {
                 return await reply(`❌ ${font.smallCaps('No valid media found')}!`)
             }
             
-            // Check file size (max 15MB for stickers)
             const fileSize = mediaMessage.fileLength || 0
             if (fileSize > 15 * 1024 * 1024) {
                 await react('❌')
                 return await reply(`❌ ${font.smallCaps('File too large! Maximum size is 15MB for stickers')}.`)
             }
             
-            // Download media
             let buffer = await downloadMediaMessage(downloadMessage, sock)
             if (buffer && typeof buffer.read === 'function') {
                 buffer = await streamToBuffer(buffer)
@@ -77,29 +72,24 @@ export default {
                 return await reply(`❌ ${font.smallCaps('Failed to download media! Please try again')}.`)
             }
             
-            // Get file type
             const fileType = await fileTypeFromBuffer(buffer)
             const isVideo = fileType && fileType.mime.startsWith('video/')
             
-            // Parse watermark parameters
             const botSettings = config.get('botSettings')
             const ownerSettings = config.get('ownerSettings')
             
             let packname = args[0] || botSettings.botName || 'Chisato-MD'
             let author = args[1] || ownerSettings.ownerName || 'Kiznavierr'
             
-            // Remove quotes if present
             packname = packname.replace(/['"]/g, '')
             author = author.replace(/['"]/g, '')
             
             let stickerBuffer
             
             if (isVideo) {
-                // Convert video to animated sticker
                 await reply(`🎬 ${font.smallCaps('Converting video to animated sticker')}...`)
                 stickerBuffer = await video2webp(buffer, 15)
             } else {
-                // Convert image to sticker with watermark
                 stickerBuffer = await sticker(buffer, null, packname, author, ['🤖'], {
                     'android-app-store-link': 'https://github.com/kiznaiverr/chisato-md',
                     'ios-app-store-link': 'https://github.com/kiznaiverr/chisato-md'
@@ -111,7 +101,6 @@ export default {
                 return await reply(`❌ ${font.smallCaps('Failed to create sticker! Please try with a different image/video')}.`)
             }
             
-            // Send as sticker
             await sock.sendMessage(msg.key.remoteJid, {
                 sticker: stickerBuffer
             })
@@ -141,7 +130,6 @@ export default {
     }
 }
 
-// Helper function to convert Readable stream to Buffer
 async function streamToBuffer(stream) {
     const chunks = []
     for await (const chunk of stream) {

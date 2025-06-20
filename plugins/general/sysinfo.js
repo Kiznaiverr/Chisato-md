@@ -14,13 +14,11 @@ export default {
         try {
             await react('🕔')
             
-            // Get basic info
             const platform = os.platform()
             const arch = os.arch()
             const hostname = os.hostname()
             const uptime = os.uptime()
             
-            // Get detailed system info using systeminformation
             const [cpu, mem, osInfo, graphics, fsSize, networkInterfaces, battery] = await Promise.all([
                 si.cpu(),
                 si.mem(),
@@ -31,13 +29,11 @@ export default {
                 si.battery()
             ])
             
-            // Format uptime
             const days = Math.floor(uptime / 86400)
             const hours = Math.floor((uptime % 86400) / 3600)
             const minutes = Math.floor((uptime % 3600) / 60)
             const uptimeStr = `${days}d ${hours}h ${minutes}m`
             
-            // Format bytes
             const formatBytes = (bytes) => {
                 if (bytes === 0) return '0 B'
                 const k = 1024
@@ -46,27 +42,22 @@ export default {
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i]
             }
             
-            // Get memory usage percentage
             const memUsagePercent = ((mem.used / mem.total) * 100).toFixed(1)
             
-            // Get main storage info
             const mainDisk = fsSize[0] || {}
             const storageUsed = mainDisk.used || 0
             const storageTotal = mainDisk.size || 0
             const storagePercent = storageTotal > 0 ? ((storageUsed / storageTotal) * 100).toFixed(1) : '0'
             
-            // Get GPU info
             const gpuInfo = graphics.controllers && graphics.controllers.length > 0 
                 ? graphics.controllers[0].model || font.smallCaps('Unknown GPU')
                 : font.smallCaps('No GPU detected')
                 
-            // Get network info
             const activeNetworks = networkInterfaces.filter(net => net.operstate === 'up' && !net.internal)
             const networkInfo = activeNetworks.length > 0 
                 ? `${activeNetworks[0].iface} (${activeNetworks[0].type})`
                 : font.smallCaps('No active network')
             
-            // Bot process info
             const processMemory = process.memoryUsage()
             const botMemUsed = (processMemory.heapUsed / 1024 / 1024).toFixed(1)
             const botMemTotal = (processMemory.heapTotal / 1024 / 1024).toFixed(1)

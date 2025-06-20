@@ -85,12 +85,10 @@ export default {
                     return;
             }
 
-            // Initialize whitelist if not exists
             if (!db[groupId].antilinkWhitelist) {
                 db[groupId].antilinkWhitelist = ['youtube.com', 'youtu.be', 'github.com'];
             }
 
-            // Save database
             fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));        } catch (error) {
             console.error('Antilink command error:', error);
             await sock.sendMessage(m.key.remoteJid, {

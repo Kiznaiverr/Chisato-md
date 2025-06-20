@@ -10,7 +10,6 @@ export default {
     async execute(context) {
         const { reply, msg, db } = context
         
-        // Get mentioned users
         const mentioned = msg.message.extendedTextMessage?.contextInfo?.mentionedJid || []
         
         if (mentioned.length === 0) {
@@ -19,7 +18,6 @@ export default {
         
         const target = mentioned[0]
         
-        // Check if target is owner
         if (db.isOwner(target)) {
             return await reply(`❌ ${font.smallCaps('Cannot ban bot owner')}!`)
         }
