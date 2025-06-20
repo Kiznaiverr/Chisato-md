@@ -72,9 +72,8 @@ export default {
             const icon = categoryIcons[requestedCategory] || '📂'
             const categoryName = requestedCategory.charAt(0).toUpperCase() + requestedCategory.slice(1)
 
-            let categoryMenuText = `╭───────────────╮\n`
-            categoryMenuText += `│  ${icon} ${font.smallCaps(categoryName + ' Menu')}  │\n`
-            categoryMenuText += `╰───────────────╯\n\n`
+            let categoryMenuText = `Halo @${msg.pushName || 'User'}, aku Chisato!\n`
+            categoryMenuText += `Ini adalah menu kategori ${categoryName}. Kamu bisa lihat semua command yang tersedia di kategori ini. Tinggal pilih dan pakai sesuai kebutuhan kamu ya! 😊\n\n`
             categoryMenuText += `👤 ${font.smallCaps('user')}: ${userName}\n`
             categoryMenuText += `🏷️ ${font.smallCaps('status')}: ${premiumText}\n`
             categoryMenuText += `⚡ ${font.smallCaps('limit')}: ${userLimit}/${maxLimit}\n`
@@ -87,7 +86,10 @@ export default {
             } else {
                 categoryMenuText += `📋 ${font.smallCaps(categoryName + ' Commands')} (${categoryPlugins.length}):\n\n`
                 
-                categoryPlugins.forEach((plugin, index) => {
+                // Sort commands alphabetically
+                const sortedPlugins = categoryPlugins.sort((a, b) => a.command.localeCompare(b.command))
+                
+                sortedPlugins.forEach((plugin, index) => {
                     const aliases = plugin.aliases && plugin.aliases.length > 0 ? ` (${plugin.aliases.map(alias => font.smallCaps(alias)).join(', ')})` : ''
                     
                     let usageText = ''
@@ -136,9 +138,9 @@ export default {
         
         // HEADER
         let menuText = ''
-        menuText += `╭───────────────╮\n`
-        menuText += `│    🤖 ${font.smallCaps('chisato - menu')}    │\n`
-        menuText += `╰───────────────╯\n\n`
+        menuText += `Halo @${msg.pushName || 'User'}, aku Chisato!\n`
+        menuText += `Aku WhatsApp bot yang bisa bantu kamu dalam berbagai hal. Dari download video, tools berguna, hiburan, sampai fitur-fitur keren lainnya!\n\n`
+        menuText += `Pilih kategori di bawah ini untuk lihat command apa aja yang tersedia. Mudah kok, tinggal ketik aja! 😄\n\n`
         menuText += `👤 ${font.smallCaps('user')}: ${userName}\n`
         menuText += `🏷️ ${font.smallCaps('status')}: ${premiumText}\n`
         menuText += `⚡ ${font.smallCaps('limit')}: ${userLimit}/${maxLimit}\n`

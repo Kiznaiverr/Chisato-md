@@ -32,9 +32,9 @@ export default {
 
         // HEADER
         let menuText = ''
-        menuText += `╭───────────────╮\n`
-        menuText += `│   🤖 ${font.smallCaps('chisato - all cmd')}   │\n`
-        menuText += `╰───────────────╯\n\n`
+        menuText += `Halo @${msg.pushName || 'User'}, aku Chisato!\n`
+        menuText += `Aku adalah WhatsApp bot yang siap membantu kamu kapan saja. Mulai dari download, tools, hiburan, sampai berbagai fitur menarik lainnya - semua bisa kamu akses dengan mudah!\n\n`
+        menuText += `Ada ${plugins.length}+ command yang bisa kamu pakai. Tinggal ketik aja commandnya dan aku akan langsung respond! 🚀\n\n`
         menuText += `👤 ${font.smallCaps('user')}: ${userName}\n`
         menuText += `🏷️ ${font.smallCaps('status')}: ${premiumText}\n`
         menuText += `⚡ ${font.smallCaps('limit')}: ${userLimit}/${maxLimit}\n`
@@ -53,15 +53,17 @@ export default {
             'media': '🎨',
             'tools': '🔧',
             'search': '🔍',
-            'downloader': '📥'
-        }
+            'downloader': '📥'        }
           
         sortedCats.forEach(cat => {
             const icon = categoryIcons[cat] || '📂'
             const categoryName = cat.charAt(0).toUpperCase() + cat.slice(1)
             menuText += `${icon} ${font.smallCaps(categoryName + ' commands')}:\n`
             
-            categories[cat].forEach(plugin => {
+            // Sort commands alphabetically within each category
+            const sortedPlugins = categories[cat].sort((a, b) => a.command.localeCompare(b.command))
+            
+            sortedPlugins.forEach(plugin => {
                 let usage = ''
                 if (plugin.usage) {
                     usage = ` • ${plugin.usage.replace(/<([^>]+)>/g, (match, content) => {
@@ -105,3 +107,4 @@ export default {
         }
     }
 }
+
