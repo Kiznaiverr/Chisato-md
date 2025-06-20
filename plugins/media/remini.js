@@ -6,7 +6,7 @@ import font from '../../lib/font.js';
 export default {
   command: 'remini',
   aliases: ['hd'],
-  category: 'tools',
+  category: 'media',
   description: 'Enhance photo (Remini AI)',
   usage: '',
   cooldown: 10,
