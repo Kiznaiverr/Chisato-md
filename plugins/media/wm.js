@@ -27,41 +27,63 @@ export default {
             
             if (!author) author = ''
             
-            const quotedMessage = msg.message.extendedTextMessage?.contextInfo?.quotedMessage
+            let mediaMessage = null
+            let downloadMessage = null
+            let fileSize = 0
+            let isSticker = false
             
-            if (!quotedMessage) {
-                await react('❌')
-                return await reply(`❌ ${font.smallCaps('Please reply to an image or video')}!\n\n💡 ${font.smallCaps('Usage')}:\n1. ${font.smallCaps('Reply to an image/video')}\n2. ${font.smallCaps('Type .wm PackName | AuthorName')}`)
-            }
-            
-            const quotedType = getContentType(quotedMessage)
-            let mediaMessage, downloadMessage, fileSize = 0, isSticker = false
-            if (quotedType === 'imageMessage' || quotedType === 'videoMessage') {
-                mediaMessage = quotedMessage[quotedType]
-                downloadMessage = {
-                    key: {
-                        remoteJid: msg.key.remoteJid,
-                        id: msg.message.extendedTextMessage.contextInfo.stanzaId,
-                        participant: msg.message.extendedTextMessage.contextInfo.participant
-                    },
-                    message: quotedMessage
-                }
+            // Check if current message contains media
+            const messageType = getContentType(msg.message)
+            if (messageType === 'imageMessage' || messageType === 'videoMessage') {
+                mediaMessage = msg.message[messageType]
+                downloadMessage = msg
                 fileSize = mediaMessage.fileLength || 0
-            } else if (quotedType === 'stickerMessage') {
+            } else if (messageType === 'stickerMessage') {
+                mediaMessage = msg.message[messageType]
+                downloadMessage = msg
+                fileSize = mediaMessage.fileLength || 0
                 isSticker = true
-                mediaMessage = quotedMessage[quotedType]
-                downloadMessage = {
-                    key: {
-                        remoteJid: msg.key.remoteJid,
-                        id: msg.message.extendedTextMessage.contextInfo.stanzaId,
-                        participant: msg.message.extendedTextMessage.contextInfo.participant
-                    },
-                    message: quotedMessage
-                }
+            } else if (messageType === 'documentMessage' && (msg.message.documentMessage.mimetype?.startsWith('image/') || msg.message.documentMessage.mimetype?.startsWith('video/'))) {
+                mediaMessage = msg.message.documentMessage
+                downloadMessage = msg
                 fileSize = mediaMessage.fileLength || 0
             } else {
-                await react('❌')
-                return await reply(`❌ ${font.smallCaps('Please reply to an image, video, or sticker')}!`)
+                // Try to get from quoted message
+                const quotedMessage = msg.message.extendedTextMessage?.contextInfo?.quotedMessage
+                
+                if (!quotedMessage) {
+                    await react('❌')
+                    return await reply(`❌ ${font.smallCaps('Please send media with caption or reply to media')}!\n\n💡 ${font.smallCaps('Usage')}:\n• ${font.smallCaps('Send image/video with caption: .wm PackName | AuthorName')}\n• ${font.smallCaps('Reply to image/video: .wm PackName | AuthorName')}`)
+                }
+                
+                const quotedType = getContentType(quotedMessage)
+                if (quotedType === 'imageMessage' || quotedType === 'videoMessage') {
+                    mediaMessage = quotedMessage[quotedType]
+                    downloadMessage = {
+                        key: {
+                            remoteJid: msg.key.remoteJid,
+                            id: msg.message.extendedTextMessage.contextInfo.stanzaId,
+                            participant: msg.message.extendedTextMessage.contextInfo.participant
+                        },
+                        message: quotedMessage
+                    }
+                    fileSize = mediaMessage.fileLength || 0
+                } else if (quotedType === 'stickerMessage') {
+                    isSticker = true
+                    mediaMessage = quotedMessage[quotedType]
+                    downloadMessage = {
+                        key: {
+                            remoteJid: msg.key.remoteJid,
+                            id: msg.message.extendedTextMessage.contextInfo.stanzaId,
+                            participant: msg.message.extendedTextMessage.contextInfo.participant
+                        },
+                        message: quotedMessage
+                    }
+                    fileSize = mediaMessage.fileLength || 0
+                } else {
+                    await react('❌')
+                    return await reply(`❌ ${font.smallCaps('Please reply to an image, video, or sticker')}!`)
+                }
             }
             if (fileSize > 15 * 1024 * 1024) {
                 await react('❌')

@@ -8,41 +8,43 @@ export default {
     usage: '',
     cooldown: 5,
     async execute(context) {
-        const { reply, sock, config } = context
+        const { reply, sock, config, msg } = context
         
         const ownerInfo = config.get('ownerSettings')
         const botInfo = config.get('botSettings')
         
-        const ownerText = `
-👨‍💻 ${font.bold(font.smallCaps('BOT OWNER'))}
-
-📱 ${font.bold(font.smallCaps('Name'))}: ${font.smallCaps(ownerInfo.ownerName || 'Bot Owner')}
-📞 ${font.bold(font.smallCaps('Number'))}: +${ownerInfo.ownerNumber || font.smallCaps('Not Set')}
-🤖 ${font.bold(font.smallCaps('Bot'))}: ${font.smallCaps(botInfo.botName || 'Chisato-MD')}
-🌐 ${font.bold(font.smallCaps('Version'))}: ${botInfo.version || '1.0.0'}
-
-💻 ${font.bold(font.smallCaps('About Owner'))}:
-${font.smallCaps('Passionate developer specializing in WhatsApp bot development using modern technologies like Baileys, Node.js, and JavaScript')}
-
-🛠️ ${font.bold(font.smallCaps('Services'))}:
-• ${font.smallCaps('WhatsApp Bot Development')}
-• ${font.smallCaps('Custom Plugin Development')}
-• ${font.smallCaps('Bot Maintenance & Support')}
-• ${font.smallCaps('API Integration')}
-
-💎 ${font.bold(font.smallCaps('This Bot Features'))}:
-• ${font.smallCaps('Modern Plugin System')}
-• ${font.smallCaps('Local JSON Database')}
-• ${font.smallCaps('User Profile Management')}
-• ${font.smallCaps('Group Administration')}
-• ${font.smallCaps('Auto Response System')}
-
-📝 ${font.bold(font.smallCaps('Want a custom bot'))}?
-${font.smallCaps('Contact the owner through the number above for bot services')}!
-
-🙏 ${font.bold(font.smallCaps('Support the project'))}:
-${font.smallCaps('Give a')} ⭐ ${font.smallCaps('if you like this bot')}!
-        `.trim()
-          await reply(ownerText)
+        // Send owner contact if number is available
+        if (ownerInfo.ownerNumber) {
+            try {
+                // Clean the phone number (remove any non-numeric characters)
+                let cleanNumber = ownerInfo.ownerNumber.replace(/[^\d]/g, '')
+                
+                // VCard format exactly like the documentation
+                const vcard = 'BEGIN:VCARD\n'
+                    + 'VERSION:3.0\n'
+                    + `FN:${ownerInfo.ownerName || 'Bot Owner'}\n`
+                    + `ORG:${botInfo.botName || 'Chisato-MD'} Developer;\n`
+                    + 'TITLE:Bot Developer & Creator\n'
+                    + `TEL;type=CELL;type=VOICE;waid=${cleanNumber}:+${cleanNumber}\n`
+                    + 'URL;type=WORK:https://kiznavierr.my.id\n'
+                    + 'URL;type=HOME:https://github.com/kiznaiverr/chisato-md\n'
+                    + 'EMAIL;type=WORK:contact@kiznavierr.my.id\n'
+                    + 'END:VCARD'
+                
+                // Send contact exactly like the documentation
+                await sock.sendMessage(msg.key.remoteJid, {
+                    contacts: {
+                        displayName: ownerInfo.ownerName || 'Bot Owner',
+                        contacts: [{ vcard }]
+                    }
+                }, { quoted: msg })
+                
+            } catch (error) {
+                console.error('Error sending contact:', error)
+                await reply(`❌ ${font.smallCaps('Failed to send owner contact')}. ${font.smallCaps('Please contact manually')}: +${ownerInfo.ownerNumber}`)
+            }
+        } else {
+            await reply(`⚠️ ${font.smallCaps('Owner number not configured in bot settings')}.`)
+        }
     }
 }
