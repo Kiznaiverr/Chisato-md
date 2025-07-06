@@ -1,6 +1,22 @@
 import path from 'path'
 import fs from 'fs'
+import os from 'os'
 import font from '../../lib/font.js'
+
+const runtimes = (seconds) => {
+    seconds = Number(seconds)
+    var d = Math.floor(seconds / (3600 * 24))
+    var h = Math.floor(seconds % (3600 * 24) / 3600)
+    var m = Math.floor(seconds % 3600 / 60)
+    var s = Math.floor(seconds % 60)
+    var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : ""
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : ""
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : ""
+    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : ""
+    return dDisplay + hDisplay + mDisplay + sDisplay
+}
+
+const readMore = String.fromCharCode(8206).repeat(4001)
 
 export default {
     command: 'allmenu',
@@ -10,100 +26,120 @@ export default {
     usage: '',
     cooldown: 3,
 
-    async execute({ reply, db, sender, plugins, prefix, sock, msg }) {
-        const isOwner = db.isOwner(sender)
-        const isAdmin = db.isAdmin(sender)
-        const botName = font.smallCaps('Chisato')
-        const userName = db.getUser ? font.smallCaps(db.getUser(sender)?.name || 'User') : font.smallCaps('User')
-        const userLimit = db.getUser ? (db.getUser(sender)?.limit ?? 0) : 0
-        const maxLimit = db.getSetting ? (db.getSetting('dailyLimit') || 10) : 10
-        const premiumText = isOwner ? font.smallCaps('Owner') : (db.isPremium ? (db.isPremium(sender) ? font.smallCaps('Premium') : font.smallCaps('Free')) : font.smallCaps('Free'))
-
-        // Group plugins by category, filter by permission
-        const categories = {}
-        for (const plugin of plugins) {
-            if (plugin.ownerOnly && !isOwner) continue
-            if (plugin.adminOnly && !isAdmin && !isOwner) continue
-            const cat = (plugin.category || 'other').toLowerCase()
-            if (!categories[cat]) categories[cat] = []
-            categories[cat].push(plugin)
-        }
-        const sortedCats = Object.keys(categories).sort()
-
-        // HEADER
-        let menuText = ''
-        menuText += `Halo @${msg.pushName || 'User'}, aku Chisato!\n`
-        menuText += `Aku adalah WhatsApp bot yang siap membantu kamu kapan saja. Mulai dari download, tools, hiburan, sampai berbagai fitur menarik lainnya - semua bisa kamu akses dengan mudah!\n\n`
-        menuText += `Ada ${plugins.length}+ command yang bisa kamu pakai. Tinggal ketik aja commandnya dan aku akan langsung respond! 🚀\n\n`
-        menuText += `👤 ${font.smallCaps('user')}: ${userName}\n`
-        menuText += `🏷️ ${font.smallCaps('status')}: ${premiumText}\n`
-        menuText += `⚡ ${font.smallCaps('limit')}: ${userLimit}/${maxLimit}\n`
-        menuText += `🕒 ${font.smallCaps('time')}: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}\n\n`
-        menuText += `━━━━━━━━━━━━━━━\n`
-        menuText += `📚 ${font.smallCaps('semua command tersedia')}:\n\n`
-        
-        // MENU KATEGORI
-        const categoryIcons = {
-            'admin': '👑',
-            'owner': '🔱',
-            'general': '📋',
-            'user': '👤',
-            'group': '👥',
-            'fun': '🎮',
-            'media': '🎨',
-            'tools': '🔧',
-            'search': '🔍',
-            'downloader': '📥'        }
-          
-        sortedCats.forEach(cat => {
-            const icon = categoryIcons[cat] || '📂'
-            const categoryName = cat.charAt(0).toUpperCase() + cat.slice(1)
-            menuText += `${icon} ${font.smallCaps(categoryName + ' commands')}:\n`
-            
-            // Sort commands alphabetically within each category
-            const sortedPlugins = categories[cat].sort((a, b) => a.command.localeCompare(b.command))
-            
-            sortedPlugins.forEach(plugin => {
-                let usage = ''
-                if (plugin.usage) {
-                    usage = ` • ${plugin.usage.replace(/<([^>]+)>/g, (match, content) => {
-                        return `<${font.smallCaps(content)}>`
-                    }).replace(/\[([^\]]+)\]/g, (match, content) => {
-                        return `[${font.smallCaps(content)}]`
-                    }).replace(/@(\w+)/g, (match, content) => {
-                        return `@${font.smallCaps(content)}`
-                    })}`
-                }
-                
-                const commandName = font.smallCaps(plugin.command)
-                menuText += `  ◦ ${prefix}${commandName}${usage}\n`
-            })
-            menuText += `\n`
-        })
-        
-        menuText += `━━━━━━━━━━━━━━━\n`
-        menuText += `📊 ${font.smallCaps('total commands')}: ${plugins.filter(p => {
-            if (p.ownerOnly && !isOwner) return false
-            if (p.adminOnly && !isAdmin && !isOwner) return false
-            return true
-        }).length}\n\n`
-        menuText += `💡 ${font.smallCaps('tips')}: ${font.smallCaps('gunakan')} .${font.smallCaps('menu')} ${font.smallCaps('untuk tampilan kategori')}\n\n`
-        menuText += `🤖 ${font.smallCaps('powered by chisato-md | created by kiznavierr')}`
-        
+    async execute({ reply, db, sender, plugins, prefix, sock, msg, config }) {
         try {
-            const bannerPath = path.join(process.cwd(), 'images', 'banner', 'Chisato.jpg')
+            const isOwner = db.isOwner(sender)
+            const isAdmin = db.isAdmin(sender)
+            const user = db.getUser(sender)
+            const botSettings = config.get('botSettings')
+            const ownerSettings = config.get('ownerSettings')
             
-            if (fs.existsSync(bannerPath)) {
-                await sock.sendMessage(msg.key.remoteJid, {
-                    image: fs.readFileSync(bannerPath),
-                    caption: menuText
-                }, { quoted: msg })
-            } else {
-                return reply(menuText)
+            const userName = user?.name || msg.pushName || 'User'
+            const userLimit = user?.limit ?? 0
+            const maxLimit = db.getSetting ? (db.getSetting('dailyLimit') || 50) : 50
+            const isPremium = db.isPremium ? db.isPremium(sender) : false
+            const premiumText = isOwner ? 'Owner' : (isPremium ? 'Premium' : 'Free')
+            const uptime = runtimes(process.uptime())
+            
+            // Get database size
+            let dbSize = 'Unknown'
+            try {
+                const dbPath = path.join(process.cwd(), 'database', 'users.json')
+                if (fs.existsSync(dbPath)) {
+                    const dbSizeBytes = fs.statSync(dbPath).size
+                    dbSize = dbSizeBytes > 1000000 
+                        ? `${(dbSizeBytes / 1000000).toFixed(2)} MB` 
+                        : `${(dbSizeBytes / 1000).toFixed(2)} KB`
+                }
+            } catch (error) {
+                dbSize = 'Unknown'
             }
+
+            // Group plugins by category
+            const categories = {}
+            const availablePlugins = plugins.filter(plugin => {
+                if (plugin.ownerOnly && !isOwner) return false
+                if (plugin.adminOnly && !isAdmin && !isOwner) return false
+                return true
+            })
+
+            for (const plugin of availablePlugins) {
+                const cat = (plugin.category || 'other').toLowerCase()
+                if (!categories[cat]) categories[cat] = []
+                categories[cat].push(plugin)
+            }
+
+            const categoryIcons = {
+                'admin': '👑',
+                'owner': '🔱',
+                'general': '📋',
+                'user': '👤',
+                'group': '👥',
+                'fun': '🎮',
+                'media': '🎨',
+                'tools': '🔧',
+                'search': '🔍',
+                'downloader': '📥',
+                'ai': '🤖'
+            }
+
+            // Build menu text
+            let menuText = `${font.smallCaps('Hello')}! ${userName}, ${font.smallCaps("I'm")} ${botSettings.botName || font.smallCaps('Chisato')}, ${font.smallCaps('a WhatsApp-based smart assistant who is here to help you')}.
+
+⛨〡︎ *${font.smallCaps('Premium')}:* ${premiumText} 🅟
+⛨〡︎ *${font.smallCaps('Limit')}:* ${userLimit}/${maxLimit} 🅛
+⛨〡 *${font.smallCaps('Uptime')}* : *${uptime}*
+⛨〡 *${font.smallCaps('Version')}* : *2.0.0*
+⛨〡 *${font.smallCaps('Prefix Used')}* : *[ ${prefix} ]*
+⛨〡︎ *${font.smallCaps('HomePage')}:* https://kiznavierr.my.id
+⛨〡︎ *${font.smallCaps('Database')}:* ${dbSize}
+
+${font.smallCaps('What can I do for you? I am designed to provide information, perform specific tasks, and provide direct support via WhatsApp messages')}.
+${readMore}
+
+`
+
+            const sortedCats = Object.keys(categories).sort()
+            
+            sortedCats.forEach(cat => {
+                const icon = categoryIcons[cat] || '📂'
+                const categoryName = cat.charAt(0).toUpperCase() + cat.slice(1)
+                
+                menuText += `*╭─────⋠ ${font.smallCaps(categoryName.toUpperCase())} ⋡*\n`
+                
+                const sortedPlugins = categories[cat].sort((a, b) => a.command.localeCompare(b.command))
+                
+                sortedPlugins.forEach(plugin => {
+                    const isPremiumCmd = plugin.premium ? '🅟' : ''
+                    const isLimitCmd = plugin.limit ? '🅛' : ''
+                    menuText += `*╎❈* ${prefix}${font.smallCaps(plugin.command)} ${isPremiumCmd} ${isLimitCmd}\n`
+                })
+                
+                menuText += `*╰────────〢*\n\n`
+            })
+
+            menuText += `🤖 ${font.smallCaps('powered by chisato-md | created by kiznavierr')}`
+
+            // Send with external ad reply
+            await sock.sendMessage(msg.key.remoteJid, {
+                text: menuText,
+                contextInfo: {
+                    externalAdReply: {
+                        title: botSettings.botName || 'Chisato-MD',
+                        body: ownerSettings.ownerName || 'Kiznavierr',
+                        thumbnail: fs.existsSync(path.join(process.cwd(), 'images', 'banner', 'Chisato.jpg')) 
+                            ? fs.readFileSync(path.join(process.cwd(), 'images', 'banner', 'Chisato.jpg'))
+                            : Buffer.alloc(0),
+                        sourceUrl: 'https://github.com/kiznaiverr/chisato-md',
+                        mediaType: 1,
+                        renderLargerThumbnail: true,
+                    }
+                }
+            }, { quoted: msg })
+
         } catch (error) {
-            console.error('Error sending allmenu with image:', error)
-            return reply(menuText)
+            console.error('Allmenu error:', error)
+            return reply('❌ Failed to generate allmenu. Please try again.')
         }
     }
 }
