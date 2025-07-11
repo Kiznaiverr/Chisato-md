@@ -1,14 +1,14 @@
 import { makeWASocket, DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion } from '@whiskeysockets/baileys'
 import qrcode from 'qrcode-terminal'
-import chalk from 'chalk'
 import pino from 'pino'
 import { Handler } from './lib/handler.js'
 import { Database } from './lib/database.js'
 import { loadPlugins, startAutoReload, stopAutoReload } from './lib/loader.js'
 import config from './lib/config.js'
+import logger from './lib/logger.js'
 
-// Initialize logger
-const logger = pino({ 
+// Initialize Pino logger for Baileys
+const pinoLogger = pino({ 
     level: 'error',
     transport: {
         target: 'pino-pretty',
@@ -28,27 +28,24 @@ const plugins = await loadPlugins()
 let handler = null
 
 // Enhanced startup banner
-console.log(chalk.cyan('\n╔══════════════════════════════════════╗'))
-console.log(chalk.cyan('║') + chalk.bold.blue(`        🤖 ${config.getBotName()}         `) + chalk.cyan('║'))
-console.log(chalk.cyan('║') + chalk.white('     WhatsApp Multi-Device Bot    ') + chalk.cyan('║'))
-console.log(chalk.cyan('║') + chalk.gray(`        Created by ${config.get('botSettings', 'author')}      `) + chalk.cyan('║'))
-console.log(chalk.cyan('╚══════════════════════════════════════╝'))
-
-console.log(chalk.green('\n🚀 Initializing bot systems...'))
-console.log(chalk.yellow(`📦 Loaded ${plugins.length} plugins successfully`))
-console.log(chalk.cyan(`⚙️  Prefix: ${config.getPrefix()}`))
-console.log(chalk.cyan(`👑 Owners: ${config.getOwners().length} configured`))
-console.log(chalk.blue('🔧 Setting up WhatsApp connection...\n'))
+logger.banner()
+logger.system(`Initializing ${config.getBotName()}`)
+logger.system(`Created by ${config.get('botSettings', 'author')}`)
+logger.separator()
+logger.plugin(`Loaded ${plugins.length} plugins successfully`)
+logger.system(`Prefix: ${config.getPrefix()}`)
+logger.system(`Owners: ${config.getOwners().length} configured`)
+logger.connection('Setting up WhatsApp connection...')
 
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState('./session')
     const { version, isLatest } = await fetchLatestBaileysVersion()
     
-    console.log(chalk.yellow(`📦 Using WA v${version.join('.')}, isLatest: ${isLatest}`))
+    logger.system(`Using WA v${version.join('.')}, isLatest: ${isLatest}`)
 
     const sock = makeWASocket({
         version,
-        logger,
+        logger: pinoLogger,
         printQRInTerminal: false,
         auth: state,
         browser: [config.getBotName(), 'Chrome', '3.0'],
@@ -72,30 +69,28 @@ async function startBot() {
     sock.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect, qr } = update
           if (qr) {
-            console.log(chalk.cyan('┌─────────────────────────────────────┐'))
-            console.log(chalk.cyan('│') + chalk.bold.yellow('  📱 Scan QR Code to Connect Bot   ') + chalk.cyan('│'))
-            console.log(chalk.cyan('└─────────────────────────────────────┘'))
+            logger.connection('QR Code generated - scan to connect')
+            logger.separator()
             qrcode.generate(qr, { small: true })
+            logger.separator()
         }
           if (connection === 'close') {
             const shouldReconnect = (lastDisconnect?.error)?.output?.statusCode !== DisconnectReason.loggedOut
-            console.log(chalk.red('❌ Connection closed:'), lastDisconnect.error)
+            logger.error('Connection closed:', lastDisconnect.error)
             if (shouldReconnect) {
-                console.log(chalk.yellow('🔄 Reconnecting in 3 seconds...'))
+                logger.connection('Reconnecting in 3 seconds...')
                 setTimeout(startBot, 3000)
             } else {
-                console.log(chalk.red('🚪 Logged out. Please restart bot.'))
+                logger.connection('Logged out. Please restart bot.')
             }        } else if (connection === 'open') {
             const botNumber = sock.user.id.split(':')[0]
             const currentTime = new Date().toLocaleTimeString('id-ID')
             
-            console.log(chalk.green('┌─────────────────────────────────────┐'))
-            console.log(chalk.green('│') + chalk.bold.white('   ✅ Bot Connected Successfully!   ') + chalk.green('│'))
-            console.log(chalk.green('│') + chalk.cyan(`   📱 Number: ${botNumber}`) + ' '.repeat(Math.max(0, 37 - 15 - botNumber.length)) + chalk.green('│'))
-            console.log(chalk.green('│') + chalk.magenta(`   🕒 Time: ${currentTime}`) + ' '.repeat(Math.max(0, 37 - 12 - currentTime.length)) + chalk.green('│'))
-            console.log(chalk.green('└─────────────────────────────────────┘'))
-            console.log(chalk.yellow('📬 Bot is now ready to receive messages!'))
-            console.log(chalk.cyan('🔄 Auto-reload is active - plugins will reload on file changes\n'))
+            logger.success('Bot connected successfully!')
+            logger.system(`Number: ${botNumber}`)
+            logger.system(`Time: ${currentTime}`)
+            logger.success('Bot is now ready to receive messages!')
+            logger.system('Auto-reload is active - plugins will reload on file changes')
         }
     })
 
@@ -109,23 +104,23 @@ async function startBot() {
 
 // Start the bot
 startBot().catch(err => {
-    console.error(chalk.red('❌ Error starting bot:'), err)
+    logger.error('Error starting bot:', err)
     process.exit(1)
 })
 
 // Handle process termination
 process.on('SIGINT', () => {
-    console.log(chalk.yellow('\n🛑 Bot stopped by user'))
+    logger.system('Bot stopped by user')
     stopAutoReload()
     process.exit(0)
 })
 
 process.on('uncaughtException', (err) => {
-    console.error(chalk.red('❌ Uncaught Exception:'), err)
+    logger.error('Uncaught Exception:', err)
     stopAutoReload()
 })
 
 process.on('unhandledRejection', (err) => {
-    console.error(chalk.red('❌ Unhandled Rejection:'), err)
+    logger.error('Unhandled Rejection:', err)
     stopAutoReload()
 })
