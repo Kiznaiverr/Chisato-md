@@ -1,53 +1,85 @@
-import fetch from 'node-fetch';
+import { youtubeSearch, youtubeAudio } from '../../lib/scraper/youtube.js';
 import font from '../../lib/font.js';
 
 export default {
   command: 'play',
   aliases: ['ytplay', 'playmp3'],
-  tags: ['downloader', 'music'],
-  help: ['<query>'],
-  limit: false,
-  premium: false,
-  groupOnly: false,
-  privateOnly: false,
-  desc: 'play youtube audio',
-  async execute(ctx) {
-    const query = ctx.args.join(' ');
-    if (!query) return ctx.reply(`${font.smallCaps('Masukkan judul atau kata kunci YouTube')}!`);
-    await ctx.react('🕔');
+  category: 'downloader',
+  description: 'Play audio YouTube dari query pencarian',
+  usage: '<query>',
+  limit: 1,
+  cooldown: 10,
+
+  async execute({ args, reply, sock, msg, react }) {
+    const query = args.join(' ');
+    if (!query) {
+      return reply(`${font.smallCaps('Masukkan judul atau kata kunci YouTube')}!\n\n` +
+                  `${font.smallCaps('Contoh')}: .play viva la vida`);
+    }
+
+    await react('🕔');
+    
     try {
-      const url = `https://api.nekoyama.my.id/api/downloader/yt-play?query=${encodeURIComponent(query)}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`${font.smallCaps('Gagal fetch API')}`);
-      const json = await res.json();
-      if (json.status !== 'success' || !json.data) {
-        await ctx.react('❌');
-        return ctx.reply(`${font.smallCaps('Tidak ada hasil ditemukan')}!`);
+      await react('🔍');
+      
+      // Search for the video
+      const searchResult = await youtubeSearch(query);
+      
+      await react('📊');
+      
+      // Send thumbnail with metadata
+      const caption = `${font.smallCaps('🎵 Audio ditemukan!')}\n\n` +
+                     `${font.smallCaps('📝 Judul')}: ${searchResult.title}\n` +
+                     `${font.smallCaps('👤 Channel')}: ${searchResult.author}\n` +
+                     `${font.smallCaps('⏱️ Durasi')}: ${searchResult.duration}\n` +
+                     `${font.smallCaps('👁️ Views')}: ${searchResult.views}\n\n` +
+                     `${font.smallCaps('⏳ Sedang mendownload...')}`;
+
+      await sock.sendMessage(msg.key.remoteJid, {
+        image: { url: searchResult.thumbnail },
+        caption
+      }, { quoted: msg });
+
+      await react('⬇️');
+      
+      // Download audio
+      const audioData = await youtubeAudio(searchResult.url, 'highest');
+      
+      if (!audioData.success || !audioData.buffer) {
+        await react('❌');
+        return reply(font.smallCaps('Gagal mendownload audio. Silakan coba lagi.'));
       }
-      const d = json.data;
-      const caption = `${font.bold(font.smallCaps('YouTube Play Result'))}
+      
+      // Check file size (max 100MB for WhatsApp)
+      const sizeInMB = audioData.buffer.length / 1024 / 1024;
+      if (sizeInMB > 100) {
+        await react('⚠️');
+        return reply(`${font.smallCaps('File terlalu besar')} (${audioData.size})!\n\n` +
+                    `${font.smallCaps('Coba dengan kata kunci yang lebih spesifik atau video yang lebih pendek')}.`);
+      }
 
-${font.bold(font.smallCaps('Judul'))}: ${d.title}
-${font.bold(font.smallCaps('Durasi'))}: ${d.duration}
-${font.bold(font.smallCaps('Video ID'))}: ${d.video_id}
-${font.bold(font.smallCaps('URL'))}: ${d.url}
+      await react('✅');
+      
+      // Send audio
+      const audioCaption = `${font.smallCaps('✅ Audio berhasil didownload!')}\n\n` +
+                          `${font.smallCaps('📝 Judul')}: ${audioData.title}\n` +
+                          `${font.smallCaps('👤 Channel')}: ${audioData.author}\n` +
+                          `${font.smallCaps('🎵 Bitrate')}: ${audioData.bitrate}\n` +
+                          `${font.smallCaps('📦 Ukuran')}: ${audioData.size}\n` +
+                          `${font.smallCaps('🗂️ Format')}: ${audioData.container}`;
 
-${font.smallCaps('Powered by')}: ${json.powered_by}`;
-      await ctx.sock.sendMessage(ctx.msg.key.remoteJid, {
-        image: { url: d.thumbnail },
-        caption,
-        jpegThumbnail: undefined
-      }, { quoted: ctx.msg });
-      await ctx.sock.sendMessage(ctx.msg.key.remoteJid, {
-        audio: { url: d.url },
+      await sock.sendMessage(msg.key.remoteJid, {
+        audio: audioData.buffer,
+        caption: audioCaption,
         mimetype: 'audio/mp4',
-        fileName: d.title + '.mp3',
-        ptt: false
-      }, { quoted: ctx.msg });
-      await ctx.react('✅');
-    } catch (e) {
-      await ctx.react('❌');
-      ctx.reply(`${font.smallCaps('Gagal mengambil audio YouTube')}!`);
+        fileName: `${audioData.title.substring(0, 50)}.${audioData.container}`
+      }, { quoted: msg });
+
+    } catch (error) {
+      await react('❌');
+      console.error('Play Error:', error);
+      
+      reply(font.smallCaps('Gagal mencari atau mendownload audio!'));
     }
   }
 };

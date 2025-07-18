@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { uploadToChisatoCDN } from '../../lib/chisato-CDN.js';
+import { uploadToPomf2 } from '../../lib/scraper/pomf2.js';
+import { imageEnhancerV2 } from '../../lib/scraper/huggingface.js';
 import { downloadMediaMessage, getContentType } from '@whiskeysockets/baileys';
 import font from '../../lib/font.js';
+import fs from 'fs';
 
 export default {
   command: 'remini',
@@ -71,16 +73,20 @@ export default {
       }
       let uploadRes;
       try {
-        uploadRes = await uploadToChisatoCDN(buffer, 'photo.jpg');
+        uploadRes = await uploadToPomf2(buffer, 'photo.jpg');
       } catch (err) {
         throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
       }
 
       const cdnUrl = uploadRes?.data?.url || uploadRes?.url;
       if (!cdnUrl) throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
-      const apiUrl = `https://api.nekoyama.my.id/api/images/remini?url=${encodeURIComponent(cdnUrl)}`;
-      let json;
+      
+      let enhancedImageUrl = null;
+      let apiMethod = 'API';
+      
+      // Try API first
       try {
+        const apiUrl = `https://api.nekoyama.my.id/api/images/remini?url=${encodeURIComponent(cdnUrl)}`;
         const res = await axios.get(apiUrl, {
           headers: {
             'User-Agent': 'Mozilla/5.0 (Node.js bot remini)',
@@ -88,16 +94,60 @@ export default {
           },
           timeout: 60000
         });
-        json = res.data;
-      } catch (err) {
-        throw new Error(`${font.smallCaps('Gagal menghubungi API Remini')}!`);
+        const json = res.data;
+        
+        if (json.status === 'success' && json.data && json.data.enhanced_image_url) {
+          enhancedImageUrl = json.data.enhanced_image_url;
+          apiMethod = 'Chisato API';
+        } else {
+          throw new Error('API response invalid');
+        }
+      } catch (apiError) {
+        console.log('API failed, trying fallback with imageEnhancerV2:', apiError.message);
+        
+        // Fallback to imageEnhancerV2
+        try {
+          const result = await imageEnhancerV2(cdnUrl, {
+            upscale_factor: 2,
+            denoise_strength: 0.4,
+            num_inference_steps: 20
+          });
+          
+          if (result.status === 200 && result.data && result.data.filepath) {
+            // Read the enhanced image file
+            const enhancedImageBuffer = fs.readFileSync(result.data.filepath);
+            
+            await react('✅');
+            await sock.sendMessage(msg.key.remoteJid, {
+              image: enhancedImageBuffer,
+              caption: `✨ ${font.smallCaps('Foto kamu sudah diperjelas dengan AI Enhancer V2!')}\n${font.smallCaps('Model:')} ${result.data.model}\n${font.smallCaps('Upscale:')} ${result.data.upscale_factor}x\n\n${font.smallCaps('Powered by HuggingFace AI')}`
+            }, { quoted: msg });
+            
+            // Clean up temporary file
+            try {
+              fs.unlinkSync(result.data.filepath);
+            } catch (cleanupErr) {
+              console.log('Cleanup warning:', cleanupErr.message);
+            }
+            
+            return; // Exit early since we successfully processed with fallback
+          } else {
+            throw new Error(result.error || 'ImageEnhancerV2 failed');
+          }
+        } catch (fallbackError) {
+          console.error('Both API and fallback failed:', fallbackError.message);
+          throw new Error(`${font.smallCaps('Gagal enhance gambar dengan kedua metode')}`);
+        }
       }
-      if (json.status !== 'success' || !json.data || !json.data.enhanced_image_url) throw new Error(`${font.smallCaps('Gagal enhance gambar')}!`);
-      await react('✅');
-      await sock.sendMessage(msg.key.remoteJid, {
-        image: { url: json.data.enhanced_image_url },
-        caption: `✨ ${font.smallCaps('Foto kamu sudah diperjelas! Semoga makin cakep ya')}~ || '-'}\n\n${font.smallCaps('Powered by Chisato API')}`
-      }, { quoted: msg });
+      
+      // If API succeeded, send the result
+      if (enhancedImageUrl) {
+        await react('✅');
+        await sock.sendMessage(msg.key.remoteJid, {
+          image: { url: enhancedImageUrl },
+          caption: `✨ ${font.smallCaps('Foto kamu sudah diperjelas!')}\n\n${font.smallCaps('Powered by')} ${apiMethod}`
+        }, { quoted: msg });
+      }
     } catch (e) {
       console.error('Remini error:', e);
       await react('❌');

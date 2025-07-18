@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { chatGPT } from '../../lib/scraper/huggingface.js'
 
 export default {
     command: 'chatgpt',
@@ -16,19 +16,18 @@ export default {
                 text: 'ChatGPT sedang berpikir...' 
             }, { quoted: msg })
             
-            const response = await axios.get(`https://api.nekoyama.my.id/api/ai/gpt-4.1-mini?message=${encodeURIComponent(text)}`)
+            const result = await chatGPT(text)
             
-            if (response.data?.status === 'success' && response.data?.data?.response) {
-                const result = response.data.data.response
-                const model = response.data.data.model || 'ChatGPT-4.1-mini'
+            if (result.status === 200 && result.data?.reply) {
+                const response = result.data.reply
                 
                 await sock.sendMessage(msg.key.remoteJid, {
-                    text: `${result}`,
+                    text: `${response}`,
                     edit: loadingMsg.key
                 })
             } else {
                 await sock.sendMessage(msg.key.remoteJid, {
-                    text: '❌ Tidak ada response dari AI',
+                    text: `❌ Error: ${result.error || 'Tidak ada response dari AI'}`,
                     edit: loadingMsg.key
                 })
             }

@@ -1,4 +1,5 @@
-import axios from 'axios'
+import { textToImage } from '../../lib/scraper/huggingface.js'
+import fs from 'fs'
 
 export default {
     command: 'text2image',
@@ -16,20 +17,24 @@ export default {
                 react: { text: '🕔', key: msg.key }
             })
             
-            const response = await axios.get(`https://api.nekoyama.my.id/api/ai/text-to-image?prompt=${encodeURIComponent(prompt)}`)
+            const result = await textToImage(prompt)
             
-            if (response.data?.status === 'success' && response.data?.data?.download_url) {
-                const result = response.data.data
-                const imageUrl = result.download_url
-                const model = result.model || 'AI Image Generator'
+            if (result.status === 200 && result.data?.filepath) {
+                const imageBuffer = fs.readFileSync(result.data.filepath)
                 
                 await sock.sendMessage(msg.key.remoteJid, {
-                    image: { url: imageUrl },
-                    caption: `*AI Generated Image*\n\n📝 *Prompt:* ${result.prompt}\n🤖 *Model:* ${model}`
+                    image: imageBuffer,
+                    caption: `*AI Generated Image*\n\n📝 *Prompt:* ${result.data.prompt}\n🤖 *Model:* ${result.data.model}\n🕒 *Generated:* ${result.data.timestamp}`
                 }, { quoted: msg })
                 
+                try {
+                    fs.unlinkSync(result.data.filepath)
+                } catch (cleanupErr) {
+                    console.log('Cleanup warning:', cleanupErr.message)
+                }
+                
             } else {
-                await reply('❌ Gagal membuat gambar, tidak ada response dari AI')
+                await reply(`❌ Error: ${result.error || 'Gagal membuat gambar, tidak ada response dari AI'}`)
             }
         } catch (error) {
             console.error('Text2Image Error:', error)

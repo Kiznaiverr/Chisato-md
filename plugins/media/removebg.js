@@ -1,7 +1,8 @@
-import axios from 'axios';
-import { uploadToChisatoCDN } from '../../lib/chisato-CDN.js';
+import { removeBackground } from '../../lib/scraper/huggingface.js';
+import { uploadToPomf2 } from '../../lib/scraper/pomf2.js';
 import { downloadMediaMessage, getContentType } from '@whiskeysockets/baileys';
 import font from '../../lib/font.js';
+import fs from 'fs';
 
 export default {
   command: 'removebg',
@@ -72,7 +73,7 @@ export default {
 
       let uploadRes;
       try {
-        uploadRes = await uploadToChisatoCDN(buffer, 'photo.jpg');
+        uploadRes = await uploadToPomf2(buffer, 'photo.jpg');
       } catch (err) {
         throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
       }
@@ -80,30 +81,25 @@ export default {
       const cdnUrl = uploadRes?.data?.url || uploadRes?.url;
       if (!cdnUrl) throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
 
-      const apiUrl = `https://api.nekoyama.my.id/api/removebg?image_url=${encodeURIComponent(cdnUrl)}`;
-      let json;
-      try {
-        const res = await axios.get(apiUrl, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Node.js bot removebg)',
-            'Accept': 'application/json'
-          },
-          timeout: 60000
-        });
-        json = res.data;
-      } catch (err) {
-        throw new Error(`${font.smallCaps('Gagal menghubungi API RemoveBG')}!`);
+      const result = await removeBackground(cdnUrl);
+      
+      if (result.status !== 200 || !result.data || !result.data.filepath) {
+        throw new Error(`${font.smallCaps('Gagal menghapus background: ')} ${result.error || 'Unknown error'}`);
       }
 
-      if (json.status !== 'success' || !json.data || !json.data.result_url) {
-        throw new Error(`${font.smallCaps('Gagal menghapus background')}!`);
-      }
+      const processedImageBuffer = fs.readFileSync(result.data.filepath);
 
       await react('✅');
       await sock.sendMessage(msg.key.remoteJid, {
-        image: { url: json.data.result_url },
-        caption: `🎨 ${font.smallCaps('Background berhasil dihapus! Foto kamu sekarang transparan')}~ || '-'}\n\n${font.smallCaps('Powered by Chisato API')}`
+        image: processedImageBuffer,
+        caption: `🎨 ${font.smallCaps('Background berhasil dihapus! Foto kamu sekarang transparan')}\n${font.smallCaps('Model:')} ${result.data.model}\n\n${font.smallCaps('Powered by HuggingFace AI')}`
       }, { quoted: msg });
+
+      try {
+        fs.unlinkSync(result.data.filepath);
+      } catch (cleanupErr) {
+        console.log('Cleanup warning:', cleanupErr.message);
+      }
 
     } catch (e) {
       console.error('RemoveBG error:', e);

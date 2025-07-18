@@ -1,7 +1,8 @@
-import axios from 'axios';
-import { uploadToChisatoCDN } from '../../lib/chisato-CDN.js';
+import { imageEditor } from '../../lib/scraper/huggingface.js';
+import { uploadToPomf2 } from '../../lib/scraper/pomf2.js';
 import { downloadMediaMessage, getContentType } from '@whiskeysockets/baileys';
 import font from '../../lib/font.js';
+import fs from 'fs';
 
 export default {
   command: 'hitamkan',
@@ -64,32 +65,33 @@ export default {
       }
       let uploadRes;
       try {
-        uploadRes = await uploadToChisatoCDN(buffer, 'photo.jpg');
+        uploadRes = await uploadToPomf2(buffer, 'photo.jpg');
       } catch (err) {
         throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
       }
       const cdnUrl = uploadRes?.data?.url || uploadRes?.url;
       if (!cdnUrl) throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
-      const apiUrl = `https://api.nekoyama.my.id/api/images/hitamkan?url=${encodeURIComponent(cdnUrl)}`;
-      let json;
-      try {
-        const res = await axios.get(apiUrl, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Node.js bot hitamkan)',
-            'Accept': 'application/json'
-          },
-          timeout: 60000
-        });
-        json = res.data;
-      } catch (err) {
-        throw new Error(`${font.smallCaps('Gagal menghubungi API Hitamkan')}!`);
+
+      const blackenPrompt = "make this image darker, increase black color, darken the image, apply black filter, make it look gothic and dark";
+      const result = await imageEditor(cdnUrl, blackenPrompt);
+      
+      if (result.status !== 200 || !result.data || !result.data.filepath) {
+        throw new Error(`${font.smallCaps('Gagal hitamkan gambar: ')} ${result.error || 'Unknown error'}`);
       }
-      if (json.status !== 'success' || !json.data || !json.data.download_url) throw new Error(`${font.smallCaps('Gagal hitamkan gambar')}!`);
+
+      const blackenedImageBuffer = fs.readFileSync(result.data.filepath);
+
       await react('✅');
       await sock.sendMessage(msg.key.remoteJid, {
-        image: { url: json.data.download_url },
-        caption: `🖤 ${font.smallCaps('Foto kamu sudah dihitamkan!')}\n\n${font.smallCaps('Powered by Chisato API')}`
+        image: blackenedImageBuffer,
+        caption: `${font.smallCaps('Foto kamu sudah dihitamkan!')}\n${font.smallCaps('Model:')} ${result.data.model}\n\n${font.smallCaps('Powered by HuggingFace AI')}`
       }, { quoted: msg });
+
+      try {
+        fs.unlinkSync(result.data.filepath);
+      } catch (cleanupErr) {
+        console.log('Cleanup warning:', cleanupErr.message);
+      }
     } catch (e) {
       console.error('Hitamkan error:', e);
       await react('❌');

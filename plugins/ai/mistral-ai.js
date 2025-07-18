@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { mistralAI } from '../../lib/scraper/huggingface.js'
 
 export default {
     command: 'mistral',
@@ -16,18 +16,19 @@ export default {
                 text: 'Mistral AI sedang berpikir...' 
             }, { quoted: msg })
             
-            const response = await axios.get(`https://api.nekoyama.my.id/api/ai/mistral-ai?message=${encodeURIComponent(text)}`)
+            const result = await mistralAI(text)
             
-            if (response.data?.status === 'success' && response.data?.data?.response) {
-                const result = response.data.data.response
+            if (result.status === 200 && result.data?.response) {
+                const response = result.data.response
+                const model = result.data.model || 'Mistral-7B'
                 
                 await sock.sendMessage(msg.key.remoteJid, {
-                    text: `${result}`,
+                    text: `${response}\n\n_Model: ${model}`,
                     edit: loadingMsg.key
                 })
             } else {
                 await sock.sendMessage(msg.key.remoteJid, {
-                    text: '❌ Tidak ada response dari AI',
+                    text: `❌ Error: ${result.error || 'Tidak ada response dari AI'}`,
                     edit: loadingMsg.key
                 })
             }

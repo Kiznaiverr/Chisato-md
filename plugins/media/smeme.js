@@ -1,6 +1,6 @@
 import { getContentType, downloadMediaMessage } from '@whiskeysockets/baileys'
 import { sticker } from '../../lib/sticker.js'
-import { uploadToChisatoCDN } from '../../lib/chisato-CDN.js'
+import { uploadToPomf2 } from '../../lib/scraper/pomf2.js'
 import font from '../../lib/font.js'
 import axios from 'axios'
 
@@ -111,7 +111,7 @@ export default {
             // Upload to CDN first
             let uploadRes
             try {
-                uploadRes = await uploadToChisatoCDN(buffer, 'meme_source.jpg')
+                uploadRes = await uploadToPomf2(buffer, 'meme_source.jpg')
             } catch (err) {
                 throw new Error(`${font.smallCaps('Failed to upload image')}`)
             }

@@ -1,7 +1,8 @@
-import axios from 'axios';
-import { uploadToChisatoCDN } from '../../lib/chisato-CDN.js';
+import { imageEditor } from '../../lib/scraper/huggingface.js';
+import { uploadToPomf2 } from '../../lib/scraper/pomf2.js';
 import { downloadMediaMessage, getContentType } from '@whiskeysockets/baileys';
 import font from '../../lib/font.js';
+import fs from 'fs';
 
 export default {
   command: 'edit',
@@ -68,32 +69,32 @@ export default {
       }
       let uploadRes;
       try {
-        uploadRes = await uploadToChisatoCDN(buffer, 'photo.jpg');
+        uploadRes = await uploadToPomf2(buffer, 'photo.jpg');
       } catch (err) {
         throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
       }
       const cdnUrl = uploadRes?.data?.url || uploadRes?.url;
       if (!cdnUrl) throw new Error(`${font.smallCaps('Gagal upload ke CDN')}!`);
-      const apiUrl = `https://api.nekoyama.my.id/api/images/edit?url=${encodeURIComponent(cdnUrl)}&prompt=${encodeURIComponent(promptText)}`;
-      let json;
-      try {
-        const res = await axios.get(apiUrl, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Node.js bot edit)',
-            'Accept': 'application/json'
-          },
-          timeout: 90000
-        });
-        json = res.data;
-      } catch (err) {
-        throw new Error(`${font.smallCaps('Gagal menghubungi API Edit')}!`);
+
+      const result = await imageEditor(cdnUrl, promptText);
+      
+      if (result.status !== 200 || !result.data || !result.data.filepath) {
+        throw new Error(`${font.smallCaps('Gagal edit gambar: ')} ${result.error || 'Unknown error'}`);
       }
-      if (json.status !== 'success' || !json.data || !json.data.download_url) throw new Error(`${font.smallCaps('Gagal edit gambar')}!`);
+
+      const editedImageBuffer = fs.readFileSync(result.data.filepath);
+
       await react('✅');
       await sock.sendMessage(msg.key.remoteJid, {
-        image: { url: json.data.download_url },
-        caption: `🖌️ ${font.smallCaps('Foto kamu sudah diedit!')}\n${font.smallCaps('Prompt:')} ${json.data.prompt || promptText}\n\n${font.smallCaps('Powered by Chisato API')}`
+        image: editedImageBuffer,
+        caption: `🖌️ ${font.smallCaps('Foto kamu sudah diedit!')}\n${font.smallCaps('Prompt:')} ${result.data.prompt}\n${font.smallCaps('Model:')} ${result.data.model}\n\n${font.smallCaps('Powered by HuggingFace AI')}`
       }, { quoted: msg });
+
+      try {
+        fs.unlinkSync(result.data.filepath);
+      } catch (cleanupErr) {
+        console.log('Cleanup warning:', cleanupErr.message);
+      }
     } catch (e) {
       console.error('Edit error:', e);
       await react('❌');
