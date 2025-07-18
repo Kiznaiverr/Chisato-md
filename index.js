@@ -6,8 +6,8 @@ import { Database } from './lib/database.js'
 import { loadPlugins, startAutoReload, stopAutoReload } from './lib/loader.js'
 import config from './lib/config.js'
 import logger from './lib/logger.js'
+import proxyManager from './lib/proxyManager.js'
 
-// Initialize Pino logger for Baileys
 const pinoLogger = pino({ 
     level: 'error',
     transport: {
@@ -24,10 +24,8 @@ const db = new Database()
 // Load plugins
 const plugins = await loadPlugins()
 
-// Initialize handler (will be set after connection)
 let handler = null
 
-// Enhanced startup banner
 logger.banner()
 logger.system(`Initializing ${config.getBotName()}`)
 logger.system(`Created by ${config.get('botSettings', 'author')}`)
@@ -52,14 +50,11 @@ async function startBot() {
         markOnlineOnConnect: true,
         generateHighQualityLinkPreview: true,
         getMessage: async (key) => {
-            // Messages not stored for performance
             return undefined
         }    })
 
-    // Initialize handler
     handler = new Handler(sock, db, plugins)
     
-    // Start auto-reload watcher
     startAutoReload((updatedPlugins) => {
         if (handler) {
             handler.updatePlugins(updatedPlugins)
@@ -102,13 +97,11 @@ async function startBot() {
     return sock
 }
 
-// Start the bot
 startBot().catch(err => {
     logger.error('Error starting bot:', err)
     process.exit(1)
 })
 
-// Handle process termination
 process.on('SIGINT', () => {
     logger.system('Bot stopped by user')
     stopAutoReload()
@@ -116,11 +109,21 @@ process.on('SIGINT', () => {
 })
 
 process.on('uncaughtException', (err) => {
+    if (err.stack && err.stack.includes('plugins')) {
+        logger.error('Plugin Error:', err)
+        return
+    }
+    
     logger.error('Uncaught Exception:', err)
     stopAutoReload()
 })
 
 process.on('unhandledRejection', (err) => {
+    if (err && err.stack && err.stack.includes('plugins')) {
+        logger.error('Plugin Rejection:', err)
+        return
+    }
+    
     logger.error('Unhandled Rejection:', err)
     stopAutoReload()
 })
