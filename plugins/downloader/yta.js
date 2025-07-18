@@ -15,14 +15,14 @@ export default {
             return reply(`${font.smallCaps('Masukkan link YouTube yang valid')}!\n\n` +
                         `${font.smallCaps('Contoh')}:\n` +
                         `• .yta https://youtu.be/xxxxx\n` +
-                        `• .yta https://youtu.be/xxxxx lowest\n\n` +
-                        `${font.smallCaps('Kualitas yang tersedia')}: highest, lowest`)
+                        `• .yta https://youtu.be/xxxxx 320\n\n` +
+                        `${font.smallCaps('Kualitas yang tersedia')}: 256 (default), 320, 128, highest, lowest`)
         }
 
         await react('🕔')
         
         const url = args[0]
-        const quality = args[1] || 'highest' // Default highest quality
+        const quality = args[1] || '256' // Default 256kbps quality
         
         try {
             // Validate YouTube URL
@@ -40,9 +40,10 @@ export default {
             const infoCaption = `${font.smallCaps('🎵 Audio ditemukan!')}\n\n` +
                            `${font.smallCaps('📝 Judul')}: ${info.title}\n` +
                            `${font.smallCaps('👤 Channel')}: ${info.author}\n` +
-                           `${font.smallCaps('⏱️ Durasi')}: ${Math.floor(info.duration / 60)}:${(info.duration % 60).toString().padStart(2, '0')}\n` +
-                           `${font.smallCaps('👁️ Views')}: ${parseInt(info.views).toLocaleString()}\n` +
-                           `${font.smallCaps('🎵 Kualitas')}: ${quality}\n\n` +
+                           `${font.smallCaps('⏱️ Durasi')}: ${info.duration}\n` +
+                           `${font.smallCaps('👁️ Views')}: ${info.views?.toLocaleString() || 'Unknown'}\n` +
+                           `${font.smallCaps('🎵 Kualitas')}: ${quality}\n` +
+                           `${font.smallCaps('🎵 Tersedia')}: ${info.availableQuality?.join(', ') || 'Unknown'}\n\n` +
                            `${font.smallCaps('⏳ Sedang mendownload...')}`
 
             // Send thumbnail with caption

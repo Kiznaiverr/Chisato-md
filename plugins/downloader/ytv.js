@@ -15,15 +15,15 @@ export default {
             return reply(`${font.smallCaps('Masukkan link YouTube yang valid')}!\n\n` +
                         `${font.smallCaps('Contoh')}:\n` +
                         `• .ytv https://youtu.be/xxxxx\n` +
-                        `• .ytv https://youtu.be/xxxxx 480p\n` +
+                        `• .ytv https://youtu.be/xxxxx 1080\n` +
                         `• .ytv https://youtu.be/xxxxx highest\n\n` +
-                        `${font.smallCaps('Kualitas yang tersedia')}: 144p, 240p, 360p, 480p, 720p, 1080p, highest, lowest`)
+                        `${font.smallCaps('Kualitas yang tersedia')}: 720 (default), 1080, 480, 360, 144, highest, lowest`)
         }
 
         await react('🕔')
         
         const url = args[0]
-        const quality = args[1] || '720p' // Default 720p
+        const quality = args[1] || '720' // Default 720
         
         try {
             // Validate YouTube URL
