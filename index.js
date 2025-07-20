@@ -4,10 +4,8 @@ import pino from 'pino'
 import { Handler } from './lib/handler.js'
 import { Database } from './lib/database.js'
 import { loadPlugins, startAutoReload, stopAutoReload } from './lib/loader.js'
-import { initializeGenshinCache } from './lib/scraper/genshinInfographic.js'
 import config from './lib/config.js'
 import logger from './lib/logger.js'
-import proxyManager from './lib/proxyManager.js'
 
 const pinoLogger = pino({ 
     level: 'error',
@@ -32,8 +30,6 @@ logger.system(`Initializing ${config.getBotName()}`)
 logger.system(`Created by ${config.get('botSettings', 'author')}`)
 logger.separator()
 
-// Initialize Genshin infographics cache
-await initializeGenshinCache()
 
 logger.plugin(`Loaded ${plugins.length} plugins successfully`)
 logger.system(`Prefix: ${config.getPrefix()}`)
