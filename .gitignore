@@ -8,3 +8,4 @@ cache
 database/
 package-lock.json
 lib/cookies.json
+lib/spam
