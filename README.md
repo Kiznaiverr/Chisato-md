@@ -1,5 +1,16 @@
 <div align="center">
 
+# ⚠️ **PROJECT DEPRECATED** ⚠️
+
+## This project is no longer maintained
+
+### 🔄 **Please use the new version instead:**
+[![New Project](https://img.shields.io/badge/New_Project-Elysia-brightgreen?style=for-the-badge&logo=github)](https://github.com/Kiznaiverr/elysia)
+
+**🚀 [Kiznaiverr/Elysia](https://github.com/Kiznaiverr/elysia)** - *The actively maintained successor*
+
+---
+
 # ✨ Chisato MD
 
 *A modern & elegant WhatsApp bot with premium features*
@@ -10,12 +21,29 @@
 [![WhatsApp](https://img.shields.io/badge/WhatsApp-Bot-brightgreen?style=for-the-badge&logo=whatsapp)](https://whatsapp.com)
 [![License](https://img.shields.io/badge/License-ISC-blue?style=for-the-badge)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/Kiznaiverr/Chisato-md?style=for-the-badge&logo=github)](https://github.com/Kiznaiverr/Chisato-md)
+[![Deprecated](https://img.shields.io/badge/Status-DEPRECATED-red?style=for-the-badge)](https://github.com/Kiznaiverr/elysia)
 
 <br>
 
 *Built with ❤️ by [Kiznavierr](https://github.com/kiznaiverr)*
 
 </div>
+
+## 🚨 **IMPORTANT NOTICE**
+
+> **⚠️ This project is no longer maintained and has been deprecated.**
+> 
+> **Please migrate to our new and actively maintained project:**
+> 
+> ## 🔗 **[Kiznaiverr/Elysia](https://github.com/Kiznaiverr/elysia)**
+> 
+> The new project offers:
+> - ✅ **Active maintenance and updates**
+> - ✅ **Better performance and stability**  
+> - ✅ **Modern architecture and features**
+> - ✅ **Ongoing bug fixes and support**
+>
+> ---
 
 <br>
 
@@ -35,6 +63,8 @@
 <br>
 
 ## �🚀 Quick Setup
+
+> **⚠️ DEPRECATED:** This setup is for historical reference only. Please use [Elysia](https://github.com/Kiznaiverr/elysia) instead.
 
 Get started in just **3 simple steps**:
 
@@ -234,7 +264,9 @@ export default {
 
 ### 🌟 Show Your Support
 
-**If you like this project, please consider giving it a ⭐**
+**⚠️ This project is deprecated. Please star the new project instead:**
+
+[![New Project](https://img.shields.io/badge/⭐_Star_New_Project-Elysia-brightgreen?style=for-the-badge&logo=github)](https://github.com/Kiznaiverr/elysia)
 
 <br>
 
@@ -248,13 +280,15 @@ export default {
 
 <div align="center">
 
-### Need Help? Get in Touch!
+### Need Help? Use the New Project!
 
-[![GitHub Issues](https://img.shields.io/badge/Issues-GitHub-red?style=for-the-badge&logo=github)](https://github.com/Kiznaiverr/Chisato-md/issues)
-[![Discussions](https://img.shields.io/badge/Discussions-GitHub-blue?style=for-the-badge&logo=github)](https://github.com/Kiznaiverr/Chisato-md/discussions)
+[![New Project Issues](https://img.shields.io/badge/Issues-Elysia_GitHub-red?style=for-the-badge&logo=github)](https://github.com/Kiznaiverr/elysia/issues)
+[![New Discussions](https://img.shields.io/badge/Discussions-Elysia_GitHub-blue?style=for-the-badge&logo=github)](https://github.com/Kiznaiverr/elysia/discussions)
 
-**Found a bug?** [Report it here](https://github.com/Kiznaiverr/Chisato-md/issues/new)  
-**Have a suggestion?** [Start a discussion](https://github.com/Kiznaiverr/Chisato-md/discussions)  
-**Need support?** Check our [documentation](https://github.com/Kiznaiverr/Chisato-md/wiki) first
+**This project is no longer supported.** For help, please visit [Elysia](https://github.com/Kiznaiverr/elysia)
+
+**Found a bug?** [Report it on the new project](https://github.com/Kiznaiverr/elysia/issues/new)  
+**Have a suggestion?** [Start a discussion on Elysia](https://github.com/Kiznaiverr/elysia/discussions)  
+**Need support?** Check [Elysia documentation](https://github.com/Kiznaiverr/elysia/wiki)
 
 </div>
